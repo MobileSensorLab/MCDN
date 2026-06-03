@@ -1,0 +1,289 @@
+{
+  "schema_version": 2,
+  "arm": "mask",
+  "split": "Mayfield_Tornado",
+  "n_seeds": 10,
+  "seeds": [
+    "seed_00",
+    "seed_11",
+    "seed_22",
+    "seed_33",
+    "seed_44",
+    "seed_55",
+    "seed_66",
+    "seed_77",
+    "seed_88",
+    "seed_99"
+  ],
+  "generated_at": "2026-04-30T14:40:36.883088+00:00",
+  "class_order": [
+    "No Damage",
+    "Minor",
+    "Major",
+    "Destroyed"
+  ],
+  "validation_set": {
+    "num_samples": 1948,
+    "class_support": {
+      "No Damage": 829,
+      "Minor": 603,
+      "Major": 372,
+      "Destroyed": 144
+    }
+  },
+  "config": {
+    "tta_views": 8,
+    "ensemble_strategy": "within_variant",
+    "prediction_rules": [
+      "EV",
+      "argmax",
+      "hybrid"
+    ],
+    "canonical_rule": "argmax",
+    "replay_tolerance": 0.005
+  },
+  "replay": {
+    "all_within_tolerance": true,
+    "max_abs_delta": 0.0,
+    "per_seed": [
+      {
+        "seed": "seed_00",
+        "stored_qwk": 0.8582614865768765,
+        "replay_ev_qwk": 0.8582614865768765,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_11",
+        "stored_qwk": 0.864218123468788,
+        "replay_ev_qwk": 0.864218123468788,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_22",
+        "stored_qwk": 0.8546515560833066,
+        "replay_ev_qwk": 0.8546515560833066,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_33",
+        "stored_qwk": 0.8615597676607245,
+        "replay_ev_qwk": 0.8615597676607245,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_44",
+        "stored_qwk": 0.8506806300592173,
+        "replay_ev_qwk": 0.8506806300592173,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_55",
+        "stored_qwk": 0.8507157529265028,
+        "replay_ev_qwk": 0.8507157529265028,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_66",
+        "stored_qwk": 0.849201155297604,
+        "replay_ev_qwk": 0.849201155297604,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_77",
+        "stored_qwk": 0.8535915105292803,
+        "replay_ev_qwk": 0.8535915105292803,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_88",
+        "stored_qwk": 0.8555782168142154,
+        "replay_ev_qwk": 0.8555782168142154,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_99",
+        "stored_qwk": 0.8520238192705925,
+        "replay_ev_qwk": 0.8520238192705925,
+        "delta": 0.0,
+        "ok": true
+      }
+    ]
+  },
+  "ensemble": {
+    "EV": {
+      "qwk": 0.8560231939021887,
+      "accuracy": 0.7664271047227926,
+      "macro_f1": 0.7639061243039891,
+      "macro_recall": 0.7792324795242435,
+      "macro_precision": 0.7614084408445958,
+      "per_class": {
+        "No Damage": {
+          "f1": 0.8245614035087718,
+          "recall": 0.7937273823884198,
+          "precision": 0.8578878748370273
+        },
+        "Minor": {
+          "f1": 0.7075978511128166,
+          "recall": 0.7645107794361525,
+          "precision": 0.6585714285714286
+        },
+        "Major": {
+          "f1": 0.7283582089552239,
+          "recall": 0.6559139784946236,
+          "precision": 0.8187919463087249
+        },
+        "Destroyed": {
+          "f1": 0.7951070336391438,
+          "recall": 0.9027777777777778,
+          "precision": 0.7103825136612022
+        }
+      },
+      "confusion_matrix": [
+        [
+          658,
+          166,
+          5,
+          0
+        ],
+        [
+          101,
+          461,
+          38,
+          3
+        ],
+        [
+          8,
+          70,
+          244,
+          50
+        ],
+        [
+          0,
+          3,
+          11,
+          130
+        ]
+      ]
+    },
+    "argmax": {
+      "qwk": 0.8582726851573006,
+      "accuracy": 0.7797741273100616,
+      "macro_f1": 0.7638641484458464,
+      "macro_recall": 0.7816731198186274,
+      "macro_precision": 0.7622604685199221,
+      "per_class": {
+        "No Damage": {
+          "f1": 0.8501199040767387,
+          "recall": 0.8552472858866104,
+          "precision": 0.8450536352800954
+        },
+        "Minor": {
+          "f1": 0.7216828478964402,
+          "recall": 0.7396351575456053,
+          "precision": 0.7045813586097947
+        },
+        "Major": {
+          "f1": 0.7166921898928024,
+          "recall": 0.6290322580645161,
+          "precision": 0.8327402135231317
+        },
+        "Destroyed": {
+          "f1": 0.7669616519174042,
+          "recall": 0.9027777777777778,
+          "precision": 0.6666666666666666
+        }
+      },
+      "confusion_matrix": [
+        [
+          709,
+          114,
+          5,
+          1
+        ],
+        [
+          119,
+          446,
+          32,
+          6
+        ],
+        [
+          10,
+          70,
+          234,
+          58
+        ],
+        [
+          1,
+          3,
+          10,
+          130
+        ]
+      ]
+    },
+    "hybrid": {
+      "qwk": 0.8598687562188775,
+      "accuracy": 0.7792607802874744,
+      "macro_f1": 0.7635367081746325,
+      "macro_recall": 0.7817734247456054,
+      "macro_precision": 0.7605772849651102,
+      "per_class": {
+        "No Damage": {
+          "f1": 0.8501199040767387,
+          "recall": 0.8552472858866104,
+          "precision": 0.8450536352800954
+        },
+        "Minor": {
+          "f1": 0.7197400487408611,
+          "recall": 0.7346600331674958,
+          "precision": 0.7054140127388535
+        },
+        "Major": {
+          "f1": 0.7173252279635258,
+          "recall": 0.6344086021505376,
+          "precision": 0.8251748251748252
+        },
+        "Destroyed": {
+          "f1": 0.7669616519174042,
+          "recall": 0.9027777777777778,
+          "precision": 0.6666666666666666
+        }
+      },
+      "confusion_matrix": [
+        [
+          709,
+          115,
+          4,
+          1
+        ],
+        [
+          119,
+          443,
+          35,
+          6
+        ],
+        [
+          10,
+          68,
+          236,
+          58
+        ],
+        [
+          1,
+          2,
+          11,
+          130
+        ]
+      ]
+    }
+  },
+  "canonical_rule_synced_at": "2026-04-30T15:36:14.287774+00:00"
+}

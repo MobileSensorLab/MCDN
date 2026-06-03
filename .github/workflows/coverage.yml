@@ -1,0 +1,66 @@
+name: Coverage
+
+# Mirrors the former GitLab `test_coverage` job: run the suite under coverage, render the
+# PyTest badge via scripts/coverage_badge.py, then publish the SVG to the orphan `badges`
+# branch. Keeping the badge off `main` lets `main` stay protected and review-clean; the
+# README references the badge through the raw.githubusercontent.com URL on `badges`.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# contents:write lets the built-in GITHUB_TOKEN force-push the badge to the unprotected
+# `badges` branch. No PAT or repo secret is required for this.
+permissions:
+  contents: write
+
+# Supersede in-flight runs for the same ref so a rapid series of pushes only publishes once.
+concurrency:
+  group: coverage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # uv provisions the Python 3.13 interpreter demanded by requires-python automatically.
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Sync the project environment
+        run: uv sync --frozen
+
+      # addopts in pyproject.toml writes the Cobertura report to .pytest_cache/coverage.xml,
+      # which the badge generator consumes below.
+      - name: Run tests with coverage
+        run: uv run pytest --cov=src --cov-report term-missing
+
+      - name: Generate the PyTest coverage badge
+        run: uv run python scripts/coverage_badge.py -i .pytest_cache/coverage.xml -o coverage.svg
+
+      # Force-push a single-commit orphan branch holding only the badge. This keeps `badges`
+      # as a clean throwaway pointer (no history bloat) and is idempotent across runs. The
+      # GITHUB_TOKEN-authored push does not retrigger this workflow, so no [skip ci] guard is
+      # needed. Restricted to pushes on main; PRs run the suite but never publish.
+      - name: Publish badge to the badges branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          cp coverage.svg "$work/coverage.svg"
+          cd "$work"
+          git init -q
+          git checkout -q -b badges
+          git add coverage.svg
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Update coverage badge"
+          git push -fq "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" badges

@@ -36,7 +36,7 @@ COLOR_HEX = {"brightgreen": "#4c1", "green": "#97ca00", "orange": "#fe7d37", "re
 
 DEFAULT_INPUT = Path(".pytest_cache/coverage.xml")
 DEFAULT_OUTPUT = Path("data/readme/coverage.svg")
-DEFAULT_LOGO = Path("data/readme/pytest.svg")
+DEFAULT_LOGO = Path("data/readme/pytest_logo.svg")
 
 
 def total_coverage(xml_path: Path) -> float:
@@ -75,7 +75,7 @@ def coverage_color(pct: float) -> str:
 # badge's fixed 14px logo box it looks underweight beside the python/PyTorch logos (which fill
 # their canvases). Cropping the embedded copy to the artwork's bounding box (a centered square
 # with a few units of breathing room) makes the logo fill the box and match the other badges'
-# visual weight, without touching the badge geometry/spacing or the pytest.svg asset itself.
+# visual weight, without touching the badge geometry/spacing or the pytest_logo.svg asset itself.
 PYTEST_SOURCE_VIEWBOX = 'viewBox="0 0 128 128"'
 PYTEST_TIGHT_VIEWBOX = 'viewBox="20.66 21.32 83.01 83.01"'
 

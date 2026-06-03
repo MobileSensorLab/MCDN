@@ -1,0 +1,16 @@
+{
+  "train_instances": 18914,
+  "val_instances": 1110,
+  "train_label_counts": {
+    "no damage": 10496,
+    "minor damage": 5497,
+    "major damage": 1991,
+    "destroyed": 930
+  },
+  "val_label_counts": {
+    "no damage": 157,
+    "minor damage": 363,
+    "major damage": 307,
+    "destroyed": 283
+  }
+}

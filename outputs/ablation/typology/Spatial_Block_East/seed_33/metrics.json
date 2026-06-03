@@ -1,0 +1,156 @@
+{
+  "holdout_event": "Spatial_Block_East",
+  "holdout_selection": "default_spatial",
+  "seed": 33,
+  "train_class_counts_ordinal": [
+    10340,
+    5364,
+    1764,
+    823
+  ],
+  "class_weights_ordinal": [
+    0.5649027824401855,
+    0.7344908714294434,
+    1.1459943056106567,
+    1.5546119213104248
+  ],
+  "best_model_path": "outputs\\ablation\\typology\\Spatial_Block_East\\seed_33\\best_model.pt",
+  "final_classification": {
+    "accuracy": 0.7807270628967109,
+    "macro_recall": 0.7918972783480076,
+    "macro_precision": 0.7880648717941662,
+    "macro_f1": 0.787778584013435,
+    "num_samples": 1733,
+    "confusion_matrix": [
+      [
+        262,
+        47,
+        4,
+        0
+      ],
+      [
+        89,
+        365,
+        39,
+        3
+      ],
+      [
+        13,
+        111,
+        386,
+        24
+      ],
+      [
+        0,
+        6,
+        44,
+        340
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 313,
+        "predicted": 364,
+        "correct": 262,
+        "recall": 0.8370607028753994,
+        "precision": 0.7197802197802198,
+        "f1": 0.7740029542097489
+      },
+      "Minor": {
+        "support": 496,
+        "predicted": 529,
+        "correct": 365,
+        "recall": 0.7358870967741935,
+        "precision": 0.6899810964083176,
+        "f1": 0.7121951219512195
+      },
+      "Major": {
+        "support": 534,
+        "predicted": 473,
+        "correct": 386,
+        "recall": 0.7228464419475655,
+        "precision": 0.8160676532769556,
+        "f1": 0.766633565044687
+      },
+      "Destroyed": {
+        "support": 390,
+        "predicted": 367,
+        "correct": 340,
+        "recall": 0.8717948717948718,
+        "precision": 0.9264305177111717,
+        "f1": 0.8982826948480847
+      }
+    }
+  },
+  "best_classification": {
+    "accuracy": 0.7847663012117715,
+    "macro_recall": 0.7965770838071062,
+    "macro_precision": 0.7914671863545131,
+    "macro_f1": 0.791954537353796,
+    "num_samples": 1733,
+    "confusion_matrix": [
+      [
+        265,
+        46,
+        2,
+        0
+      ],
+      [
+        87,
+        362,
+        44,
+        3
+      ],
+      [
+        13,
+        107,
+        390,
+        24
+      ],
+      [
+        0,
+        7,
+        40,
+        343
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 313,
+        "predicted": 365,
+        "correct": 265,
+        "recall": 0.8466453674121406,
+        "precision": 0.726027397260274,
+        "f1": 0.7817109144542772
+      },
+      "Minor": {
+        "support": 496,
+        "predicted": 522,
+        "correct": 362,
+        "recall": 0.7298387096774194,
+        "precision": 0.6934865900383141,
+        "f1": 0.7111984282907663
+      },
+      "Major": {
+        "support": 534,
+        "predicted": 476,
+        "correct": 390,
+        "recall": 0.7303370786516854,
+        "precision": 0.819327731092437,
+        "f1": 0.7722772277227722
+      },
+      "Destroyed": {
+        "support": 390,
+        "predicted": 370,
+        "correct": 343,
+        "recall": 0.8794871794871795,
+        "precision": 0.927027027027027,
+        "f1": 0.9026315789473683
+      }
+    }
+  },
+  "best_val_qwk": 0.880370827261098,
+  "final_val_qwk": 0.8774794271874484,
+  "final_val_loss": 0.05757626909762621,
+  "epochs_completed": 33
+}

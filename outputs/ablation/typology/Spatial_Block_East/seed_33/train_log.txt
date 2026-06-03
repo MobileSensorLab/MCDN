@@ -1,0 +1,368 @@
+# MCDN training run - label=typology   seed=33
+# started 2026-04-27 10:03:28
+# config_hash 9d1f4d9e
+Validating integrity for 51 records...
+Dataset initialized: Extracted 18291 unique structural instances.
+Dataset initialized: Extracted 1733 unique structural instances.
+================================================================================
+  started  2026-04-27 10:03:33
+  config   typology (hash 9d1f4d9e)   seed 33   fold Spatial_Block_East
+  device   cuda:0 (NVIDIA GeForce RTX 5090, 31.8 GiB)
+  arch     convnextv2_nano.fcmae_ft_in22k_in1k
+           mask   mask_weighted_pooling   EMA (decay 0.996)
+  params   total 33.2M   trainable 33.2M
+================================================================================
+
+[data]    scanning data/   ->   51 valid instances (sensor_profile=uas_5cm)
+[split]   train 18,291   val 1,733   counts {noD 10340, min 5364, maj 1764, des 823}
+[loaders] workers 8   pin_memory True   persistent True   prefetch 3   drop_last True
+          sampler uniform-random   batch 64 x2 accum -> eff 128   chip 512
+[opt]     AdamW lr 1.0e-04 fused   epochs 100   plateau patience 4   early-stop patience 10   grad_clip 1.0
+          class weights [0.5649, 0.7345, 1.146, 1.5546]
+
+================================================================================
+  Training   100 epochs
+================================================================================
+
+[E 01 / 100  10:03:33]
+  heartbeat  71/285 (25%)   loss 0.145  run 0.148   eta  1m 11s
+  heartbeat 142/285 (50%)   loss 0.129  run 0.126   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.086  run 0.119   eta  0m 23s
+  train   loss 0.115  lr 1.00e-04  imgs/s  197  gpu 22.6G  time  2m 16s
+   val    loss 0.277  qwk 0.3146   mf1 0.2138  sel 0.2642  +sel    ----   patience  0/10 p
+  recall  noD  94.9%   min  37.1%   maj   1.5%   des   0.0%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 02 / 100  10:06:32]
+  heartbeat  71/285 (25%)   loss 0.084  run 0.092   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.082  run 0.094   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.069  run 0.094   eta  0m 23s
+  train   loss 0.093  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.171  qwk 0.6604   mf1 0.4642  sel 0.5623  +sel +0.2981   patience  0/10 p
+  recall  noD  86.6%   min  69.0%   maj  59.9%   des   0.0%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 03 / 100  10:08:27]
+  heartbeat  71/285 (25%)   loss 0.048  run 0.088   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.090  run 0.088   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.071  run 0.084   eta  0m 23s
+  train   loss 0.078  lr 1.00e-04  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.160  qwk 0.6975   mf1 0.4883  sel 0.5929  +sel +0.0306   patience  0/10 p
+  recall  noD  84.7%   min  70.6%   maj  68.5%   des   0.0%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 04 / 100  10:10:21]
+  heartbeat  71/285 (25%)   loss 0.053  run 0.062   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.051  run 0.061   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.046  run 0.061   eta  0m 23s
+  train   loss 0.060  lr 1.00e-04  imgs/s  205  gpu 22.7G  time  1m 36s
+   val    loss 0.123  qwk 0.7311   mf1 0.5312  sel 0.6311  +sel +0.0383   patience  0/10 p
+  recall  noD  84.3%   min  73.8%   maj  73.2%   des   4.1%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 05 / 100  10:12:16]
+  heartbeat  71/285 (25%)   loss 0.041  run 0.057   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.052  run 0.056   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.055  run 0.057   eta  0m 23s
+  train   loss 0.057  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.076  qwk 0.8338   mf1 0.7347  sel 0.7843  +sel +0.1531   patience  0/10 p
+  recall  noD  84.0%   min  74.4%   maj  74.9%   des  60.0%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 06 / 100  10:14:11]
+  heartbeat  71/285 (25%)   loss 0.053  run 0.055   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.054  run 0.054   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.047  run 0.053   eta  0m 23s
+  train   loss 0.054  lr 1.00e-04  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.063  qwk 0.8608   mf1 0.7693  sel 0.8150  +sel +0.0308   patience  0/10 p
+  recall  noD  83.7%   min  74.2%   maj  72.7%   des  77.7%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 07 / 100  10:16:06]
+  heartbeat  71/285 (25%)   loss 0.048  run 0.053   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.043  run 0.052   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.064  run 0.052   eta  0m 23s
+  train   loss 0.052  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.061  qwk 0.8688   mf1 0.7796  sel 0.8242  +sel +0.0092   patience  0/10 p
+  recall  noD  83.1%   min  74.0%   maj  72.1%   des  83.8%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 08 / 100  10:18:00]
+  heartbeat  71/285 (25%)   loss 0.053  run 0.050   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.070  run 0.049   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.033  run 0.049   eta  0m 23s
+  train   loss 0.049  lr 1.00e-04  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.059  qwk 0.8732   mf1 0.7867  sel 0.8299  +sel +0.0057   patience  0/10 p
+  recall  noD  83.4%   min  72.2%   maj  73.6%   des  87.2%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 09 / 100  10:19:55]
+  heartbeat  71/285 (25%)   loss 0.041  run 0.048   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.050  run 0.048   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.048  run 0.048   eta  0m 23s
+  train   loss 0.048  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.056  qwk 0.8777   mf1 0.7867  sel 0.8322  +sel +0.0023   patience  0/10 p
+  recall  noD  80.5%   min  73.0%   maj  73.6%   des  88.5%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 10 / 100  10:21:49]
+  heartbeat  71/285 (25%)   loss 0.053  run 0.046   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.066  run 0.046   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.041  run 0.046   eta  0m 23s
+  train   loss 0.047  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.057  qwk 0.8776   mf1 0.7914  sel 0.8345  +sel +0.0023   patience  0/10 p
+  recall  noD  83.4%   min  74.4%   maj  73.2%   des  86.7%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 11 / 100  10:23:44]
+  heartbeat  71/285 (25%)   loss 0.067  run 0.045   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.069  run 0.046   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.032  run 0.046   eta  0m 23s
+  train   loss 0.046  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 36s
+   val    loss 0.058  qwk 0.8771   mf1 0.7912  sel 0.8341  +sel -0.0004   patience  0/10 p
+  recall  noD  85.6%   min  72.6%   maj  72.7%   des  87.7%
+  shadow: EMA (decay 0.996)
+
+[E 12 / 100  10:25:39]
+  heartbeat  71/285 (25%)   loss 0.036  run 0.044   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.056  run 0.042   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.061  run 0.044   eta  0m 23s
+  train   loss 0.044  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8802   mf1 0.7909  sel 0.8355  +sel +0.0014   patience  0/10 p
+  recall  noD  86.3%   min  72.0%   maj  73.4%   des  86.9%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 13 / 100  10:27:33]
+  heartbeat  71/285 (25%)   loss 0.031  run 0.043   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.049  run 0.044   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.042  run 0.043   eta  0m 23s
+  train   loss 0.043  lr 1.00e-04  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8774   mf1 0.7892  sel 0.8333  +sel -0.0023   patience  0/10 p
+  recall  noD  85.9%   min  72.4%   maj  72.3%   des  87.7%
+  shadow: EMA (decay 0.996)
+
+[E 14 / 100  10:29:28]
+  heartbeat  71/285 (25%)   loss 0.051  run 0.045   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.052  run 0.043   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.054  run 0.043   eta  0m 23s
+  train   loss 0.042  lr 1.00e-04  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8791   mf1 0.7913  sel 0.8352  +sel +0.0019   patience  0/10 p
+  recall  noD  85.6%   min  73.4%   maj  72.3%   des  87.7%
+  shadow: EMA (decay 0.996)
+
+[E 15 / 100  10:31:22]
+  heartbeat  71/285 (25%)   loss 0.028  run 0.042   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.045  run 0.041   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.040  run 0.041   eta  0m 23s
+  train   loss 0.042  lr 1.00e-04  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8737   mf1 0.7831  sel 0.8284  +sel -0.0068   patience  0/10 p
+  recall  noD  84.3%   min  72.2%   maj  71.9%   des  87.2%
+  shadow: EMA (decay 0.996)
+
+[E 16 / 100  10:33:17]
+  heartbeat  71/285 (25%)   loss 0.041  run 0.040   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.044  run 0.041   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.065  run 0.040   eta  0m 23s
+  train   loss 0.040  lr 1.00e-04  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.059  qwk 0.8760   mf1 0.7843  sel 0.8301  +sel +0.0017   patience  0/10 p
+  recall  noD  83.1%   min  73.2%   maj  71.3%   des  88.2%
+  shadow: EMA (decay 0.996)
+
+[E 17 / 100  10:35:12]
+  heartbeat  71/285 (25%)   loss 0.049  run 0.038   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.032  run 0.038   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.027  run 0.039   eta  0m 23s
+  train   loss 0.039  lr 5.00e-05  imgs/s  196  gpu 22.7G  time  1m 36s
+   val    loss 0.060  qwk 0.8721   mf1 0.7800  sel 0.8261  +sel -0.0041   patience  0/10 p
+  recall  noD  82.1%   min  72.2%   maj  71.3%   des  88.7%
+  shadow: EMA (decay 0.996)
+
+================================================================================
+[event] epoch 17  LR reduced 1.00e-04 -> 5.00e-05  (early-stopping armed)
+[event] epoch 17  warm-started training model + EMA shadow from best (optimizer state preserved)
+================================================================================
+
+[E 18 / 100  10:37:07]
+  heartbeat  71/285 (25%)   loss 0.046  run 0.038   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.047  run 0.040   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.065  run 0.040   eta  0m 23s
+  train   loss 0.040  lr 5.00e-05  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.057  qwk 0.8780   mf1 0.7879  sel 0.8330  +sel +0.0069   patience  0/10 a
+  recall  noD  83.4%   min  72.4%   maj  73.4%   des  87.4%
+  shadow: EMA (decay 0.996)
+
+[E 19 / 100  10:39:01]
+  heartbeat  71/285 (25%)   loss 0.026  run 0.040   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.050  run 0.040   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.039  run 0.041   eta  0m 23s
+  train   loss 0.040  lr 5.00e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.057  qwk 0.8781   mf1 0.7905  sel 0.8343  +sel +0.0013   patience  1/10 a
+  recall  noD  85.0%   min  73.2%   maj  72.3%   des  87.7%
+  shadow: EMA (decay 0.996)
+
+[E 20 / 100  10:40:56]
+  heartbeat  71/285 (25%)   loss 0.031  run 0.038   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.046  run 0.039   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.069  run 0.040   eta  0m 23s
+  train   loss 0.040  lr 5.00e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8778   mf1 0.7890  sel 0.8334  +sel -0.0009   patience  2/10 a
+  recall  noD  84.7%   min  72.0%   maj  71.7%   des  90.0%
+  shadow: EMA (decay 0.996)
+
+[E 21 / 100  10:42:50]
+  heartbeat  71/285 (25%)   loss 0.041  run 0.039   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.013  run 0.039   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.049  run 0.039   eta  0m 23s
+  train   loss 0.039  lr 5.00e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8788   mf1 0.7915  sel 0.8351  +sel +0.0018   patience  3/10 a
+  recall  noD  86.9%   min  71.8%   maj  71.5%   des  89.7%
+  shadow: EMA (decay 0.996)
+
+[E 22 / 100  10:44:45]
+  heartbeat  71/285 (25%)   loss 0.020  run 0.037   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.050  run 0.038   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.036  run 0.038   eta  0m 23s
+  train   loss 0.038  lr 2.50e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8761   mf1 0.7849  sel 0.8305  +sel -0.0047   patience  4/10 a
+  recall  noD  85.0%   min  72.4%   maj  70.6%   des  88.7%
+  shadow: EMA (decay 0.996)
+
+================================================================================
+[event] epoch 22  LR reduced 5.00e-05 -> 2.50e-05  (early-stopping active)
+[event] epoch 22  warm-started training model + EMA shadow from best (optimizer state preserved)
+================================================================================
+
+[E 23 / 100  10:46:40]
+  heartbeat  71/285 (25%)   loss 0.054  run 0.040   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.028  run 0.038   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.023  run 0.039   eta  0m 23s
+  train   loss 0.039  lr 2.50e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.057  qwk 0.8804   mf1 0.7920  sel 0.8362  +sel +0.0057   patience  5/10 a
+  recall  noD  84.7%   min  73.0%   maj  73.0%   des  87.9%
+  shadow: EMA (decay 0.996)
+  *** new best -> outputs\ablation\typology\Spatial_Block_East\seed_33\best_model.pt
+
+[E 24 / 100  10:48:34]
+  heartbeat  71/285 (25%)   loss 0.029  run 0.039   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.047  run 0.038   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.021  run 0.039   eta  0m 23s
+  train   loss 0.039  lr 2.50e-05  imgs/s  196  gpu 22.7G  time  1m 36s
+   val    loss 0.058  qwk 0.8773   mf1 0.7849  sel 0.8311  +sel -0.0051   patience  0/10 a
+  recall  noD  83.7%   min  72.6%   maj  72.1%   des  87.4%
+  shadow: EMA (decay 0.996)
+
+[E 25 / 100  10:50:29]
+  heartbeat  71/285 (25%)   loss 0.046  run 0.037   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.050  run 0.038   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.034  run 0.037   eta  0m 23s
+  train   loss 0.037  lr 2.50e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.059  qwk 0.8761   mf1 0.7878  sel 0.8319  +sel +0.0008   patience  1/10 a
+  recall  noD  84.7%   min  73.6%   maj  72.3%   des  86.4%
+  shadow: EMA (decay 0.996)
+
+[E 26 / 100  10:52:24]
+  heartbeat  71/285 (25%)   loss 0.047  run 0.037   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.034  run 0.037   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.041  run 0.038   eta  0m 23s
+  train   loss 0.038  lr 2.50e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.060  qwk 0.8744   mf1 0.7845  sel 0.8295  +sel -0.0025   patience  2/10 a
+  recall  noD  84.0%   min  74.0%   maj  71.3%   des  86.2%
+  shadow: EMA (decay 0.996)
+
+[E 27 / 100  10:54:19]
+  heartbeat  71/285 (25%)   loss 0.029  run 0.037   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.043  run 0.037   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.024  run 0.038   eta  0m 23s
+  train   loss 0.037  lr 2.50e-05  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.060  qwk 0.8737   mf1 0.7836  sel 0.8286  +sel -0.0008   patience  3/10 a
+  recall  noD  84.0%   min  74.4%   maj  70.8%   des  85.9%
+  shadow: EMA (decay 0.996)
+
+[E 28 / 100  10:56:13]
+  heartbeat  71/285 (25%)   loss 0.036  run 0.037   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.025  run 0.036   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.027  run 0.037   eta  0m 23s
+  train   loss 0.036  lr 1.25e-05  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.060  qwk 0.8724   mf1 0.7831  sel 0.8278  +sel -0.0009   patience  4/10 a
+  recall  noD  84.0%   min  73.8%   maj  71.2%   des  86.2%
+  shadow: EMA (decay 0.996)
+
+================================================================================
+[event] epoch 28  LR reduced 2.50e-05 -> 1.25e-05  (early-stopping active)
+[event] epoch 28  warm-started training model + EMA shadow from best (optimizer state preserved)
+================================================================================
+
+[E 29 / 100  10:58:08]
+  heartbeat  71/285 (25%)   loss 0.043  run 0.039   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.024  run 0.038   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.018  run 0.038   eta  0m 23s
+  train   loss 0.038  lr 1.25e-05  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8796   mf1 0.7907  sel 0.8351  +sel +0.0073   patience  5/10 a
+  recall  noD  83.7%   min  73.2%   maj  73.0%   des  87.9%
+  shadow: EMA (decay 0.996)
+
+[E 30 / 100  11:00:02]
+  heartbeat  71/285 (25%)   loss 0.049  run 0.036   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.019  run 0.037   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.048  run 0.038   eta  0m 23s
+  train   loss 0.038  lr 1.25e-05  imgs/s  197  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8769   mf1 0.7876  sel 0.8323  +sel -0.0029   patience  6/10 a
+  recall  noD  83.4%   min  73.2%   maj  72.5%   des  87.4%
+  shadow: EMA (decay 0.996)
+
+[E 31 / 100  11:01:57]
+  heartbeat  71/285 (25%)   loss 0.025  run 0.037   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.047  run 0.039   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.041  run 0.039   eta  0m 23s
+  train   loss 0.038  lr 1.25e-05  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8762   mf1 0.7861  sel 0.8312  +sel -0.0011   patience  7/10 a
+  recall  noD  82.7%   min  73.8%   maj  72.3%   des  86.9%
+  shadow: EMA (decay 0.996)
+
+[E 32 / 100  11:03:52]
+  heartbeat  71/285 (25%)   loss 0.031  run 0.038   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.031  run 0.038   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.049  run 0.037   eta  0m 23s
+  train   loss 0.038  lr 1.25e-05  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8776   mf1 0.7880  sel 0.8328  +sel +0.0017   patience  8/10 a
+  recall  noD  83.7%   min  73.2%   maj  72.1%   des  87.9%
+  shadow: EMA (decay 0.996)
+
+[E 33 / 100  11:05:46]
+  heartbeat  71/285 (25%)   loss 0.028  run 0.038   eta  1m 10s
+  heartbeat 142/285 (50%)   loss 0.043  run 0.037   eta  0m 47s
+  heartbeat 214/285 (75%)   loss 0.030  run 0.037   eta  0m 23s
+  train   loss 0.036  lr 6.25e-06  imgs/s  196  gpu 22.7G  time  1m 35s
+   val    loss 0.058  qwk 0.8775   mf1 0.7878  sel 0.8326  +sel -0.0002   patience  9/10 a
+  recall  noD  83.7%   min  73.6%   maj  72.3%   des  87.2%
+  shadow: EMA (decay 0.996)
+
+================================================================================
+[event] epoch 33  LR reduced 1.25e-05 -> 6.25e-06  (early-stopping active)
+[event] epoch 33  warm-started training model + EMA shadow from best (optimizer state preserved)
+================================================================================
+[event] epoch 33  early stopping  (10 epochs without improvement post-LR-drop)
+
+================================================================================
+  Training complete   33 epochs   wall 1h 04m 08s   images seen 601,920
+
+  top 3   |  epoch  |   sel   |   qwk   |   mf1  
+==========+=========+=========+=========+=========
+   #1     |    23   | 0.8362  | 0.8804  | 0.7920
+   #2     |    12   | 0.8355  | 0.8802  | 0.7909
+   #3     |    14   | 0.8352  | 0.8791  | 0.7913
+
+  best    epoch 23   sel 0.8362   qwk 0.8804   mf1 0.7920
+  final   epoch 33   sel 0.8326   qwk 0.8775   mf1 0.7878
+================================================================================

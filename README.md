@@ -4,7 +4,9 @@
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.12.0--dev-EE4C2C?logo=pytorch&logoColor=orange)](https://pytorch.org/)
-[![PyTest coverage](https://raw.githubusercontent.com/MobileSensorLab/mcdn/badges/coverage.svg)](https://docs.pytest.org/en/stable/)
+[![PyTest coverage](data/readme/badge_coverage.svg)](https://docs.pytest.org/en/stable/)
+<!-- Live badge; re-enable once the repo is public:
+[![PyTest coverage](https://raw.githubusercontent.com/MobileSensorLab/mcdn/badges/coverage.svg)](https://docs.pytest.org/en/stable/) -->
 
 [![License: AGPL v3](https://img.shields.io/badge/License-GNU%20AGPL%20v3-663366.svg?logo=gnu&logoColor=white)](./LICENSE.md)
 

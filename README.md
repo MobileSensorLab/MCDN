@@ -17,7 +17,7 @@ channel soft attention mask, achieving state-of-the-art ordinal regression on th
 
 Ten-seed ensemble (argmax decoding) on the four-class Joint Damage Scale, evaluated under three increasingly out-of-distribution holdout protocols:
 
-<img src="data/readme/confusion_triptych.svg" alt="Alt Text" width="680">
+<img src="data/readme/confusion_triptych.svg" alt="Confusion matrices" width="750">
 
 | Holdout | Protocol | Macro-Precision | Macro-Recall | Macro-F1 | QWK |
 |---|---|:---:|:---:|:---:|:---:|

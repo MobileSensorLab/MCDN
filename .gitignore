@@ -1,0 +1,24 @@
+# Python / IDE
+__pycache__
+.cursor/
+.idea/
+.pytest_cache/
+.ruff_cache/
+.venv/
+*.py[oc]
+*.egg-info
+build/
+dist/
+wheels/
+outputs/
+
+# Include the data folder and top-level files, but ignore the ~400GB files within the subfolders
+data/*/*
+
+# Documentation artifacts (quarto wiki will be rendered from _freeze through a CI/CD loop)
+doc/.quarto/
+doc/_book/
+doc/_wiki/
+doc/site_libs/
+doc/*_files/
+**/*.quarto_ipynb

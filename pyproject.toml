@@ -1,0 +1,118 @@
+[project]
+name = "MCDN"
+version = "0.0.1"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "albumentations",
+    "geopandas>=1.0.0",
+    "great_tables>=0.20.0",
+    "ipykernel>=7.1.0",
+    "jupyter>=1.1.1",
+    "jupyter-cache>=1.0.1",
+    "matplotlib>=3.10.8",
+    "opencv-python-headless",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0.0",
+    "rasterio>=1.4.0",
+    "seaborn>=0.13.0",
+    "shapely>=2.0.0",
+    "timm>=0.9.0",
+    "tabulate>=0.10.0",
+    "libpysal>=4.14.1",
+    "esda>=2.8.2",
+    "splot>=1.1.7",
+    "statsmodels>=0.14.6",
+    "xgboost>=3.2.0",
+    "scikit-learn>=1.5.0",
+    "fvcore>=0.1.5",
+
+    # Target explicit URLs for development (sm_120 support on Windows w/ python 3.13).
+    "torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp313-cp313-win_amd64.whl ; sys_platform == 'win32'",
+    "torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp313-cp313-win_amd64.whl ; sys_platform == 'win32'",
+
+    # Use CPU variant for CI/CD
+    "torch ; sys_platform == 'linux'",
+    "torchvision ; sys_platform == 'linux'",
+    "optuna>=4.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=3.5.0",
+    "pybadges>=3.0.1",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.15.0",
+    "setuptools>=75.0.0"
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", marker = "sys_platform == 'linux'" }
+]
+torchvision = [
+    { index = "pytorch-cpu", marker = "sys_platform == 'linux'" }
+]
+
+[tool.uv]
+prerelease = "allow"
+environments = [
+    "sys_platform == 'win32'",
+    "sys_platform == 'linux'"
+]
+
+[tool.ruff]
+line-length = 140 # 120 preferred, 140 maximum
+target-version = "py312"
+
+[tool.ruff.lint]
+extend-select = [
+    "ANN", # Type annotations
+    "ARG", # Unused arguments
+    "B", # Bugbear
+    "C4", # Comprehensions
+    "D",   # Docstrings
+    "NPY", # Numpy
+    "PERF", #Performance
+    "PT", # Pytest
+    "RUF", # ruff-specific
+    "SIM", # simplify
+    "UP" # PyUprade
+]
+ignore = [
+    "D100", # Missing docstring in public module
+    "D202" # No blank lines allowed after function docstring
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D"]
+"train.py" = ["E402"] # CUDA_LAUNCH_BLOCKING must run before torch import
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src", "scripts"]  # Effectively replaces "python -m pytest"
+testpaths = ["tests"]
+addopts = "--cov=. --cov-report=term-missing --cov-report=xml:.pytest_cache/coverage.xml"
+filterwarnings = [
+    "ignore:`torch.jit.script` is deprecated:DeprecationWarning", # timm / torchvision still exercise torch.jit internals on import; not actionable in this repo until upstream drops jit.
+]
+
+[tool.coverage.run]
+source = ["."]
+branch = true
+data_file = ".pytest_cache/.coverage"
+omit = ["*signature_bootstrap.py", "*/shibokensupport/*", "*/__init__.py", "train.py"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = ["if __name__ == .__main__.:"]
+omit = []

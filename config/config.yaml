@@ -1,0 +1,33 @@
+data:
+  dir: "data/"
+  chip_size: 512
+  holdout_event: null  # Replace with a string (e.g., "Hurricane Ian") to target a specific fold
+  sensor_profile: "uas_5cm"
+
+training:
+  epochs: 50
+  batch_size: 64 #32
+  accum_steps: 4
+  lr: 1e-4
+  sampler_mode: "uniform"
+  class_weighting_enabled: true
+
+model:
+  name: "convnextv2_nano.fcmae_ft_in22k_in1k"
+  pretrained: true
+
+ablation:
+  mask_enabled: true
+  typology_enabled: true
+
+runtime:
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 3
+  drop_last: true
+  val_batch_size_factor: 0.5
+  device: "auto"
+  seed: null # Replace with a >0 integer to force a deterministic outcome
+  early_stopping_patience: 10
+  checkpoint_root: "outputs/checkpoints"

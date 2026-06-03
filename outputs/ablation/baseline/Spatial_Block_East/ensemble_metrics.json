@@ -1,0 +1,289 @@
+{
+  "schema_version": 2,
+  "arm": "baseline",
+  "split": "Spatial_Block_East",
+  "n_seeds": 10,
+  "seeds": [
+    "seed_00",
+    "seed_11",
+    "seed_22",
+    "seed_33",
+    "seed_44",
+    "seed_55",
+    "seed_66",
+    "seed_77",
+    "seed_88",
+    "seed_99"
+  ],
+  "generated_at": "2026-04-30T14:33:29.865893+00:00",
+  "class_order": [
+    "No Damage",
+    "Minor",
+    "Major",
+    "Destroyed"
+  ],
+  "validation_set": {
+    "num_samples": 1733,
+    "class_support": {
+      "No Damage": 313,
+      "Minor": 496,
+      "Major": 534,
+      "Destroyed": 390
+    }
+  },
+  "config": {
+    "tta_views": 8,
+    "ensemble_strategy": "within_variant",
+    "prediction_rules": [
+      "EV",
+      "argmax",
+      "hybrid"
+    ],
+    "canonical_rule": "argmax",
+    "replay_tolerance": 0.005
+  },
+  "replay": {
+    "all_within_tolerance": true,
+    "max_abs_delta": 0.0002706461796240234,
+    "per_seed": [
+      {
+        "seed": "seed_00",
+        "stored_qwk": 0.8758860813326498,
+        "replay_ev_qwk": 0.8758860813326499,
+        "delta": 1.1102230246251565e-16,
+        "ok": true
+      },
+      {
+        "seed": "seed_11",
+        "stored_qwk": 0.8760067868678196,
+        "replay_ev_qwk": 0.8760067868678196,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_22",
+        "stored_qwk": 0.8799505906679215,
+        "replay_ev_qwk": 0.8799505906679215,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_33",
+        "stored_qwk": 0.8816319274726006,
+        "replay_ev_qwk": 0.8816319274726006,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_44",
+        "stored_qwk": 0.8730845739719018,
+        "replay_ev_qwk": 0.8730845739719018,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_55",
+        "stored_qwk": 0.8788609114531889,
+        "replay_ev_qwk": 0.8788609114531889,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_66",
+        "stored_qwk": 0.8791288367050152,
+        "replay_ev_qwk": 0.8788581905253912,
+        "delta": -0.0002706461796240234,
+        "ok": true
+      },
+      {
+        "seed": "seed_77",
+        "stored_qwk": 0.8806450842524592,
+        "replay_ev_qwk": 0.8806450842524592,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_88",
+        "stored_qwk": 0.8759071349502109,
+        "replay_ev_qwk": 0.8759071349502109,
+        "delta": 0.0,
+        "ok": true
+      },
+      {
+        "seed": "seed_99",
+        "stored_qwk": 0.8770746100745933,
+        "replay_ev_qwk": 0.8770746100745934,
+        "delta": 1.1102230246251565e-16,
+        "ok": true
+      }
+    ]
+  },
+  "ensemble": {
+    "EV": {
+      "qwk": 0.8828092134358267,
+      "accuracy": 0.7847663012117715,
+      "macro_f1": 0.7919369356345621,
+      "macro_recall": 0.796875100674415,
+      "macro_precision": 0.7927142649296612,
+      "per_class": {
+        "No Damage": {
+          "f1": 0.7854014598540147,
+          "recall": 0.8594249201277955,
+          "precision": 0.7231182795698925
+        },
+        "Minor": {
+          "f1": 0.7237354085603113,
+          "recall": 0.75,
+          "precision": 0.6992481203007519
+        },
+        "Major": {
+          "f1": 0.7664670658682635,
+          "recall": 0.7191011235955056,
+          "precision": 0.8205128205128205
+        },
+        "Destroyed": {
+          "f1": 0.8921438082556592,
+          "recall": 0.8589743589743589,
+          "precision": 0.9279778393351801
+        }
+      },
+      "confusion_matrix": [
+        [
+          269,
+          41,
+          3,
+          0
+        ],
+        [
+          91,
+          372,
+          32,
+          1
+        ],
+        [
+          12,
+          113,
+          384,
+          25
+        ],
+        [
+          0,
+          6,
+          49,
+          335
+        ]
+      ]
+    },
+    "argmax": {
+      "qwk": 0.87721480524062,
+      "accuracy": 0.7986151182919792,
+      "macro_f1": 0.8037284443995997,
+      "macro_recall": 0.8167867273553195,
+      "macro_precision": 0.8025395040336898,
+      "per_class": {
+        "No Damage": {
+          "f1": 0.7835616438356164,
+          "recall": 0.9137380191693291,
+          "precision": 0.6858513189448441
+        },
+        "Minor": {
+          "f1": 0.7235772357723578,
+          "recall": 0.717741935483871,
+          "precision": 0.7295081967213115
+        },
+        "Major": {
+          "f1": 0.7926078028747434,
+          "recall": 0.7228464419475655,
+          "precision": 0.8772727272727273
+        },
+        "Destroyed": {
+          "f1": 0.9151670951156812,
+          "recall": 0.9128205128205128,
+          "precision": 0.9175257731958762
+        }
+      },
+      "confusion_matrix": [
+        [
+          286,
+          24,
+          2,
+          1
+        ],
+        [
+          108,
+          356,
+          27,
+          5
+        ],
+        [
+          21,
+          101,
+          386,
+          26
+        ],
+        [
+          2,
+          7,
+          25,
+          356
+        ]
+      ]
+    },
+    "hybrid": {
+      "qwk": 0.8784943244858151,
+      "accuracy": 0.7963069821119446,
+      "macro_f1": 0.8016621257869414,
+      "macro_recall": 0.8148782007152326,
+      "macro_precision": 0.8002026474595563,
+      "per_class": {
+        "No Damage": {
+          "f1": 0.7835616438356164,
+          "recall": 0.9137380191693291,
+          "precision": 0.6858513189448441
+        },
+        "Minor": {
+          "f1": 0.7222787385554426,
+          "recall": 0.7157258064516129,
+          "precision": 0.728952772073922
+        },
+        "Major": {
+          "f1": 0.7856410256410257,
+          "recall": 0.7172284644194756,
+          "precision": 0.8684807256235828
+        },
+        "Destroyed": {
+          "f1": 0.9151670951156812,
+          "recall": 0.9128205128205128,
+          "precision": 0.9175257731958762
+        }
+      },
+      "confusion_matrix": [
+        [
+          286,
+          24,
+          2,
+          1
+        ],
+        [
+          108,
+          355,
+          28,
+          5
+        ],
+        [
+          21,
+          104,
+          383,
+          26
+        ],
+        [
+          2,
+          4,
+          28,
+          356
+        ]
+      ]
+    }
+  },
+  "canonical_rule_synced_at": "2026-04-30T15:36:14.253119+00:00"
+}

@@ -13,7 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
 
-from src.model.mcdn import MaskConditionedDamageNet
+from src.model.mcdn import MaskCenteredDamageNet
 from src.model.trainer import _validation_qwk_and_classification
 from src.postproc import ensemble as ens
 
@@ -340,7 +340,7 @@ def test_build_model_from_config_resnet18_eval_mode_cpu() -> None:
 
     cfg = {"ablation": _ensemble_ablation_cfg(), "model": _ensemble_model_cfg()}
     model = ens.build_model_from_config(cfg=cfg, device="cpu")
-    assert isinstance(model, MaskConditionedDamageNet)
+    assert isinstance(model, MaskCenteredDamageNet)
     assert not model.training
     x = torch.randn(1, 4, 64, 64, dtype=torch.float32)
     ctx = torch.randn(1, 4, dtype=torch.float32)

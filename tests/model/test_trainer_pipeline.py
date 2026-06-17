@@ -115,7 +115,7 @@ def _patch_heavy_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("src.model.trainer.get_val_transforms", lambda: None)
     monkeypatch.setattr("src.model.trainer.create_weighted_sampler", lambda _dataset: object())
     monkeypatch.setattr("src.model.trainer.DataLoader", lambda *_args, **_kwargs: object())
-    monkeypatch.setattr("src.model.trainer.MaskConditionedDamageNet", lambda **_kwargs: object())
+    monkeypatch.setattr("src.model.trainer.MaskCenteredDamageNet", lambda **_kwargs: object())
     monkeypatch.setattr("src.model.trainer.OrdinalEarthMoversDistanceLoss", lambda **_kwargs: object())
     monkeypatch.setattr(
         "src.model.trainer.UnitemporalTrainer",
@@ -147,7 +147,7 @@ def _patch_pipeline_components_for_split_capture(
     monkeypatch.setattr("src.model.trainer.get_val_transforms", lambda: None)
     monkeypatch.setattr("src.model.trainer.create_weighted_sampler", lambda _dataset: object())
     monkeypatch.setattr("src.model.trainer.DataLoader", lambda *_args, **_kwargs: object())
-    monkeypatch.setattr("src.model.trainer.MaskConditionedDamageNet", lambda **_kwargs: object())
+    monkeypatch.setattr("src.model.trainer.MaskCenteredDamageNet", lambda **_kwargs: object())
     monkeypatch.setattr("src.model.trainer.OrdinalEarthMoversDistanceLoss", lambda **_kwargs: object())
 
     def _trainer_ctor(**kwargs: object) -> object:
@@ -194,7 +194,7 @@ def test_run_training_pipeline_default(monkeypatch: pytest.MonkeyPatch) -> None:
         classifier_kwargs.update(kwargs)
         return object()
 
-    monkeypatch.setattr("src.model.trainer.MaskConditionedDamageNet", _classifier_ctor)
+    monkeypatch.setattr("src.model.trainer.MaskCenteredDamageNet", _classifier_ctor)
 
     trainer_calls: dict[str, object] = {}
 
@@ -391,7 +391,7 @@ def test_run_training_pipeline_model_and_ablation_wiring(monkeypatch: pytest.Mon
         classifier_kwargs.update(kwargs)
         return object()
 
-    monkeypatch.setattr("src.model.trainer.MaskConditionedDamageNet", _classifier_ctor)
+    monkeypatch.setattr("src.model.trainer.MaskCenteredDamageNet", _classifier_ctor)
     monkeypatch.setattr("src.model.trainer.CRASARUnitemporalDataset", lambda *_a, **_k: type("D", (), {"instances": [{"damage_label": "no damage"}]})())
     monkeypatch.setattr("src.model.trainer.get_train_transforms", lambda: None)
     monkeypatch.setattr("src.model.trainer.get_val_transforms", lambda: None)
@@ -572,7 +572,7 @@ def test_run_training_pipeline_applies_runtime_config_to_dataloaders_and_trainer
 
     dataloader_calls: list[tuple[tuple[object, ...], dict[str, object]]] = []
     monkeypatch.setattr("src.model.trainer.DataLoader", lambda *args, **kwargs: dataloader_calls.append((args, kwargs)) or object())
-    monkeypatch.setattr("src.model.trainer.MaskConditionedDamageNet", lambda **_kwargs: object())
+    monkeypatch.setattr("src.model.trainer.MaskCenteredDamageNet", lambda **_kwargs: object())
     monkeypatch.setattr("src.model.trainer.OrdinalEarthMoversDistanceLoss", lambda **_kwargs: object())
     determinism_calls: list[int | None] = []
     monkeypatch.setattr("src.model.trainer.set_seeds", lambda seed: determinism_calls.append(seed))
@@ -657,7 +657,7 @@ def test_run_training_pipeline_ignores_prefetch_when_num_workers_zero(monkeypatc
 
     dataloader_calls: list[dict[str, object]] = []
     monkeypatch.setattr("src.model.trainer.DataLoader", lambda *_args, **kwargs: dataloader_calls.append(kwargs) or object())
-    monkeypatch.setattr("src.model.trainer.MaskConditionedDamageNet", lambda **_kwargs: object())
+    monkeypatch.setattr("src.model.trainer.MaskCenteredDamageNet", lambda **_kwargs: object())
     monkeypatch.setattr("src.model.trainer.OrdinalEarthMoversDistanceLoss", lambda **_kwargs: object())
     monkeypatch.setattr(
         "src.model.trainer.UnitemporalTrainer",
@@ -895,7 +895,7 @@ def test_run_training_pipeline_persists_reproducibility_metadata(tmp_path: Path,
     monkeypatch.setattr("src.model.trainer.get_val_transforms", lambda: None)
     monkeypatch.setattr("src.model.trainer.create_weighted_sampler", lambda _dataset: object())
     monkeypatch.setattr("src.model.trainer.DataLoader", lambda *_args, **_kwargs: object())
-    monkeypatch.setattr("src.model.trainer.MaskConditionedDamageNet", lambda **_kwargs: object())
+    monkeypatch.setattr("src.model.trainer.MaskCenteredDamageNet", lambda **_kwargs: object())
     monkeypatch.setattr("src.model.trainer.OrdinalEarthMoversDistanceLoss", lambda **_kwargs: object())
 
     class _Trainer:

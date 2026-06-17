@@ -56,7 +56,7 @@ from src.data.sampling import (
     generate_loeo_splits,
     select_fold,
 )
-from src.model.mcdn import MaskConditionedDamageNet
+from src.model.mcdn import MaskCenteredDamageNet
 from src.model.trainer import (
     ORDINAL_CLASS_DISPLAY_NAMES,
     _build_dataloaders,
@@ -88,12 +88,12 @@ def load_stored_metrics(fold_dir: Path) -> dict:
     return json.loads(metrics_path.read_text(encoding="utf-8"))
 
 
-def build_model_from_config(cfg: dict, device: str) -> MaskConditionedDamageNet:
+def build_model_from_config(cfg: dict, device: str) -> MaskCenteredDamageNet:
     """Construct the model architecture matching a resolved-config snapshot."""
 
     ablation = cfg["ablation"]
     model_cfg = cfg["model"]
-    model = MaskConditionedDamageNet(
+    model = MaskCenteredDamageNet(
         backbone_name=model_cfg["name"],
         pretrained=False,
         mask_enabled=ablation["mask_enabled"],
@@ -154,7 +154,7 @@ def build_val_loader_from_config(cfg: dict, data_dir_override: str | None = None
 
 
 @torch.no_grad()
-def collect_averaged_probabilities(model: MaskConditionedDamageNet, val_loader: DataLoader,
+def collect_averaged_probabilities(model: MaskCenteredDamageNet, val_loader: DataLoader,
                                     device: str) -> tuple[torch.Tensor, torch.Tensor]:
     """Run 4x rotation TTA and return softmax-averaged probabilities + targets.
 

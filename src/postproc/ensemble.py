@@ -70,7 +70,7 @@ from src.data.sampling import (
     generate_loeo_splits,
     select_fold,
 )
-from src.model.mcdn import MaskConditionedDamageNet
+from src.model.mcdn import MaskCenteredDamageNet
 from src.model.trainer import (
     ORDINAL_CLASS_DISPLAY_NAMES,
     _build_dataloaders,
@@ -138,12 +138,12 @@ def load_stored_metrics(fold_dir: Path) -> dict:
     return json.loads(metrics_path.read_text(encoding="utf-8"))
 
 
-def build_model_from_config(cfg: dict, device: str) -> MaskConditionedDamageNet:
+def build_model_from_config(cfg: dict, device: str) -> MaskCenteredDamageNet:
     """Construct the model architecture matching a resolved-config snapshot."""
 
     ablation = cfg["ablation"]
     model_cfg = cfg["model"]
-    model = MaskConditionedDamageNet(
+    model = MaskCenteredDamageNet(
         backbone_name=model_cfg["name"],
         pretrained=False,
         mask_enabled=ablation["mask_enabled"],
@@ -156,12 +156,12 @@ def build_model_from_config(cfg: dict, device: str) -> MaskConditionedDamageNet:
     return model
 
 
-def build_student_model_from_config(cfg: dict, device: str) -> MaskConditionedDamageNet:
+def build_student_model_from_config(cfg: dict, device: str) -> MaskCenteredDamageNet:
     """Construct a trainable MCDN from resolved config (pretrained backbone per yaml)."""
 
     ablation = cfg["ablation"]
     model_cfg = cfg["model"]
-    model = MaskConditionedDamageNet(
+    model = MaskCenteredDamageNet(
         backbone_name=model_cfg["name"],
         pretrained=model_cfg.get("pretrained", True),
         mask_enabled=ablation["mask_enabled"],
@@ -285,7 +285,7 @@ def build_deterministic_train_loader_from_config(cfg: dict, data_dir_override: s
 # Inference core ----------------------------------------------------------
 
 @torch.no_grad()
-def tta_mean_softmax_probs(model: MaskConditionedDamageNet, images_u8: torch.Tensor, context: torch.Tensor,
+def tta_mean_softmax_probs(model: MaskCenteredDamageNet, images_u8: torch.Tensor, context: torch.Tensor,
                            device: str) -> torch.Tensor:
     """Apply 8x D4 TTA and return mean softmax probabilities [B, K].
 
@@ -316,7 +316,7 @@ def tta_mean_softmax_probs(model: MaskConditionedDamageNet, images_u8: torch.Ten
 
 
 @torch.no_grad()
-def ensemble_mean_tta_probs(models: list[MaskConditionedDamageNet], images_u8: torch.Tensor, context: torch.Tensor,
+def ensemble_mean_tta_probs(models: list[MaskCenteredDamageNet], images_u8: torch.Tensor, context: torch.Tensor,
                             device: str) -> torch.Tensor:
     """Mean softmax probabilities across seeds after per-seed 8x D4 TTA."""
 
@@ -328,7 +328,7 @@ def ensemble_mean_tta_probs(models: list[MaskConditionedDamageNet], images_u8: t
 
 
 @torch.no_grad()
-def collect_averaged_probabilities(model: MaskConditionedDamageNet, val_loader: DataLoader,
+def collect_averaged_probabilities(model: MaskCenteredDamageNet, val_loader: DataLoader,
                                     device: str) -> tuple[torch.Tensor, torch.Tensor]:
     """Run 8x D4 TTA and return softmax-averaged probabilities + targets.
 

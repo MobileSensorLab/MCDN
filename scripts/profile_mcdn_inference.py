@@ -16,7 +16,7 @@ import torch.nn as nn
 import yaml
 from fvcore.nn import FlopCountAnalysis
 
-from src.model.mcdn import MaskConditionedDamageNet
+from src.model.mcdn import MaskCenteredDamageNet
 
 DEFAULT_CHECKPOINT_DIR = Path("outputs/ablation/baseline/Spatial_Block_East/seed_00")
 
@@ -27,7 +27,7 @@ class ProfileConfigError(ValueError):
 
 @dataclass(frozen=True)
 class ResolvedFoldConfig:
-    """Subset of training snapshot fields required to rebuild ``MaskConditionedDamageNet``."""
+    """Subset of training snapshot fields required to rebuild ``MaskCenteredDamageNet``."""
 
     chip_size: int
     model_name: str
@@ -92,10 +92,10 @@ def load_resolved_fold_config(config_path: Path) -> ResolvedFoldConfig:
     )
 
 
-def build_model(cfg: ResolvedFoldConfig) -> MaskConditionedDamageNet:
+def build_model(cfg: ResolvedFoldConfig) -> MaskCenteredDamageNet:
     """Instantiate MCDN from resolved fold config."""
 
-    return MaskConditionedDamageNet(
+    return MaskCenteredDamageNet(
         backbone_name=cfg.model_name,
         pretrained=cfg.model_pretrained,
         mask_enabled=cfg.mask_enabled,

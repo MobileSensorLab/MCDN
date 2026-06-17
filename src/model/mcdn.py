@@ -1,4 +1,4 @@
-"""Neural network architectures for mask-conditioned damage assessment.
+"""Neural network architectures for mask-centered damage assessment.
 
 Provides the core PyTorch module that fuses 4-channel visual features (RGB + a priori footprint mask)
 with disaster typology embeddings for ordinal damage classification.
@@ -58,7 +58,7 @@ def _global_and_soft_mask_pools(
     return g_avg, g_max, m_avg, m_max
 
 
-class MaskConditionedDamageNet(nn.Module):
+class MaskCenteredDamageNet(nn.Module):
     """Fuses 4-channel imagery with disaster context for damage classification.
 
     Utilizes a pre-trained backbone (via timm) adapted for 4-channel input.

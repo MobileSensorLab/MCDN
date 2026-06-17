@@ -1,4 +1,4 @@
-"""PyTorch Dataset implementation for mask-conditioned unitemporal damage assessment.
+"""PyTorch Dataset implementation for mask-centered unitemporal damage assessment.
 
 This module provides the core dataloading logic, converting orthomosaic-level
 manifests into instance-level (building-specific) training chips. It generates

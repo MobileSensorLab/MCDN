@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from src.model.mcdn import MaskConditionedDamageNet
+from src.model.mcdn import MaskCenteredDamageNet
 
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def sample_batch() -> tuple[torch.Tensor, torch.Tensor]:
 def test_model_initialization() -> None:
     """Verifies the model initializes with 4 input channels correctly."""
     # Using a tiny test model to keep memory footprint low during pytest
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False)
 
     # Verify the first conv layer expects 4 channels
     first_conv = list(model.backbone.modules())[1]
@@ -33,7 +33,7 @@ def test_model_initialization() -> None:
 def test_forward_pass_shape(sample_batch: tuple[torch.Tensor, torch.Tensor]) -> None:
     """Verifies the forward pass returns the correct logit shape."""
     images, context = sample_batch
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False)
 
     model.eval()
     with torch.no_grad():
@@ -50,7 +50,7 @@ def test_gradient_flow(sample_batch: tuple[torch.Tensor, torch.Tensor]) -> None:
     images.requires_grad = True
     context.requires_grad = True
 
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False)
     # FiLM affine layers are zero-initialized so the network starts from an identity
     # transform; perturb them so the context branch actually contributes to logits and
     # the architectural connectivity check below is meaningful.
@@ -73,7 +73,7 @@ def test_gradient_flow(sample_batch: tuple[torch.Tensor, torch.Tensor]) -> None:
 def test_model_initialization_mask_ablation_uses_three_input_channels() -> None:
     """mask_enabled=False switches backbone input channels from 4 to 3."""
 
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False, mask_enabled=False)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False, mask_enabled=False)
     first_conv = list(model.backbone.modules())[1]
     assert first_conv.in_channels == 3
 
@@ -82,7 +82,7 @@ def test_forward_pass_shape_typology_ablation(sample_batch: tuple[torch.Tensor, 
     """typology_enabled=False still returns valid logits shape."""
 
     images, context = sample_batch
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=False)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=False)
     model.eval()
     with torch.no_grad():
         logits = model(images, context)
@@ -96,7 +96,7 @@ def test_gradient_flow_typology_ablation_ignores_context_branch(sample_batch: tu
     images, context = sample_batch
     images.requires_grad = True
     context.requires_grad = True
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=False)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=False)
     model.train()
 
     logits = model(images, context)
@@ -110,7 +110,7 @@ def test_gradient_flow_typology_ablation_ignores_context_branch(sample_batch: tu
 def test_typology_disabled_skips_film_modules() -> None:
     """typology_enabled=False omits the FiLM MLP and per-stage affine layers."""
 
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=False)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=False)
     assert model.context_mlp is None
     assert model.stage3_film is None
     assert model.stage4_film is None
@@ -119,7 +119,7 @@ def test_typology_disabled_skips_film_modules() -> None:
 def test_typology_enabled_builds_film_modules() -> None:
     """typology_enabled=True instantiates the FiLM MLP and per-stage affine layers."""
 
-    model = MaskConditionedDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=True)
+    model = MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False, typology_enabled=True)
     assert model.context_mlp is not None
     assert model.stage3_film is not None
     assert model.stage4_film is not None

@@ -1,17 +1,19 @@
 name: Coverage
 
-# Mirrors the former GitLab `test_coverage` job: run the suite under coverage, render the
-# PyTest badge via scripts/coverage_badge.py, then publish the SVG to the orphan `badges`
-# branch. Keeping the badge off `main` lets `main` stay protected and review-clean; the
-# README references the badge through the raw.githubusercontent.com URL on `badges`.
+# Mirrors the former GitLab `test_coverage` job: run the suite under coverage. The badge is
+# currently committed statically at data/readme/badge_coverage.svg (regenerated locally),
+# because the orphan-`badges`-branch + raw-URL variant cannot render in the README while the
+# repo is private (GitHub's image proxy cannot fetch private raw assets). The live variant is
+# preserved, commented out, in the steps below for re-enablement once the repo is public.
 
 on:
   push:
     branches: [main]
   pull_request:
 
-# contents:write lets the built-in GITHUB_TOKEN force-push the badge to the unprotected
-# `badges` branch. No PAT or repo secret is required for this.
+# Retained for the (currently disabled) badges-branch publish step: contents:write lets the
+# built-in GITHUB_TOKEN force-push the badge to the unprotected `badges` branch. No PAT or
+# repo secret is required. Harmless while the publish step is commented out.
 permissions:
   contents: write
 
@@ -41,26 +43,33 @@ jobs:
       - name: Run tests with coverage
         run: uv run pytest --cov=src --cov-report term-missing
 
-      - name: Generate the PyTest coverage badge
-        run: uv run python scripts/coverage_badge.py -i .pytest_cache/coverage.xml -o coverage.svg
-
-      # Force-push a single-commit orphan branch holding only the badge. This keeps `badges`
-      # as a clean throwaway pointer (no history bloat) and is idempotent across runs. The
-      # GITHUB_TOKEN-authored push does not retrigger this workflow, so no [skip ci] guard is
-      # needed. Restricted to pushes on main; PRs run the suite but never publish.
-      - name: Publish badge to the badges branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          work="$(mktemp -d)"
-          cp coverage.svg "$work/coverage.svg"
-          cd "$work"
-          git init -q
-          git checkout -q -b badges
-          git add coverage.svg
-          git -c user.name="github-actions[bot]" \
-              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -q -m "Update coverage badge"
-          git push -fq "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" badges
+      # Badges-branch variant disabled while the repo is private: GitHub's image proxy cannot
+      # fetch raw.githubusercontent.com assets from a private repo, so the live badge will not
+      # render in the README. The badge is instead committed statically at
+      # data/readme/badge_coverage.svg (regenerate locally with scripts/coverage_badge.py).
+      # Re-enable the two steps below (and swap the README back to the raw URL) once the repo
+      # is public.
+      #
+      # - name: Generate the PyTest coverage badge
+      #   run: uv run python scripts/coverage_badge.py -i .pytest_cache/coverage.xml -o coverage.svg
+      #
+      # # Force-push a single-commit orphan branch holding only the badge. This keeps `badges`
+      # # as a clean throwaway pointer (no history bloat) and is idempotent across runs. The
+      # # GITHUB_TOKEN-authored push does not retrigger this workflow, so no [skip ci] guard is
+      # # needed. Restricted to pushes on main; PRs run the suite but never publish.
+      # - name: Publish badge to the badges branch
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     set -euo pipefail
+      #     work="$(mktemp -d)"
+      #     cp coverage.svg "$work/coverage.svg"
+      #     cd "$work"
+      #     git init -q
+      #     git checkout -q -b badges
+      #     git add coverage.svg
+      #     git -c user.name="github-actions[bot]" \
+      #         -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+      #         commit -q -m "Update coverage badge"
+      #     git push -fq "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" badges

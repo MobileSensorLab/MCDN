@@ -620,7 +620,7 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    Mask Conditioned Damage Net
+    Mask Centered Damage Net
     Copyright (C) 2026  Adam Kaplan
 
     This program is free software: you can redistribute it and/or modify

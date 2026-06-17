@@ -9,7 +9,7 @@ This module provides uniform averaging and a **selective** variant: only
 state_dict keys whose names start with a configured prefix tuple are
 averaged; all other float tensors are taken from the **first** checkpoint
 (typically seed 00). Tier 1.5 uses ``("backbone.",)`` on
-``MaskConditionedDamageNet`` so timm backbone weights are soup-averaged while
+``MaskCenteredDamageNet`` so timm backbone weights are soup-averaged while
 randomly initialized scaffolding (FiLM, mask-pooling readout, classifier)
 stays fixed to one seed's basin.
 
@@ -168,7 +168,7 @@ def build_uniform_soup(checkpoint_paths: list[Path], device: str = "cpu",
         average_key_prefixes: If ``None``, every float tensor is uniformly
             averaged (full soup). If a non-empty iterable, only keys starting
             with one of these prefixes are averaged; other float tensors are
-            copied from the first checkpoint. Tier 1.5 for ``MaskConditionedDamageNet``
+            copied from the first checkpoint. Tier 1.5 for ``MaskCenteredDamageNet``
             uses ``(\"backbone.\",)`` so timm backbone weights are averaged while
             FiLM, mixer, and classifier stay on the reference seed.
 

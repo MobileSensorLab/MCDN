@@ -1,6 +1,6 @@
 """F-MCDN - MCDN architecture overview block diagram.
 
-Renders the Mask Conditioned Damage Net as a top-down block diagram for the
+Renders the Mask Centered Damage Net as a top-down block diagram for the
 journal Methodology section
 (``.cursor/paper/v1_mask_conditioned_damage_net.tex``, ``\\ref{fig:mcdn-block}``).
 The four MCDN-specific architectural commitments beyond a stock ConvNeXt~v2

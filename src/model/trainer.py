@@ -31,7 +31,7 @@ from src.data.sampling import (
 )
 from src.data.transform import get_train_transforms, get_val_transforms
 from src.model.loss import OrdinalEarthMoversDistanceLoss
-from src.model.mcdn import MaskConditionedDamageNet
+from src.model.mcdn import MaskCenteredDamageNet
 
 _NUMPY_RNG = np.random.default_rng()
 ORDINAL_CLASS_DISPLAY_NAMES: tuple[str, ...] = ("No Damage", "Minor", "Major", "Destroyed")
@@ -1286,7 +1286,7 @@ def _build_model_and_loss(config: AppConfig, class_weights: torch.Tensor | None 
         class_weights: Optional per-class weighting tensor computed per fold.
     """
 
-    model = MaskConditionedDamageNet(
+    model = MaskCenteredDamageNet(
         backbone_name=config.model.name,
         pretrained=config.model.pretrained,
         mask_enabled=config.ablation.mask_enabled,

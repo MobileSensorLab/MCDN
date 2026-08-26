@@ -149,6 +149,7 @@ def build_val_loader_from_config(cfg: dict, data_dir_override: str | None = None
         val_batch_size_factor=runtime_cfg["val_batch_size_factor"],
         seed=runtime_cfg.get("seed"),
         sampler_mode=training_cfg.get("sampler_mode", "uniform"),
+        synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0),
     )
     return val_loader, holdout
 

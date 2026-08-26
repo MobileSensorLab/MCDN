@@ -1211,21 +1211,22 @@ class SplitSummary(TypedDict):
 def _build_dataloaders(train_df: pd.DataFrame, val_df: pd.DataFrame, chip_size: int, batch_size: int, num_workers: int,
                        pin_memory: bool, persistent_workers: bool, prefetch_factor: int, drop_last: bool,
                        val_batch_size_factor: float, seed: int | None, sampler_mode: str,
-                       mask_dilation_px: int = 0) -> tuple[DataLoader, DataLoader, SplitSummary]:
+                       mask_dilation_px: int = 0, synthetic_gsd_factor: float = 1.0) -> tuple[DataLoader, DataLoader, SplitSummary]:
     """Build train/validation datasets and dataloaders from split manifests."""
 
     train_dataset = CRASARUnitemporalDataset(
         train_df,
         chip_size=chip_size,
-        transform=get_train_transforms(),
+        transform=get_train_transforms(synthetic_gsd_factor=synthetic_gsd_factor),
         is_train=True,
         mask_dilation_px=mask_dilation_px,
     )
     # cache_validation_tensors: speeds validation from epoch 2 onward (~4MB per val instance in RAM).
+    # The GSD degradation models the sensor, so it applies to validation too (deterministic, cache-safe).
     val_dataset = CRASARUnitemporalDataset(
         val_df,
         chip_size=chip_size,
-        transform=get_val_transforms(),
+        transform=get_val_transforms(synthetic_gsd_factor=synthetic_gsd_factor),
         is_train=False,
         cache_validation_tensors=True,
         mask_dilation_px=mask_dilation_px,
@@ -1520,6 +1521,7 @@ def _execute_training_pipeline(
         seed=effective_seed,
         sampler_mode=config.training.sampler_mode,
         mask_dilation_px=config.ablation.mask_dilation_px,
+        synthetic_gsd_factor=config.data.synthetic_gsd_factor,
     )
 
     class_weights_tensor: torch.Tensor | None = None

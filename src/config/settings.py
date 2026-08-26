@@ -16,12 +16,18 @@ class DataConfig(BaseModel):
         chip_size: Structure-centered chip size in pixels.
         holdout_event: Optional LOEO holdout event name.
         sensor_profile: Imagery source profile selector for resolution ablations.
+        synthetic_gsd_factor: Linear ground-sample-distance degradation factor for the controlled
+            resolution ablation. Chips are anti-alias downsampled by this factor and restored to
+            the original pixel grid (RGB only; the vector-derived mask channel is untouched), so
+            the chip inventory is identical to the source-profile arm. ``1.0`` (default) disables
+            the degradation; ``3.0`` simulates 15 cm GSD from the 5 cm sUAS imagery.
     """
 
     dir: Path
     chip_size: int = Field(default=512, gt=0)
     holdout_event: str | None = None
     sensor_profile: Literal["uas_5cm", "manned_15cm"] = "uas_5cm"
+    synthetic_gsd_factor: float = Field(default=1.0, ge=1.0)
 
     @field_validator("dir", mode="before")
     @classmethod

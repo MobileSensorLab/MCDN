@@ -194,6 +194,48 @@ def test_load_config_invalid_loss_selector_error(tmp_path: Path) -> None:
         load_config(path)
 
 
+def test_load_config_synthetic_gsd_factor_default_and_explicit(tmp_path: Path) -> None:
+    """data.synthetic_gsd_factor defaults to 1.0 (disabled) and accepts degradation factors."""
+
+    default_path = tmp_path / "gsd_default.yaml"
+    default_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/"
+        ]),
+        encoding="utf-8"
+    )
+    assert load_config(default_path).data.synthetic_gsd_factor == 1.0
+
+    degraded_path = tmp_path / "gsd_3x.yaml"
+    degraded_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "  synthetic_gsd_factor: 3.0"
+        ]),
+        encoding="utf-8"
+    )
+    assert load_config(degraded_path).data.synthetic_gsd_factor == 3.0
+
+
+def test_load_config_synthetic_gsd_factor_below_one_error(tmp_path: Path) -> None:
+    """Factors below 1.0 (upsampling) raise ValidationError."""
+
+    path = tmp_path / "bad_gsd.yaml"
+    path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "  synthetic_gsd_factor: 0.5"
+        ]),
+        encoding="utf-8"
+    )
+
+    with pytest.raises(ValidationError):
+        load_config(path)
+
+
 def test_load_config_weighted_sampler_and_class_weights_allowed(tmp_path: Path) -> None:
     """Weighted sampler plus loss class weights is allowed (may compound rare-class emphasis)."""
 

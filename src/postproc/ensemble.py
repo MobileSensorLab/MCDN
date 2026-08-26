@@ -228,6 +228,7 @@ def build_val_loader_from_config(cfg: dict, data_dir_override: str | None = None
         seed=runtime_cfg.get("seed"),
         sampler_mode=training_cfg.get("sampler_mode", "uniform"),
         mask_dilation_px=ablation.get("mask_dilation_px", 0),
+        synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0),
     )
     return val_loader, holdout
 

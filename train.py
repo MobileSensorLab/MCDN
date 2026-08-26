@@ -13,7 +13,9 @@ ABLATION_PRESET_FILES = {
     "baseline": "ablation_baseline.yaml",
     "mask": "ablation_mask.yaml",
     "typology": "ablation_typology.yaml",
-    "resolution": "ablation_resolution.yaml"
+    "resolution": "ablation_resolution.yaml",
+    "rgb_only": "ablation_rgb_only.yaml",
+    "no_smoothing": "ablation_no_smoothing.yaml"
 }
 
 def _resolve_early_config_path_for_cuda_launch_blocking() -> Path:

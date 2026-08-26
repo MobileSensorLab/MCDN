@@ -1,0 +1,47 @@
+data:
+  dir: "data/"
+  chip_size: 512
+  holdout_event: null
+  sensor_profile: "uas_5cm"
+
+training:
+  epochs: 100
+  batch_size: 64
+  accum_steps: 2
+  lr: 1e-4
+  sampler_mode: "uniform"
+  class_weighting_enabled: true
+  class_weighting_power: 0.4
+  lr_plateau_patience: 4
+  label_smoothing: 0.0
+  max_grad_norm: 1.0
+
+model:
+  name: "convnextv2_nano.fcmae_ft_in22k_in1k"
+  pretrained: true
+  drop_path_rate: 0.10
+
+# No-label-smoothing preset. All model toggles match baseline; only the adjacency-aware
+# ordinal label smoothing is disabled (training.label_smoothing 0.02 -> 0.0), isolating
+# exactly the smoothing contribution to the squared-EMD training objective.
+ablation:
+  mask_enabled: true
+  typology_enabled: true
+  mask_weighted_pooling_enabled: true
+  mask_dilation_px: 0
+
+runtime:
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 3
+  drop_last: true
+  val_batch_size_factor: 0.5
+  device: "auto"
+  seed: null
+  early_stopping_patience: 10
+  ema_enabled: true
+  ema_decay: 0.996
+  lr_drop_warmstart_from_best: true
+  reset_optimizer_on_lr_drop: false
+  checkpoint_root: "outputs/checkpoints"

@@ -123,3 +123,63 @@ def test_typology_enabled_builds_film_modules() -> None:
     assert model.context_mlp is not None
     assert model.stage3_film is not None
     assert model.stage4_film is not None
+
+
+def _build_pooling_only_model() -> MaskCenteredDamageNet:
+    """Construct the pooling-only ablation configuration on the test backbone."""
+
+    return MaskCenteredDamageNet(
+        backbone_name="resnet18", pretrained=False, mask_enabled=False,
+        typology_enabled=False, mask_weighted_pooling_enabled=True
+    )
+
+
+def test_pooling_only_builds_rgb_backbone_with_four_wide_pooling() -> None:
+    """Pooling without the mask channel keeps a 3-channel stem and 4-readout pooling widths."""
+
+    model = _build_pooling_only_model()
+    first_conv = list(model.backbone.modules())[1]
+    assert first_conv.in_channels == 3
+    feature_channels = model.backbone.feature_info.channels()
+    assert model.stage3_feature_dim == 4 * feature_channels[-2]
+    assert model.stage4_feature_dim == 4 * feature_channels[-1]
+
+
+def test_pooling_only_forward_pass_shape(sample_batch: tuple[torch.Tensor, torch.Tensor]) -> None:
+    """Pooling-only forward accepts the standard 4-channel batch and returns valid logits."""
+
+    images, context = sample_batch
+    model = _build_pooling_only_model()
+    model.eval()
+    with torch.no_grad():
+        logits = model(images, context)
+
+    assert logits.shape == (2, 4)
+
+
+def test_pooling_only_mask_channel_steers_readout() -> None:
+    """In the pooling-only arm, changing only the mask channel changes the logits."""
+
+    torch.manual_seed(0)
+    model = _build_pooling_only_model()
+    model.eval()
+    rgb = torch.randn(1, 3, 224, 224)
+    context = torch.zeros(1, 4)
+    mask_upper_left = torch.zeros(1, 1, 224, 224)
+    mask_upper_left[..., :112, :112] = 1.0
+    mask_lower_right = torch.zeros(1, 1, 224, 224)
+    mask_lower_right[..., 112:, 112:] = 1.0
+
+    with torch.no_grad():
+        logits_upper_left = model(torch.cat([rgb, mask_upper_left], dim=1), context)
+        logits_lower_right = model(torch.cat([rgb, mask_lower_right], dim=1), context)
+
+    assert not torch.allclose(logits_upper_left, logits_lower_right)
+
+
+def test_pooling_enabled_forward_rejects_input_without_mask_channel() -> None:
+    """Pooling-enabled forward raises when the input lacks the footprint channel."""
+
+    model = _build_pooling_only_model()
+    with pytest.raises(ValueError, match="footprint mask channel"):
+        model(torch.randn(1, 3, 224, 224), torch.zeros(1, 4))

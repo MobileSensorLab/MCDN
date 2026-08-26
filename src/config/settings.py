@@ -88,8 +88,11 @@ class AblationConfig(BaseModel):
             the forward pass skips conditioning entirely. The legacy late-concat path
             (``head_input_dim = visual_feature_dim + embedding_dim``) has been retired; the head
             always operates on ``visual_feature_dim`` regardless of typology routing.
-        mask_weighted_pooling_enabled: When True (requires mask_enabled), concatenate global avg/max
-            with mask-weighted avg/max on backbone feature maps.
+        mask_weighted_pooling_enabled: When True, concatenate global avg/max with mask-weighted
+            avg/max on backbone feature maps. Independent of ``mask_enabled``: pooling keys on the
+            dataset's footprint channel directly, so enabling it without the 4th input channel
+            yields the pooling-only ablation arm (footprint steers readout but never enters the
+            backbone representation).
         mask_dilation_px: Morphological dilation applied to the footprint mask itself (in final-chip
             pixel units) to compensate for systematic label-source under-segmentation - polygon
             annotations typically exclude roof overhangs, eaves, and small attached structures.

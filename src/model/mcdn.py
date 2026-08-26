@@ -80,9 +80,12 @@ class MaskCenteredDamageNet(nn.Module):
         dropout_p: The dropout probability before the final classification (default: 0.3).
         gate_strength: Dampening factor for per-sample dynamic scale gates. A value of
             0.0 enforces equal branch weights; 1.0 uses fully dynamic gate outputs.
-        mask_weighted_pooling_enabled: When True (requires mask_enabled), concatenate global avg/max
-            with mask-weighted avg/max (same width as global branches; fallback aligns mask stats
-            with global when mask support on the feature grid is below ``_MASK_POOL_MIN_AREA_FRAC``).
+        mask_weighted_pooling_enabled: When True, concatenate global avg/max with mask-weighted
+            avg/max (same width as global branches; fallback aligns mask stats with global when
+            mask support on the feature grid is below ``_MASK_POOL_MIN_AREA_FRAC``). Independent of
+            ``mask_enabled``: pooling keys on the footprint channel of the input tensor (index 3),
+            so with ``mask_enabled=False`` the footprint steers deep-feature readout without ever
+            entering the backbone representation (the pooling-only ablation arm).
         drop_path_rate: Stochastic-depth rate forwarded to the timm backbone at construction.
     """
 
@@ -95,8 +98,6 @@ class MaskCenteredDamageNet(nn.Module):
         super().__init__()
         if not 0.0 <= gate_strength <= 1.0:
             raise ValueError("gate_strength must be in [0.0, 1.0].")
-        if mask_weighted_pooling_enabled and not mask_enabled:
-            raise ValueError("mask_weighted_pooling_enabled=True requires mask_enabled=True.")
         if not 0.0 <= drop_path_rate < 1.0:
             raise ValueError("drop_path_rate must be in [0.0, 1.0).")
         self.mask_enabled = mask_enabled
@@ -198,9 +199,14 @@ class MaskCenteredDamageNet(nn.Module):
     def forward(self, x: torch.Tensor, context: torch.Tensor) -> torch.Tensor:
         """Compute logits from multi-channel imagery and typology context.
 
-        The input tensor carries ``3 + mask_enabled`` channels (RGB, optional footprint mask at
-        index 3). Mask-weighted pooling keys on the footprint at index 3.
+        The dataset supplies the 4-channel [RGB, footprint mask] layout unconditionally. When
+        ``mask_enabled`` is False the backbone consumes only the RGB slice; when
+        ``mask_weighted_pooling_enabled`` is True the pooling branch keys on the footprint at
+        index 3 regardless of what the backbone consumes.
         """
+
+        if self.mask_weighted_pooling_enabled and x.size(1) < 4:
+            raise ValueError("mask_weighted_pooling_enabled=True requires the footprint mask channel at input index 3.")
 
         # Apply mask ablation by dropping the mask channel before forwarding.
         image_tensor = x if self.mask_enabled else x[:, :3, :, :]

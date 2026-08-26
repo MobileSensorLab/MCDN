@@ -50,6 +50,20 @@ PRESET_EXPECTATIONS = {
         "mask_weighted_pooling_enabled": True,
         "sensor_profile": "uas_5cm",
         "label_smoothing": 0.0
+    },
+    "ablation_mask_channel_only.yaml": {
+        "mask_enabled": True,
+        "typology_enabled": False,
+        "mask_weighted_pooling_enabled": False,
+        "sensor_profile": "uas_5cm",
+        "label_smoothing": 0.02
+    },
+    "ablation_pooling_only.yaml": {
+        "mask_enabled": False,
+        "typology_enabled": False,
+        "mask_weighted_pooling_enabled": True,
+        "sensor_profile": "uas_5cm",
+        "label_smoothing": 0.02
     }
 }
 

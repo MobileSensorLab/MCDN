@@ -21,9 +21,9 @@ model:
   pretrained: true
   drop_path_rate: 0.10
 
-# Design-correct no-typology preset. Removes disaster typology conditioning (FiLM MLP
-# and per-stage affine layers are not constructed; forward skips the FiLM block).
-# Mask and mask-weighted pooling preserved so this isolates exactly the typology prior.
+# No-typology preset. Removes disaster typology conditioning (FiLM MLP and per-stage
+# affine layers are not constructed; forward skips the FiLM block). Mask and
+# mask-weighted pooling preserved so the arm isolates exactly the typology prior.
 ablation:
   mask_enabled: true
   typology_enabled: false

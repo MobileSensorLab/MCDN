@@ -21,8 +21,8 @@ model:
   pretrained: true
   drop_path_rate: 0.10
 
-# Design-correct resolution preset. All model knobs match baseline; only sensor profile
-# differs (manned_15cm vs the baseline uas_5cm) so this isolates exactly the imagery
+# Resolution preset. All model knobs match baseline; only sensor profile differs
+# (manned_15cm vs the baseline uas_5cm) so the arm isolates exactly the imagery
 # resolution / GSD effect.
 ablation:
   mask_enabled: true

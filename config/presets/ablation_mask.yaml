@@ -21,9 +21,9 @@ model:
   pretrained: true
   drop_path_rate: 0.10
 
-# Design-correct no-mask preset. Drops the 4th-channel structural mask and disables
-# mask-weighted pooling (which has no defined behavior without the mask). Typology is
-# preserved so this isolates exactly the mask prior.
+# No-mask preset. Drops the 4th-channel structural mask and disables mask-weighted
+# pooling (which has no defined behavior without the mask). Typology is preserved so
+# the arm isolates exactly the mask prior.
 ablation:
   mask_enabled: false
   typology_enabled: true

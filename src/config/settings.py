@@ -45,6 +45,10 @@ class TrainingConfig(BaseModel):
             only pathological spikes). Relevant mainly for (a) rare-class batch gradient outliers
             and (b) the first few steps after ``optimizer.state.clear()`` on LR-drop warmstart,
             where absent momenta can produce abnormally large effective steps.
+        loss: Training criterion selector. "emd" (default) is the squared Earth Mover's Distance
+            with adjacency-aware ordinal label smoothing; "ce" is categorical cross-entropy with
+            torch-standard uniform label smoothing (the EMD-vs-CE ablation arm). Both receive the
+            same per-class weight tensor; ``label_smoothing`` semantics follow the selected loss.
     """
 
     epochs: int = Field(default=50, gt=0)
@@ -60,6 +64,7 @@ class TrainingConfig(BaseModel):
     class_weighting_max_ratio: float | None = Field(default=None, gt=1.0)
     lr_plateau_patience: int = Field(default=2, ge=1)
     label_smoothing: float = Field(default=0.025, ge=0.0, lt=1.0)
+    loss: Literal["emd", "ce"] = "emd"
 
 
 class ModelConfig(BaseModel):

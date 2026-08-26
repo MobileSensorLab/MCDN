@@ -30,7 +30,7 @@ from src.data.sampling import (
     select_fold,
 )
 from src.data.transform import get_train_transforms, get_val_transforms
-from src.model.loss import OrdinalEarthMoversDistanceLoss
+from src.model.loss import create_criterion
 from src.model.mcdn import MaskCenteredDamageNet
 
 _NUMPY_RNG = np.random.default_rng()
@@ -1282,7 +1282,8 @@ def _build_model_and_loss(config: AppConfig, class_weights: torch.Tensor | None 
 
     Args:
         config: Fully-validated root config. Model architecture is pulled from ``config.model``
-            and ``config.ablation``; loss smoothing is pulled from ``config.training``.
+            and ``config.ablation``; the loss selector and smoothing rate are pulled from
+            ``config.training``.
         class_weights: Optional per-class weighting tensor computed per fold.
     """
 
@@ -1294,7 +1295,8 @@ def _build_model_and_loss(config: AppConfig, class_weights: torch.Tensor | None 
         mask_weighted_pooling_enabled=config.ablation.mask_weighted_pooling_enabled,
         drop_path_rate=config.model.drop_path_rate,
     )
-    criterion = OrdinalEarthMoversDistanceLoss(
+    criterion = create_criterion(
+        loss_name=config.training.loss,
         weight=class_weights,
         label_smoothing=config.training.label_smoothing,
     )

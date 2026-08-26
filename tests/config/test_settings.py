@@ -150,6 +150,50 @@ def test_load_config_invalid_sensor_profile_error(tmp_path: Path) -> None:
         load_config(path)
 
 
+def test_load_config_loss_selector_default_and_ce(tmp_path: Path) -> None:
+    """training.loss defaults to emd and accepts the ce ablation selector."""
+
+    default_path = tmp_path / "loss_default.yaml"
+    default_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/"
+        ]),
+        encoding="utf-8"
+    )
+    assert load_config(default_path).training.loss == "emd"
+
+    ce_path = tmp_path / "loss_ce.yaml"
+    ce_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "training:",
+            "  loss: ce"
+        ]),
+        encoding="utf-8"
+    )
+    assert load_config(ce_path).training.loss == "ce"
+
+
+def test_load_config_invalid_loss_selector_error(tmp_path: Path) -> None:
+    """Loss selector outside the emd/ce pair raises ValidationError."""
+
+    path = tmp_path / "bad_loss.yaml"
+    path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "training:",
+            "  loss: focal"
+        ]),
+        encoding="utf-8"
+    )
+
+    with pytest.raises(ValidationError):
+        load_config(path)
+
+
 def test_load_config_weighted_sampler_and_class_weights_allowed(tmp_path: Path) -> None:
     """Weighted sampler plus loss class weights is allowed (may compound rare-class emphasis)."""
 

@@ -93,3 +93,26 @@ class OrdinalEarthMoversDistanceLoss(nn.Module):
             return loss_per_sample.sum() * 0.0
 
         return loss_per_sample.mean()
+
+
+def create_criterion(loss_name: str, weight: torch.Tensor | None = None, label_smoothing: float = 0.025) -> nn.Module:
+    """Build the training criterion for a configured loss selector.
+
+    Args:
+        loss_name: "emd" for the squared Earth Mover's Distance with adjacency-aware ordinal
+            smoothing, or "ce" for categorical cross-entropy (the EMD-vs-CE ablation arm).
+        weight: Optional 1D per-class weight tensor of shape [K], passed to either loss. Both
+            losses normalize the batch mean by the summed weights of the participating samples.
+        label_smoothing: Smoothing rate whose semantics follow the selected loss: adjacency-aware
+            ordinal smoothing (mass bleeds only to immediate ordinal neighbors) under "emd",
+            torch-standard uniform smoothing across all classes under "ce".
+
+    Returns:
+        Criterion module mapping (logits [B, K], integer targets [B]) to a scalar loss.
+    """
+
+    if loss_name == "emd":
+        return OrdinalEarthMoversDistanceLoss(weight=weight, label_smoothing=label_smoothing)
+    if loss_name == "ce":
+        return nn.CrossEntropyLoss(weight=weight, label_smoothing=label_smoothing)
+    raise ValueError(f"Unknown loss selector '{loss_name}'. Expected 'emd' or 'ce'.")

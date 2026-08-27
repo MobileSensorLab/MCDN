@@ -292,14 +292,21 @@ def build_deterministic_train_loader_from_config(cfg: dict, data_dir_override: s
 
 # Inference core ----------------------------------------------------------
 
-@torch.no_grad()
-def tta_mean_softmax_probs(model: MaskCenteredDamageNet, images_u8: torch.Tensor, context: torch.Tensor,
-                           device: str) -> torch.Tensor:
-    """Apply 8x D4 TTA and return mean softmax probabilities [B, K].
+# D4 view geometry shared by TTA averaging and the seed x TTA decomposition tooling.
+# Index 0 is the untransformed identity view, which defines the no-TTA configuration.
+D4_VIEW_ORDER: tuple[str, ...] = ("rot0", "rot90", "rot180", "rot270", "rot0_hflip", "rot90_hflip", "rot180_hflip", "rot270_hflip")
+IDENTITY_VIEW_INDEX: int = 0
 
+
+@torch.no_grad()
+def tta_view_softmax_probs(model: MaskCenteredDamageNet, images_u8: torch.Tensor, context: torch.Tensor,
+                           device: str) -> torch.Tensor:
+    """Return per-view softmax probabilities [V, B, K] over the 8 D4 views.
+
+    View order follows ``D4_VIEW_ORDER``: 4 rotations, then the hflip of each.
     ``images_u8`` and ``context`` may live on CPU or ``device``; views are evaluated on
-    ``device``. Matches :meth:`UnitemporalTrainer._validate` and legacy
-    ``collect_averaged_probabilities`` probability geometry.
+    ``device``. Retaining the view axis lets downstream tooling score no-TTA (identity
+    view only) configurations without re-running the model.
     """
 
     images_u8 = images_u8.to(device, non_blocking=True)
@@ -316,11 +323,23 @@ def tta_mean_softmax_probs(model: MaskCenteredDamageNet, images_u8: torch.Tensor
         ]
         tta_views = rot_views + [torch.flip(v, dims=[3]) for v in rot_views]
 
-        probs_stack = torch.stack(
+        return torch.stack(
             [F.softmax(model(view, context).float(), dim=1) for view in tta_views],
             dim=0
         )
-        return probs_stack.mean(dim=0)
+
+
+@torch.no_grad()
+def tta_mean_softmax_probs(model: MaskCenteredDamageNet, images_u8: torch.Tensor, context: torch.Tensor,
+                           device: str) -> torch.Tensor:
+    """Apply 8x D4 TTA and return mean softmax probabilities [B, K].
+
+    ``images_u8`` and ``context`` may live on CPU or ``device``; views are evaluated on
+    ``device``. Matches :meth:`UnitemporalTrainer._validate` and legacy
+    ``collect_averaged_probabilities`` probability geometry.
+    """
+
+    return tta_view_softmax_probs(model=model, images_u8=images_u8, context=context, device=device).mean(dim=0)
 
 
 @torch.no_grad()

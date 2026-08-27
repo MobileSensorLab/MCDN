@@ -13,6 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
 
+from src.data.dataset import to_normalized_float
 from src.model.mcdn import MaskCenteredDamageNet
 from src.model.trainer import _validation_qwk_and_classification
 from src.postproc import ensemble as ens
@@ -177,6 +178,51 @@ def test_compute_cross_variant_ensemble_target_mismatch_raises() -> None:
     vr2 = {**vr1, "variant_root": "/b", "targets": t2}
     with pytest.raises(RuntimeError, match="Cross-variant target mismatch"):
         ens.compute_cross_variant_ensemble([vr1, vr2])
+
+
+class _OrientationSensitiveModel(nn.Module):
+    """Logits keyed to the top-left pixel so the eight D4 views produce distinct outputs."""
+
+    def forward(self, x: torch.Tensor, _context: torch.Tensor) -> torch.Tensor:
+        corner = x[:, 0, 0, 0]  # [B]
+        return torch.stack([corner, -corner, corner * 0.5, -corner * 0.5], dim=1)
+
+
+def _patterned_images(batch: int = 2) -> torch.Tensor:
+    """Asymmetric uint8 chips whose corners differ, so rotations are distinguishable."""
+
+    base = (torch.arange(4 * 8 * 8, dtype=torch.int64).reshape(4, 8, 8) % 251).to(torch.uint8)
+    return torch.stack([base + i for i in range(batch)], dim=0)
+
+
+def test_tta_view_softmax_probs_shape_and_mean_consistency() -> None:
+    """View stack is [8, B, K] of softmaxes whose mean reproduces tta_mean_softmax_probs."""
+
+    images = _patterned_images()
+    context = torch.zeros((2, 2), dtype=torch.float32)
+    model = _OrientationSensitiveModel().eval()
+
+    stack = ens.tta_view_softmax_probs(model=model, images_u8=images, context=context, device="cpu")
+    assert stack.shape == (8, 2, 4)
+    assert torch.allclose(stack.sum(dim=-1), torch.ones(8, 2), atol=1e-5)
+
+    mean = ens.tta_mean_softmax_probs(model=model, images_u8=images, context=context, device="cpu")
+    assert torch.allclose(stack.mean(dim=0), mean, atol=1e-6)
+
+
+def test_tta_view_stack_identity_view_matches_direct_forward() -> None:
+    """View 0 is the untransformed forward pass; augmented views genuinely differ from it."""
+
+    images = _patterned_images()
+    context = torch.zeros((2, 2), dtype=torch.float32)
+    model = _OrientationSensitiveModel().eval()
+
+    stack = ens.tta_view_softmax_probs(model=model, images_u8=images, context=context, device="cpu")
+    expected_identity = F.softmax(model(to_normalized_float(images), context).float(), dim=1)
+    # Autocast may run the stack in reduced precision, so compare with a loose tolerance.
+    assert torch.allclose(stack[ens.IDENTITY_VIEW_INDEX], expected_identity, atol=1e-2)
+    assert not torch.allclose(stack[0], stack[1], atol=1e-3)
+    assert len(ens.D4_VIEW_ORDER) == 8
 
 
 def test_collect_averaged_probabilities_shapes_and_softmax() -> None:

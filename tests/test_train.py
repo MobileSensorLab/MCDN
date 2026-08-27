@@ -78,6 +78,27 @@ def test_apply_overrides_updates_supported_cli_fields() -> None:
     assert updated.data.dir == Path("alt-data")
 
 
+def test_apply_overrides_splits_plus_delimited_holdout_into_composite_list() -> None:
+    """A '+'-joined --holdout-event value becomes a multi-event composite holdout list."""
+
+    config = _build_minimal_config()
+    args = argparse.Namespace(
+        config=Path("config/config.yaml"),
+        epochs=None,
+        batch_size=None,
+        accum_steps=None,
+        lr=None,
+        chip_size=None,
+        holdout_event="Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado",
+        data_dir=None
+    )
+
+    updated = _apply_overrides(config=config, args=args)
+    assert updated.data.holdout_event == [
+        "Hurricane Michael", "Hurricane Idalia", "Mussett Bayou Fire", "Mayfield Tornado"
+    ]
+
+
 def test_main_forwards_full_config_to_training_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
     """main() forwards data, training, model, and runtime config to pipeline."""
 

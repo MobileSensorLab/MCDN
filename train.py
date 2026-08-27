@@ -134,7 +134,8 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--class-weighting-eps", type=float, default=None, help="Override class weighting eps.")
     parser.add_argument("--class-weighting-max-ratio", type=float, default=None, help="Override class weighting max ratio.")
     parser.add_argument("--chip-size", type=int, default=None, help="Override data chip size.")
-    parser.add_argument("--holdout-event", type=str, default=None, help="Override holdout event for LOEO.")
+    parser.add_argument("--holdout-event", type=str, default=None,
+                        help="Override holdout event for LOEO. Join multiple names with '+' for a composite fold.")
     parser.add_argument("--data-dir", type=Path, default=None, help="Override data directory path.")
     parser.add_argument("--seeds", type=int, nargs="+", default=None, help="Execute one run per provided seed value.")
     parser.add_argument("--fixed-seeds", action="store_true", help="Use the fixed ablation seed protocol: 0, 11, 22, 33, 44, 55, 66, 77, 88, 99.")
@@ -190,7 +191,10 @@ def _apply_overrides(config: AppConfig, args: argparse.Namespace) -> AppConfig:
     if args.chip_size is not None:
         payload["data"]["chip_size"] = args.chip_size
     if args.holdout_event is not None:
-        payload["data"]["holdout_event"] = args.holdout_event
+        # A '+'-delimited value expresses a composite multi-event holdout from the CLI
+        # (event names never contain '+'), e.g. the dataset-default test pool. Single
+        # names pass through unchanged, preserving the string-based LOEO path.
+        payload["data"]["holdout_event"] = args.holdout_event.split("+") if "+" in args.holdout_event else args.holdout_event
     if args.data_dir is not None:
         payload["data"]["dir"] = args.data_dir
     if getattr(args, "verbose", False):
@@ -205,7 +209,7 @@ def _apply_overrides(config: AppConfig, args: argparse.Namespace) -> AppConfig:
 def _compute_seed_macro_qwk(variant_root: Path, seed: int) -> tuple[float, int]:
     """Compute macro-QWK across every ``<split>/seed_<seed>`` under ``variant_root``.
 
-    Reflects the canonical ablation layout where each (split, seed) pair writes its
+    Reflects the standard ablation layout where each (split, seed) pair writes its
     metrics directly into ``<variant>/<split>/seed_<n>/metrics.json``. Returns the mean
     ``best_val_qwk`` across available splits and the number of splits contributing.
     """

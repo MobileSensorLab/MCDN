@@ -4,6 +4,11 @@
 # events (Hurricanes Ian, Ida, Laura, and Harvey, the Kilauea Eruption, and the Champlain
 # Towers Collapse) train — enabling a controlled building-level Macro-F1 comparison
 # against the published deployed-system results on an identical split.
+#
+# Verified 27 Aug 2026 on the staged HF tree: this event partition is identical to the
+# dataset's own train/ vs test/ directory split (event-disjoint), making this composite
+# the dataset-default evaluation. Other arms reach the same fold via the '+'-delimited
+# --holdout-event CLI form; the sorted composite split-directory name is shared.
 data:
   dir: "data/"
   chip_size: 512

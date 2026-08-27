@@ -29,7 +29,12 @@
 #SBATCH --requeue
 #SBATCH --open-mode=append
 #SBATCH --output=/network/rit/lab/mobilesensorlab/mcdn/outputs/cluster_logs/%x_%A_%a.out
-#SBATCH --container-image='docker://nvcr.io#nvidia/pytorch:25.01-py3'
+# Pre-imported squashfs (seconds to start) instead of a per-task registry import (~4 min each).
+# Regenerate after an image bump with:
+#   srun --partition=dgx --gpus=0 --cpus-per-task=16 --mem=64G --time=01:00:00 \
+#     enroot import -o /network/rit/dgx/dgx_mobilesensorlab/containers/nvidia+pytorch+25.01-py3.sqsh \
+#     'docker://nvcr.io#nvidia/pytorch:25.01-py3'
+#SBATCH --container-image=/network/rit/dgx/dgx_mobilesensorlab/containers/nvidia+pytorch+25.01-py3.sqsh
 #SBATCH --container-mounts=/network/rit/lab/mobilesensorlab:/network/rit/lab/mobilesensorlab,/network/rit/dgx/dgx_mobilesensorlab:/network/rit/dgx/dgx_mobilesensorlab
 
 set -euo pipefail

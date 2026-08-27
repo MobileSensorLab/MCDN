@@ -5,7 +5,7 @@ import pandas as pd
 from unittest.mock import MagicMock
 from torch.utils.data import WeightedRandomSampler
 
-from src.data.sampling import generate_loeo_splits, create_weighted_sampler
+from src.data.sampling import build_multi_event_fold, generate_loeo_splits, create_weighted_sampler
 
 
 # --- LOEO Split Tests ---
@@ -36,6 +36,83 @@ def test_generate_loeo_splits_success() -> None:
     # Verify no geographic leakage occurred
     assert "Mayfield Tornado" not in train_df["event"].values
     assert "Mayfield Tornado" in val_df["event"].values
+
+
+# --- Multi-Event Fold Tests ---
+
+def _multi_event_manifest() -> pd.DataFrame:
+    """Manifest with four events at two rows each for composite-fold tests."""
+
+    events = ["Hurricane Ian", "Hurricane Michael", "Mayfield Tornado", "Mussett Bayou Fire"]
+    return pd.DataFrame({
+        "image_path": [f"{i}.tif" for i in range(8)],
+        "event": [event for event in events for _ in range(2)]
+    })
+
+
+def test_build_multi_event_fold_partitions_events() -> None:
+    """Listed events form the validation pool; every other event trains; no leakage."""
+
+    manifest = _multi_event_manifest()
+    fold_name, train_df, val_df, selection = build_multi_event_fold(
+        manifest=manifest, holdout_events=["Hurricane Michael", "Mayfield Tornado"]
+    )
+
+    assert fold_name == "Hurricane Michael+Mayfield Tornado"
+    assert selection == "explicit_multi"
+    assert len(val_df) == 4
+    assert len(train_df) == 4
+    assert set(val_df["event"]) == {"Hurricane Michael", "Mayfield Tornado"}
+    assert set(train_df["event"]) == {"Hurricane Ian", "Mussett Bayou Fire"}
+
+
+def test_build_multi_event_fold_canonicalizes_requested_names() -> None:
+    """Case / hyphen variants resolve to manifest labels, matching select_fold semantics."""
+
+    manifest = _multi_event_manifest()
+    fold_name, _train_df, val_df, _selection = build_multi_event_fold(
+        manifest=manifest, holdout_events=["hurricane-michael", "MAYFIELD tornado"]
+    )
+
+    assert fold_name == "Hurricane Michael+Mayfield Tornado"
+    assert set(val_df["event"]) == {"Hurricane Michael", "Mayfield Tornado"}
+
+
+def test_build_multi_event_fold_deduplicates_matched_events() -> None:
+    """Requests resolving to the same manifest event collapse to one validation pool entry."""
+
+    manifest = _multi_event_manifest()
+    fold_name, _train_df, val_df, _selection = build_multi_event_fold(
+        manifest=manifest, holdout_events=["Hurricane Michael", "hurricane michael"]
+    )
+
+    assert fold_name == "Hurricane Michael"
+    assert len(val_df) == 2
+
+
+def test_build_multi_event_fold_unknown_event_error() -> None:
+    """An unmatched event name raises with the available events listed."""
+
+    manifest = _multi_event_manifest()
+    with pytest.raises(ValueError, match="not found in manifest"):
+        build_multi_event_fold(manifest=manifest, holdout_events=["Hurricane Michael", "Hurricane Sandy"])
+
+
+def test_build_multi_event_fold_rejects_holdout_of_all_events() -> None:
+    """Holding out every event leaves no training pool and raises."""
+
+    manifest = _multi_event_manifest()
+    all_events = ["Hurricane Ian", "Hurricane Michael", "Mayfield Tornado", "Mussett Bayou Fire"]
+    with pytest.raises(ValueError, match="no training events"):
+        build_multi_event_fold(manifest=manifest, holdout_events=all_events)
+
+
+def test_build_multi_event_fold_missing_event_column() -> None:
+    """Raises ValueError if 'event' column is missing from the manifest."""
+
+    manifest = pd.DataFrame({"image_path": ["a.tif", "b.tif"]})
+    with pytest.raises(ValueError, match="must contain an 'event' column"):
+        build_multi_event_fold(manifest=manifest, holdout_events=["Hurricane Michael"])
 
 
 # --- Weighted Sampler Tests ---

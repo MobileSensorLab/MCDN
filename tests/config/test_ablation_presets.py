@@ -89,6 +89,15 @@ PRESET_EXPECTATIONS = {
         "label_smoothing": 0.02,
         "loss": "emd",
         "synthetic_gsd_factor": 3.0
+    },
+    "ablation_deployed_split.yaml": {
+        "mask_enabled": True,
+        "typology_enabled": True,
+        "mask_weighted_pooling_enabled": True,
+        "sensor_profile": "uas_5cm",
+        "label_smoothing": 0.02,
+        "loss": "emd",
+        "holdout_event": ["Hurricane Michael", "Hurricane Idalia", "Mussett Bayou Fire", "Mayfield Tornado"]
     }
 }
 
@@ -108,8 +117,8 @@ def test_ablation_preset_files_exist(preset_name: str) -> None:
 
 
 @pytest.mark.parametrize(("preset_name", "expected"), sorted(PRESET_EXPECTATIONS.items()))
-def test_ablation_presets_define_expected_matrix_values(preset_name: str, expected: dict[str, bool | str | float]) -> None:
-    """Preset files define the expected mask/typology/pooling/sensor/smoothing/loss/GSD matrix."""
+def test_ablation_presets_define_expected_matrix_values(preset_name: str, expected: dict[str, bool | str | float | list[str]]) -> None:
+    """Preset files define the expected mask/typology/pooling/sensor/smoothing/loss/GSD/holdout matrix."""
 
     preset_path = _presets_dir() / preset_name
     raw_payload = yaml.safe_load(preset_path.read_text(encoding="utf-8"))
@@ -121,6 +130,7 @@ def test_ablation_presets_define_expected_matrix_values(preset_name: str, expect
     assert raw_payload["training"]["label_smoothing"] == expected["label_smoothing"]
     assert raw_payload["training"].get("loss", "emd") == expected["loss"]
     assert raw_payload["data"].get("synthetic_gsd_factor", 1.0) == expected.get("synthetic_gsd_factor", 1.0)
+    assert raw_payload["data"].get("holdout_event") == expected.get("holdout_event")
 
 
 @pytest.mark.parametrize("preset_name", sorted(PRESET_EXPECTATIONS))

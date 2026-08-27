@@ -10,6 +10,7 @@ from src.config.settings import AppConfig
 from train import _apply_overrides
 from train import _aggregate_ablation_metrics
 from train import _compute_seed_macro_qwk
+from train import _seed_run_is_complete
 from train import main
 
 
@@ -319,6 +320,123 @@ def test_compute_seed_macro_qwk_requires_all_split_artifacts(tmp_path: Path) -> 
 
     with pytest.raises(ValueError, match="Missing required fold artifacts"):
         _compute_seed_macro_qwk(variant_root=variant_root, seed=11)
+
+
+def _write_seed_run_artifacts(checkpoint_root: Path) -> None:
+    """Scaffold the per-seed artifact triplet that marks a run complete."""
+
+    checkpoint_root.mkdir(parents=True, exist_ok=True)
+    (checkpoint_root / "metrics.json").write_text('{"best_val_qwk": 0.80}', encoding="utf-8")
+    (checkpoint_root / "config_resolved.yaml").write_text("runtime:\n  seed: 11\n", encoding="utf-8")
+    (checkpoint_root / "best_model.pt").write_text("placeholder", encoding="utf-8")
+
+
+def _multi_seed_namespace(*, skip_if_complete: bool) -> argparse.Namespace:
+    """CLI namespace for a two-seed run with the skip-if-complete guard toggled."""
+
+    return argparse.Namespace(
+        config=Path("config/config.yaml"),
+        epochs=None,
+        batch_size=None,
+        accum_steps=None,
+        lr=None,
+        chip_size=None,
+        holdout_event=None,
+        data_dir=None,
+        seeds=[11, 22],
+        fixed_seeds=False,
+        ablation_preset=None,
+        skip_if_complete=skip_if_complete
+    )
+
+
+def test_seed_run_is_complete_requires_full_artifact_triplet(tmp_path: Path) -> None:
+    """Completion requires metrics.json, config_resolved.yaml, and best_model.pt together."""
+
+    assert _seed_run_is_complete(tmp_path) is False
+
+    _write_seed_run_artifacts(tmp_path)
+    assert _seed_run_is_complete(tmp_path) is True
+
+    (tmp_path / "best_model.pt").unlink()
+    assert _seed_run_is_complete(tmp_path) is False
+
+
+def test_main_skip_if_complete_backfills_only_missing_seeds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """--skip-if-complete skips seeds whose artifact triplet exists and runs the rest."""
+
+    config = _build_minimal_config()
+    payload = config.model_dump(mode="python")
+    payload["runtime"]["checkpoint_root"] = str(tmp_path)
+    config = AppConfig.model_validate(payload)
+
+    _write_seed_run_artifacts(tmp_path / "seed_11")
+
+    class _Parser:
+        @staticmethod
+        def parse_args() -> argparse.Namespace:
+            return _multi_seed_namespace(skip_if_complete=True)
+
+    calls: list[dict[str, object]] = []
+    monkeypatch.setattr("train._build_parser", lambda: _Parser())
+    monkeypatch.setattr("train.load_config", lambda _path: config)
+    monkeypatch.setattr("train.run_training_pipeline", lambda **kwargs: calls.append(kwargs))
+
+    main()
+
+    assert [call["seed"] for call in calls] == [22]
+    assert str(calls[0]["checkpoint_root"]).replace("\\", "/").endswith("seed_22")
+
+
+def test_main_skip_if_complete_reruns_partial_seed_outputs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A seed directory missing any triplet member (e.g. a preempted run) is not skipped."""
+
+    config = _build_minimal_config()
+    payload = config.model_dump(mode="python")
+    payload["runtime"]["checkpoint_root"] = str(tmp_path)
+    config = AppConfig.model_validate(payload)
+
+    _write_seed_run_artifacts(tmp_path / "seed_11")
+    (tmp_path / "seed_11" / "best_model.pt").unlink()
+
+    class _Parser:
+        @staticmethod
+        def parse_args() -> argparse.Namespace:
+            return _multi_seed_namespace(skip_if_complete=True)
+
+    calls: list[dict[str, object]] = []
+    monkeypatch.setattr("train._build_parser", lambda: _Parser())
+    monkeypatch.setattr("train.load_config", lambda _path: config)
+    monkeypatch.setattr("train.run_training_pipeline", lambda **kwargs: calls.append(kwargs))
+
+    main()
+
+    assert [call["seed"] for call in calls] == [11, 22]
+
+
+def test_main_without_skip_flag_reruns_completed_seeds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Default behavior is unchanged: completed seed directories are retrained when the flag is off."""
+
+    config = _build_minimal_config()
+    payload = config.model_dump(mode="python")
+    payload["runtime"]["checkpoint_root"] = str(tmp_path)
+    config = AppConfig.model_validate(payload)
+
+    _write_seed_run_artifacts(tmp_path / "seed_11")
+
+    class _Parser:
+        @staticmethod
+        def parse_args() -> argparse.Namespace:
+            return _multi_seed_namespace(skip_if_complete=False)
+
+    calls: list[dict[str, object]] = []
+    monkeypatch.setattr("train._build_parser", lambda: _Parser())
+    monkeypatch.setattr("train.load_config", lambda _path: config)
+    monkeypatch.setattr("train.run_training_pipeline", lambda **kwargs: calls.append(kwargs))
+
+    main()
+
+    assert [call["seed"] for call in calls] == [11, 22]
 
 
 def test_main_rejects_fixed_seed_without_preset(monkeypatch: pytest.MonkeyPatch) -> None:

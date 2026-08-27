@@ -304,3 +304,61 @@ def select_fold(splits: list[tuple[str, pd.DataFrame, pd.DataFrame]], holdout_ev
         f"'{DEFAULT_SPATIAL_HOLDOUT_CANONICAL}'. Available events: {available_events}. "
         "Set data.holdout_event explicitly."
     )
+
+
+def build_multi_event_fold(manifest: pd.DataFrame, holdout_events: list[str]) -> tuple[str, pd.DataFrame, pd.DataFrame, str]:
+    """Build one composite fold holding out several events at once.
+
+    Supports split-replication experiments whose published protocol reserves a fixed
+    multi-disaster test pool (e.g. the deployed-baseline split: four test disasters,
+    six training disasters) rather than a single LOEO event. Event matching mirrors
+    ``select_fold``: exact manifest labels first, then unique canonicalized matches
+    (case / hyphen / whitespace insensitive).
+
+    Args:
+        manifest: Valid manifest with an ``event`` column (see ``build_valid_manifest``).
+        holdout_events: Event names forming the validation pool. Training keeps every
+            other event.
+
+    Returns:
+        ``(fold_name, train_df, val_df, "explicit_multi")`` where ``fold_name`` joins the
+        matched manifest event labels, sorted, with ``+``.
+
+    Raises:
+        ValueError: If the manifest lacks an ``event`` column, a requested event is missing
+            or ambiguous after canonicalization, or no training events would remain.
+    """
+
+    if "event" not in manifest.columns:
+        raise ValueError("Manifest must contain an 'event' column for multi-event holdout.")
+
+    available_events = [str(event) for event in manifest["event"].dropna().unique()]
+    canonical_lookup: dict[str, list[str]] = {}
+    for event_name in available_events:
+        canonical_lookup.setdefault(_canonicalize_event_name(event_name), []).append(event_name)
+
+    matched: list[str] = []
+    for requested in holdout_events:
+        if requested in available_events:
+            matched.append(requested)
+            continue
+        candidates = canonical_lookup.get(_canonicalize_event_name(requested), [])
+        if len(candidates) == 1:
+            matched.append(candidates[0])
+            continue
+        if len(candidates) > 1:
+            raise ValueError(
+                f"Event '{requested}' matched multiple manifest events after canonicalization: "
+                f"{', '.join(candidates)}. Use exact holdout event strings."
+            )
+        raise ValueError(f"Event '{requested}' not found in manifest. Available events: {', '.join(sorted(available_events))}")
+
+    matched_unique = list(dict.fromkeys(matched))
+    val_mask = manifest["event"].isin(matched_unique)
+    val_df = manifest[val_mask].copy()
+    train_df = manifest[~val_mask].copy()
+    if train_df.empty:
+        raise ValueError("Multi-event holdout would leave no training events. Reduce data.holdout_event.")
+
+    fold_name = "+".join(sorted(matched_unique))
+    return fold_name, train_df, val_df, "explicit_multi"

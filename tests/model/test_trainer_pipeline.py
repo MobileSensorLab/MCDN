@@ -30,7 +30,7 @@ from src.model.trainer import run_training_pipeline
 def _make_config(
     *,
     data_dir: str = "dataset-root",
-    holdout_event: str | None = None,
+    holdout_event: str | list[str] | None = None,
     sensor_profile: str = "uas_5cm",
     chip_size: int = 512,
     batch_size: int = 64,
@@ -967,3 +967,41 @@ def test_run_training_pipeline_persists_reproducibility_metadata(tmp_path: Path,
     classification_payload = json.loads(classification_path.read_text(encoding="utf-8"))
     assert classification_payload["final"]["accuracy"] == 0.5
     assert classification_payload["best"]["accuracy"] == 0.6
+
+
+def test_run_training_pipeline_multi_event_holdout_builds_composite_fold(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """A list-valued holdout trains on the remaining events and round-trips through the snapshot.
+
+    Exercises the real ``build_multi_event_fold`` path (no LOEO split patching): the listed
+    events form the validation pool, the composite fold name lands in ``metrics.json``, and
+    ``config_resolved.yaml`` retains the original event list so postproc reconstruction can
+    rebuild the same split.
+    """
+
+    manifest = _build_event_manifest()
+    captured: dict[str, object] = {}
+    _patch_pipeline_components_for_split_capture(monkeypatch=monkeypatch, manifest=manifest, captured=captured)
+
+    config = _make_config(
+        holdout_event=["Event B", "Event C"],
+        data_dir="dataset-root",
+        checkpoint_root=str(tmp_path),
+        seed=22,
+    )
+    run_training_pipeline(config=config)
+
+    train_df = captured["train_df"]
+    val_df = captured["val_df"]
+    assert isinstance(train_df, pd.DataFrame)
+    assert isinstance(val_df, pd.DataFrame)
+    assert set(train_df["event"]) == {"Event A"}
+    assert set(val_df["event"]) == {"Event B", "Event C"}
+
+    metrics_payload = json.loads((tmp_path / "metrics.json").read_text(encoding="utf-8"))
+    assert metrics_payload["holdout_event"] == "Event B+Event C"
+    assert metrics_payload["holdout_selection"] == "explicit_multi"
+
+    config_payload = yaml.safe_load((tmp_path / "config_resolved.yaml").read_text(encoding="utf-8"))
+    assert config_payload["data"]["holdout_event"] == ["Event B", "Event C"]
+    assert config_payload["metadata"]["holdout_event"] == ["Event B", "Event C"]
+    assert config_payload["metadata"]["holdout_selection"] == "explicit_multi"

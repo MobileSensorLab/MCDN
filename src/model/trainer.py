@@ -23,6 +23,7 @@ from src.common.logging import config_hash, tee_stdout_to_file
 from src.config.settings import AppConfig
 from src.data.dataset import CRASARUnitemporalDataset, to_normalized_float
 from src.data.sampling import (
+    build_multi_event_fold,
     build_spatial_split_manifest,
     build_valid_manifest,
     create_weighted_sampler,
@@ -1308,7 +1309,7 @@ def _build_resolved_config_snapshot(
     config: AppConfig,
     *,
     resolved_data_root: Path,
-    resolved_holdout: str,
+    resolved_holdout: str | list[str],
     resolved_device: str,
     resolved_seed: int | None,
     checkpoint_root: str,
@@ -1319,7 +1320,9 @@ def _build_resolved_config_snapshot(
     The snapshot feeds ``config_resolved.yaml`` alongside fold metrics. It starts from
     ``config.model_dump(mode="json")`` so every validated field round-trips, and then
     overrides the small number of keys whose final values are only known after
-    manifest scanning, device resolution, and holdout selection.
+    manifest scanning, device resolution, and holdout selection. ``resolved_holdout`` is
+    the resolved fold name for single-event runs and the original event list for
+    composite multi-event runs, keeping the snapshot reloadable for split reconstruction.
     """
 
     snapshot = config.model_dump(mode="json")
@@ -1502,9 +1505,14 @@ def _execute_training_pipeline(
     valid_manifest = build_valid_manifest(data_dir=str(resolved_data_root), sensor_profile=sensor_profile)
 
     holdout_event = config.data.holdout_event
-    split_manifest = valid_manifest if holdout_event is not None else build_spatial_split_manifest(valid_manifest)
-    splits = list(generate_loeo_splits(split_manifest))
-    holdout, train_df, val_df, holdout_selection = select_fold(splits=splits, holdout_event=holdout_event)
+    if isinstance(holdout_event, list):
+        # Composite multi-event holdout (e.g. deployed-baseline split replication): the listed
+        # events form the validation pool and every remaining event trains.
+        holdout, train_df, val_df, holdout_selection = build_multi_event_fold(manifest=valid_manifest, holdout_events=holdout_event)
+    else:
+        split_manifest = valid_manifest if holdout_event is not None else build_spatial_split_manifest(valid_manifest)
+        splits = list(generate_loeo_splits(split_manifest))
+        holdout, train_df, val_df, holdout_selection = select_fold(splits=splits, holdout_event=holdout_event)
 
     resolved_device = _resolve_device(device=config.runtime.device)
     train_loader, val_loader, split_summary = _build_dataloaders(
@@ -1581,10 +1589,13 @@ def _execute_training_pipeline(
         reset_optimizer_on_lr_drop=config.runtime.reset_optimizer_on_lr_drop,
     )
 
+    # Multi-event runs round-trip the original list through the snapshot so downstream
+    # reconstruction (postproc ensemble / probe tooling) can rebuild the composite split;
+    # single-event runs record the resolved fold name as before.
     resolved_config = _build_resolved_config_snapshot(
         config=config,
         resolved_data_root=resolved_data_root,
-        resolved_holdout=holdout,
+        resolved_holdout=holdout_event if isinstance(holdout_event, list) else holdout,
         resolved_device=resolved_device,
         resolved_seed=effective_seed,
         checkpoint_root=effective_checkpoint_root,

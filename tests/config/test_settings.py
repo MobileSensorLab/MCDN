@@ -236,6 +236,78 @@ def test_load_config_synthetic_gsd_factor_below_one_error(tmp_path: Path) -> Non
         load_config(path)
 
 
+def test_load_config_holdout_event_accepts_string_list_and_null(tmp_path: Path) -> None:
+    """data.holdout_event supports a single event name, a multi-event list, and null."""
+
+    single_path = tmp_path / "holdout_single.yaml"
+    single_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "  holdout_event: Hurricane Michael"
+        ]),
+        encoding="utf-8"
+    )
+    assert load_config(single_path).data.holdout_event == "Hurricane Michael"
+
+    multi_path = tmp_path / "holdout_multi.yaml"
+    multi_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "  holdout_event:",
+            "    - Hurricane Michael",
+            "    - '  Mayfield Tornado '",
+            "    - Hurricane Michael"
+        ]),
+        encoding="utf-8"
+    )
+    # The list form strips whitespace and drops duplicates while preserving order.
+    assert load_config(multi_path).data.holdout_event == ["Hurricane Michael", "Mayfield Tornado"]
+
+    null_path = tmp_path / "holdout_null.yaml"
+    null_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "  holdout_event: null"
+        ]),
+        encoding="utf-8"
+    )
+    assert load_config(null_path).data.holdout_event is None
+
+
+def test_load_config_holdout_event_rejects_empty_list(tmp_path: Path) -> None:
+    """An empty (or all-blank) holdout_event list raises ValidationError."""
+
+    path = tmp_path / "holdout_empty.yaml"
+    path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "  holdout_event: []"
+        ]),
+        encoding="utf-8"
+    )
+
+    with pytest.raises(ValidationError):
+        load_config(path)
+
+    blank_path = tmp_path / "holdout_blank.yaml"
+    blank_path.write_text(
+        "\n".join([
+            "data:",
+            "  dir: data/",
+            "  holdout_event:",
+            "    - '   '"
+        ]),
+        encoding="utf-8"
+    )
+
+    with pytest.raises(ValidationError):
+        load_config(blank_path)
+
+
 def test_load_config_weighted_sampler_and_class_weights_allowed(tmp_path: Path) -> None:
     """Weighted sampler plus loss class weights is allowed (may compound rare-class emphasis)."""
 

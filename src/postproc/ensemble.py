@@ -65,6 +65,7 @@ from torch.utils.data import DataLoader
 from src.data.dataset import CRASARUnitemporalDataset, to_normalized_float
 from src.data.transform import get_val_transforms
 from src.data.sampling import (
+    build_multi_event_fold,
     build_spatial_split_manifest,
     build_valid_manifest,
     generate_loeo_splits,
@@ -190,10 +191,16 @@ def get_fold_dataframes_from_config(cfg: dict, data_dir_override: str | None = N
     holdout_selection = cfg.get("metadata", {}).get("holdout_selection") or data_cfg.get("holdout_selection", "explicit")
     if holdout_selection == "default_spatial":
         split_manifest = build_spatial_split_manifest(valid_manifest)
-        holdout_event_arg: str | None = None
+        holdout_event_arg: str | list[str] | None = None
     else:
         split_manifest = valid_manifest
         holdout_event_arg = data_cfg.get("holdout_event")
+
+    # Multi-event snapshots persist the original event list, so the composite fold is
+    # rebuilt directly rather than routed through single-event LOEO selection.
+    if isinstance(holdout_event_arg, list):
+        holdout, train_df, val_df, _selection = build_multi_event_fold(manifest=valid_manifest, holdout_events=holdout_event_arg)
+        return train_df, val_df, holdout
 
     splits = list(generate_loeo_splits(split_manifest))
     holdout, train_df, val_df, _selection = select_fold(splits=splits, holdout_event=holdout_event_arg)
@@ -257,7 +264,7 @@ def build_deterministic_train_loader_from_config(cfg: dict, data_dir_override: s
     train_dataset = CRASARUnitemporalDataset(
         train_df,
         chip_size=data_cfg["chip_size"],
-        transform=get_val_transforms(),
+        transform=get_val_transforms(synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0)),
         is_train=False,
         mask_dilation_px=ablation.get("mask_dilation_px", 0),
     )

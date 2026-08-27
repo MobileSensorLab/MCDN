@@ -19,7 +19,8 @@ ABLATION_PRESET_FILES = {
     "mask_channel_only": "ablation_mask_channel_only.yaml",
     "pooling_only": "ablation_pooling_only.yaml",
     "ce_loss": "ablation_ce_loss.yaml",
-    "downsample_15cm": "ablation_downsample_15cm.yaml"
+    "downsample_15cm": "ablation_downsample_15cm.yaml",
+    "deployed_split": "ablation_deployed_split.yaml"
 }
 
 def _resolve_early_config_path_for_cuda_launch_blocking() -> Path:
@@ -80,6 +81,31 @@ from src.model.trainer import run_training_pipeline
 
 FIXED_ABLATION_SEEDS = [0, 11, 22, 33, 44, 55, 66, 77, 88, 99]
 
+REQUIRED_RUN_ARTIFACTS = ("metrics.json", "config_resolved.yaml", "best_model.pt")
+
+
+def _seed_run_is_complete(checkpoint_root: Path) -> bool:
+    """True when a run directory already holds the full per-seed artifact triplet.
+
+    Keyed on the same three files the aggregation step requires, so a skipped run is by
+    definition one downstream tooling can consume. Partial artifacts (e.g. a preempted
+    run that only wrote a log) never trigger a skip.
+    """
+
+    return all((checkpoint_root / name).is_file() for name in REQUIRED_RUN_ARTIFACTS)
+
+
+def _resolve_split_dir_name(holdout_event: str | list[str] | None) -> str:
+    """Directory name for the configured holdout under the ablation output layout.
+
+    Multi-event holdouts join their sorted event names with ``+`` to mirror the composite
+    fold name emitted by ``build_multi_event_fold``.
+    """
+
+    if isinstance(holdout_event, list):
+        return "+".join(sorted(holdout_event)).replace(" ", "_")
+    return (holdout_event or "Spatial_Block_East").replace(" ", "_")
+
 
 def _ablation_variant_root(preset: str) -> Path:
     """Output directory for a named ablation preset under outputs/ablation/."""
@@ -118,6 +144,11 @@ def _build_parser() -> argparse.ArgumentParser:
         choices=sorted(ABLATION_PRESET_FILES.keys()),
         default=None,
         help="Run using a named preset from config/presets."
+    )
+    parser.add_argument(
+        "--skip-if-complete",
+        action="store_true",
+        help="Skip a seed whose checkpoint root already holds metrics.json, config_resolved.yaml, and best_model.pt (idempotent backfill for requeued or resubmitted job arrays)."
     )
     parser.add_argument(
         "--cuda-launch-blocking",
@@ -273,10 +304,13 @@ def main() -> None:
     for seed in seed_values:
         if args.ablation_preset is not None:
             ablation_root = _ablation_variant_root(args.ablation_preset)
-            split_name = (config.data.holdout_event or "Spatial_Block_East").replace(" ", "_")
+            split_name = _resolve_split_dir_name(config.data.holdout_event)
             checkpoint_root = ablation_root / split_name / f"seed_{seed:02d}"
         else:
             checkpoint_root = config.runtime.checkpoint_root if len(seed_values) == 1 else config.runtime.checkpoint_root / f"seed_{seed:02d}"
+        if getattr(args, "skip_if_complete", False) and _seed_run_is_complete(Path(checkpoint_root)):
+            print(f"Skipping seed {seed}: complete artifacts already present under {checkpoint_root}")
+            continue
         run_training_pipeline(
             config=config,
             seed=seed,

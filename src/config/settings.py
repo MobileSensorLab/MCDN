@@ -14,7 +14,10 @@ class DataConfig(BaseModel):
     Args:
         dir: Dataset root directory.
         chip_size: Structure-centered chip size in pixels.
-        holdout_event: Optional LOEO holdout event name.
+        holdout_event: Optional holdout specification. A single event name selects one LOEO
+            fold; a list of event names builds one composite fold whose validation pool is
+            exactly those events (split-replication experiments, e.g. the deployed-baseline
+            four-disaster test pool); ``null`` selects the default spatial-block split.
         sensor_profile: Imagery source profile selector for resolution ablations.
         synthetic_gsd_factor: Linear ground-sample-distance degradation factor for the controlled
             resolution ablation. Chips are anti-alias downsampled by this factor and restored to
@@ -25,7 +28,7 @@ class DataConfig(BaseModel):
 
     dir: Path
     chip_size: int = Field(default=512, gt=0)
-    holdout_event: str | None = None
+    holdout_event: str | list[str] | None = None
     sensor_profile: Literal["uas_5cm", "manned_15cm"] = "uas_5cm"
     synthetic_gsd_factor: float = Field(default=1.0, ge=1.0)
 
@@ -35,6 +38,19 @@ class DataConfig(BaseModel):
         """Convert supported path-like inputs to Path."""
 
         return Path(value)
+
+    @field_validator("holdout_event")
+    @classmethod
+    def validate_holdout_event(cls, value: str | list[str] | None) -> str | list[str] | None:
+        """Normalize list-form holdouts: strip whitespace, drop empties, dedupe, reject empty lists."""
+
+        if not isinstance(value, list):
+            return value
+        cleaned = [item.strip() for item in value if item and item.strip()]
+        deduped = list(dict.fromkeys(cleaned))
+        if not deduped:
+            raise ValueError("data.holdout_event list must contain at least one non-empty event name.")
+        return deduped
 
 
 class TrainingConfig(BaseModel):

@@ -13,12 +13,12 @@
 #   2. Dataset staged at $MCDN_DATA_DIR (see tasks.md T-22).
 #   3. Job manifest generated: python scripts/cluster/make_job_manifest.py
 #
-# Submission (use submit_tier_a.sh, which sizes the array from the manifest):
-#   scripts/cluster/submit_tier_a.sh
-# Smoke test (single task) before the full array:
+# Submission (use submit_tier_a.sh, which launches the pump shepherd): the freetier
+# QOS caps a user at 8 submitted jobs, so the full manifest cannot be queued as one
+# array. pump_tier_a.sbatch feeds single-task jobs through this script instead,
+# passing the manifest row via MCDN_TASK_ID. Array invocation still works for
+# smoke tests within the cap:
 #   sbatch --array=1-1 scripts/cluster/train_array.sbatch
-# Overrides: pass sbatch flags at submission (they beat these headers), e.g.
-#   sbatch --qos=training --array=1-190%16 ... once the training QOS is sanctioned.
 #
 #SBATCH --job-name=mcdn_tier_a
 #SBATCH --partition=dgx
@@ -49,17 +49,26 @@ export PYTHONUNBUFFERED=1
 
 cd "$REPO_ROOT"
 
-line=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$MANIFEST")
+# Row selection: array tasks use SLURM_ARRAY_TASK_ID; pump-fed single jobs pass
+# the manifest row explicitly via MCDN_TASK_ID.
+TASK_ID=${SLURM_ARRAY_TASK_ID:-${MCDN_TASK_ID:?need SLURM_ARRAY_TASK_ID or MCDN_TASK_ID}}
+
+line=$(sed -n "${TASK_ID}p" "$MANIFEST")
 if [[ -z "$line" ]]; then
-    echo "ERROR: no manifest line ${SLURM_ARRAY_TASK_ID} in ${MANIFEST}" >&2
+    echo "ERROR: no manifest line ${TASK_ID} in ${MANIFEST}" >&2
     exit 1
 fi
 IFS=$'\t' read -r preset holdout seed <<< "$line"
-echo "[task ${SLURM_ARRAY_TASK_ID}] preset=${preset} holdout=${holdout} seed=${seed} node=$(hostname)"
+echo "[task ${TASK_ID}] preset=${preset} holdout=${holdout} seed=${seed} node=$(hostname)"
 
 args=(--ablation-preset "$preset" --seeds "$seed" --data-dir "$DATA_DIR" --skip-if-complete)
 if [[ "$holdout" != "-" ]]; then
     args+=(--holdout-event "$holdout")
 fi
 
-exec "$REPO_ROOT/.venv/bin/python" train.py "${args[@]}"
+"$REPO_ROOT/.venv/bin/python" train.py "${args[@]}"
+
+# Success marker for the pump shepherd: reached only when train.py exits 0 (set -e
+# aborts us otherwise), including --skip-if-complete no-ops on already-finished rows.
+mkdir -p "$REPO_ROOT/outputs/cluster_logs/done"
+touch "$REPO_ROOT/outputs/cluster_logs/done/t${TASK_ID}.done"

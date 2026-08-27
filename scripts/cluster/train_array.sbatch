@@ -15,7 +15,7 @@
 #
 # Submission (use submit_tier_a.sh, which launches the pump shepherd): the freetier
 # QOS caps a user at 8 submitted jobs, so the full manifest cannot be queued as one
-# array. pump_tier_a.sbatch feeds single-task jobs through this script instead,
+# array. spawn_tier_a.sbatch feeds single-task jobs through this script instead,
 # passing the manifest row via MCDN_TASK_ID. Array invocation still works for
 # smoke tests within the cap:
 #   sbatch --array=1-1 scripts/cluster/train_array.sbatch

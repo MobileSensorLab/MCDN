@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Launch the Tier A campaign via the pump shepherd (pump_tier_a.sbatch).
+# Launch the Tier A campaign via the spawner shepherd (spawn_tier_a.sbatch).
 #
 # The freetier QOS caps a user at 8 submitted jobs (pending + running), so the
 # full manifest cannot be queued as one array. Instead a CPU-only pump job keeps
@@ -29,7 +29,7 @@ set -euo pipefail
 
 REPO_ROOT=${MCDN_REPO_ROOT:-/network/rit/lab/mobilesensorlab/mcdn}
 MANIFEST=${MCDN_JOB_MANIFEST:-$REPO_ROOT/scripts/cluster/jobs.tsv}
-PUMP=$REPO_ROOT/scripts/cluster/pump_tier_a.sbatch
+PUMP=$REPO_ROOT/scripts/cluster/spawn_tier_a.sbatch
 
 if [[ ! -f "$MANIFEST" ]]; then
     echo "ERROR: job manifest not found at ${MANIFEST}." >&2

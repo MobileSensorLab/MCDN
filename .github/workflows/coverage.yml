@@ -35,13 +35,14 @@ jobs:
         with:
           enable-cache: true
 
+      # Linux torch backends are opt-in extras (see pyproject.toml); CI uses the CPU wheels.
       - name: Sync the project environment
-        run: uv sync --frozen
+        run: uv sync --frozen --extra cpu
 
       # addopts in pyproject.toml writes the Cobertura report to .pytest_cache/coverage.xml,
       # which the badge generator consumes below.
       - name: Run tests with coverage
-        run: uv run pytest --cov=src --cov-report term-missing
+        run: uv run --no-sync pytest --cov=src --cov-report term-missing
 
       # Badges-branch variant disabled while the repo is private: GitHub's image proxy cannot
       # fetch raw.githubusercontent.com assets from a private repo, so the live badge will not

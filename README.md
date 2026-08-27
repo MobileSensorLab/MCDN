@@ -57,6 +57,10 @@ RTX 3090/4090/5090 or equivalent. MCDN may still be trained on less robust GPUs 
     uv sync
     ```
 
+    On **Linux**, PyTorch backends are opt-in extras: use `uv sync --extra cu128` for CUDA
+    machines (e.g. A100/H100 nodes) or `uv sync --extra cpu` for CPU-only environments such as CI.
+    Windows resolves its CUDA wheels automatically and needs no extra.
+
 3.  **Activate the environment:**
     To use the environment in your shell:
     - **Windows**: `.venv\Scripts\activate`

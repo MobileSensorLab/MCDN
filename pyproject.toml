@@ -31,11 +31,22 @@ dependencies = [
     # Target explicit URLs for development (sm_120 support on Windows w/ python 3.13).
     "torch @ https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp313-cp313-win_amd64.whl ; sys_platform == 'win32'",
     "torchvision @ https://download-r2.pytorch.org/whl/cu128/torchvision-0.26.0%2Bcu128-cp313-cp313-win_amd64.whl ; sys_platform == 'win32'",
+    "optuna>=4.8.0",
+]
 
-    # Use CPU variant for CI/CD
+# Linux torch backends are mutually exclusive opt-in extras: `--extra cpu` for CI and
+# GPU-less checkouts, `--extra cu128` for CUDA nodes (DGX A100 is sm_80, so the standard
+# cu128 wheels apply — none of the Windows sm_120 workaround above is needed). The cu128
+# pins match the Windows wheel versions to keep one torch lineage across platforms.
+# Windows ignores both extras; its torch resolves from the direct URLs above.
+[project.optional-dependencies]
+cpu = [
     "torch ; sys_platform == 'linux'",
     "torchvision ; sys_platform == 'linux'",
-    "optuna>=4.8.0",
+]
+cu128 = [
+    "torch==2.11.0 ; sys_platform == 'linux'",
+    "torchvision==0.26.0 ; sys_platform == 'linux'",
 ]
 
 [dependency-groups]
@@ -53,12 +64,19 @@ name = "pytorch-cpu"
 url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
 [tool.uv.sources]
 torch = [
-    { index = "pytorch-cpu", marker = "sys_platform == 'linux'" }
+    { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform == 'linux'" },
+    { index = "pytorch-cu128", extra = "cu128", marker = "sys_platform == 'linux'" }
 ]
 torchvision = [
-    { index = "pytorch-cpu", marker = "sys_platform == 'linux'" }
+    { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform == 'linux'" },
+    { index = "pytorch-cu128", extra = "cu128", marker = "sys_platform == 'linux'" }
 ]
 
 [tool.uv]
@@ -66,6 +84,12 @@ prerelease = "allow"
 environments = [
     "sys_platform == 'win32'",
     "sys_platform == 'linux'"
+]
+conflicts = [
+    [
+        { extra = "cpu" },
+        { extra = "cu128" }
+    ]
 ]
 
 [tool.ruff]

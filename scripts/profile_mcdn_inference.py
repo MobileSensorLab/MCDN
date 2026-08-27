@@ -1,4 +1,22 @@
-"""Profile MCDN inference: latency, fvcore FLOPs, and torch.profiler summaries for edge-deployment reporting."""
+"""Profile MCDN inference: latency, fvcore FLOPs, and torch.profiler summaries for edge-deployment reporting.
+
+Two modes:
+    - default (forward): bare-forward latency, fvcore FLOPs, and a torch.profiler table
+      for one checkpoint — kernel-level diagnostics.
+    - ``--deployment``: measured latency for the three deployment configurations (T-8) —
+      single model / no TTA, single model / 8-view D4 TTA, and the seed-ensemble x 8-view
+      TTA headline — timed through the actual inference entry points used at evaluation
+      time (``tta_mean_softmax_probs`` / ``ensemble_mean_tta_probs``), so uint8-to-float
+      normalization, view transforms, autocast, and softmax are all inside the timed
+      region. Reports chips/sec, per-chip latency, peak CUDA memory, and derived
+      time-to-full-holdout figures (val chip counts read from ``split_summary.json``)
+      plus the 415-building operational yardstick.
+
+Deployment-mode usage:
+    uv run python -m scripts.profile_mcdn_inference --deployment \
+        --checkpoint-dir outputs/ablation/baseline/Spatial_Block_East/seed_00 \
+        --deployment-batch-sizes 1 16 64 --output-json outputs/ablation/latency_profile.json
+"""
 
 from __future__ import annotations
 
@@ -7,18 +25,26 @@ import json
 import statistics
 import sys
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import yaml
 from fvcore.nn import FlopCountAnalysis
 
+from src.data.dataset import to_normalized_float
 from src.model.mcdn import MaskCenteredDamageNet
+from src.postproc.ensemble import ensemble_mean_tta_probs, tta_mean_softmax_probs
 
 DEFAULT_CHECKPOINT_DIR = Path("outputs/ablation/baseline/Spatial_Block_East/seed_00")
+
+# Operational yardstick: the deployed CRASAR baseline assessed 415 buildings in ~18 min
+# at Hurricanes Debby/Helene; used as a citable time-to-assessment anchor in T-8.
+YARDSTICK_CHIPS = 415
 
 
 class ProfileConfigError(ValueError):
@@ -377,6 +403,252 @@ def run_profile_suite(
     return payload
 
 
+# Deployment-configuration benchmarking (T-8) --------------------------------
+
+@torch.no_grad()
+def no_tta_softmax_probs(model: MaskCenteredDamageNet, images_u8: torch.Tensor, context: torch.Tensor,
+                         device: str) -> torch.Tensor:
+    """Single-view softmax probabilities [B, K] under the deployed inference conventions.
+
+    Mirrors ``tta_view_softmax_probs`` (GPU-side uint8 normalization, autocast, softmax)
+    restricted to the identity view — the deployed no-TTA configuration.
+    """
+
+    images_u8 = images_u8.to(device, non_blocking=True)
+    context = context.to(device, non_blocking=True)
+    images = to_normalized_float(images_u8)
+    autocast_device = "cuda" if torch.cuda.is_available() else "cpu"
+    model.eval()
+    with torch.amp.autocast(autocast_device):
+        return F.softmax(model(images, context).float(), dim=1)
+
+
+def discover_seed_checkpoints(split_root: Path, limit: int | None = None) -> list[Path]:
+    """Sorted ``seed_*`` fold directories under one split root that contain weights.
+
+    Args:
+        split_root: ``outputs/ablation/<variant>/<split>`` directory.
+        limit: Optional cap on the number of returned fold directories.
+
+    Returns:
+        Fold directories sorted by name, truncated to ``limit`` when given.
+    """
+
+    folds = sorted(
+        path for path in split_root.glob("seed_*")
+        if path.is_dir() and (path / "best_model.pt").is_file()
+    )
+    return folds[:limit] if limit is not None else folds
+
+
+def read_event_chip_counts(variant_root: Path) -> dict[str, int]:
+    """Validation chip counts per split, read from any seed's ``split_summary.json``.
+
+    Splits without a readable summary are skipped; an empty mapping disables the
+    derived time-to-event reporting.
+    """
+
+    counts: dict[str, int] = {}
+    for split_dir in sorted(path for path in variant_root.iterdir() if path.is_dir()):
+        for fold_dir in discover_seed_checkpoints(split_dir):
+            summary_path = fold_dir / "split_summary.json"
+            if not summary_path.is_file():
+                continue
+            try:
+                summary = json.loads(summary_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            val_instances = summary.get("val_instances")
+            if isinstance(val_instances, int) and val_instances > 0:
+                counts[split_dir.name] = val_instances
+                break
+    return counts
+
+
+def derive_operational_times(per_chip_ms: float, event_chip_counts: dict[str, int],
+                             yardstick_chips: int = YARDSTICK_CHIPS) -> dict[str, float]:
+    """Seconds to process each holdout's validation set plus the operational yardstick."""
+
+    times = {f"{event}_s": count * per_chip_ms / 1000.0 for event, count in event_chip_counts.items()}
+    times[f"yardstick_{yardstick_chips}_chips_s"] = yardstick_chips * per_chip_ms / 1000.0
+    return times
+
+
+def synthetic_uint8_batch(batch_size: int, chip_size: int, device: torch.device,
+                          mask_fill_fraction: float = 0.1) -> tuple[torch.Tensor, torch.Tensor]:
+    """Loader-shaped uint8 chips ([B, 4, H, W], mask channel in {0, 1}) plus context.
+
+    The mask channel is partially filled so mask-weighted pooling exercises its standard
+    (non-fallback) path, matching typical deployed inputs.
+    """
+
+    rng = torch.Generator(device="cpu")
+    rng.manual_seed(42)
+    rgb = torch.randint(0, 256, (batch_size, 3, chip_size, chip_size), dtype=torch.uint8, generator=rng)
+    mask = (torch.rand((batch_size, 1, chip_size, chip_size), generator=rng) < mask_fill_fraction).to(torch.uint8)
+    images_u8 = torch.cat([rgb, mask], dim=1).to(device)
+    context = torch.zeros(batch_size, 4, dtype=torch.float32, device=device)
+    context[:, 0] = 1.0
+    return images_u8, context
+
+
+def benchmark_callable_ms(step_fn: Callable[[], None], *, device: torch.device,
+                          warmup: int, iterations: int) -> dict[str, float]:
+    """Time a zero-arg inference step with CUDA events (or perf_counter on CPU)."""
+
+    def sync() -> None:
+        if device.type == "cuda":
+            torch.cuda.synchronize(device)
+
+    for _ in range(warmup):
+        step_fn()
+        sync()
+
+    times_ms: list[float] = []
+    if device.type == "cuda":
+        start = torch.cuda.Event(enable_timing=True)
+        end = torch.cuda.Event(enable_timing=True)
+        for _ in range(iterations):
+            sync()
+            start.record()
+            step_fn()
+            end.record()
+            sync()
+            times_ms.append(float(start.elapsed_time(end)))
+    else:
+        for _ in range(iterations):
+            t_a = time.perf_counter()
+            step_fn()
+            t_b = time.perf_counter()
+            times_ms.append((t_b - t_a) * 1000.0)
+
+    sorted_t = sorted(times_ms)
+    return {
+        "latency_batch_ms_mean": float(statistics.mean(times_ms)),
+        "latency_batch_ms_std": float(statistics.pstdev(times_ms)) if len(times_ms) > 1 else 0.0,
+        "latency_batch_ms_p50": percentile_sorted(sorted_t, 50.0),
+        "latency_batch_ms_p95": percentile_sorted(sorted_t, 95.0),
+    }
+
+
+def _load_deployment_model(fold_dir: Path, device: torch.device) -> MaskCenteredDamageNet:
+    """Build one fold's MCDN with weights loaded and moved to ``device``."""
+
+    cfg = load_resolved_fold_config(fold_dir / "config_resolved.yaml")
+    model = build_model(cfg)
+    load_state_dict_into_model(model, fold_dir / "best_model.pt", device=torch.device("cpu"))
+    model.to(device)
+    model.eval()
+    return model
+
+
+def run_deployment_suite(*, checkpoint_dir: Path, batch_sizes: list[int], warmup: int, iterations: int,
+                         device_str: str, ensemble_size: int, output_json: Path | None) -> dict[str, Any]:
+    """Measure the three deployment configurations and derive operational timings.
+
+    Configurations: ``single_no_tta`` (1 forward/chip), ``single_tta8`` (8 forwards/chip),
+    and ``ensemble<N>_tta8`` (8N forwards/chip), each timed through the deployed inference
+    entry points. Autocast mixed precision is applied inside those entry points, matching
+    evaluation behavior exactly.
+    """
+
+    device = torch.device(device_str)
+    split_root = checkpoint_dir.parent
+    variant_root = split_root.parent
+
+    fold_dirs = discover_seed_checkpoints(split_root, limit=ensemble_size)
+    if not fold_dirs:
+        msg = f"No seed_* folds with best_model.pt under {split_root}"
+        raise FileNotFoundError(msg)
+
+    cfg = load_resolved_fold_config(checkpoint_dir / "config_resolved.yaml")
+    single_model = _load_deployment_model(checkpoint_dir, device)
+    ensemble_models = [_load_deployment_model(fold_dir, device) for fold_dir in fold_dirs]
+    event_chip_counts = read_event_chip_counts(variant_root)
+
+    gpu_name = torch.cuda.get_device_name(device) if device.type == "cuda" else None
+    ensemble_label = f"ensemble{len(ensemble_models)}_tta8"
+    print(f"Deployment profile: device={gpu_name or device}  chip={cfg.chip_size}  "
+          f"backbone={cfg.model_name}  ensemble seeds={len(ensemble_models)}")
+    print(f"Event chip counts: {event_chip_counts or 'unavailable (time-to-event skipped)'}")
+
+    batch_sweeps: list[dict[str, Any]] = []
+    for batch_size in batch_sizes:
+        images_u8, context = synthetic_uint8_batch(batch_size=batch_size, chip_size=cfg.chip_size, device=device)
+        config_steps: dict[str, Callable[[], None]] = {
+            "single_no_tta": lambda x=images_u8, c=context: no_tta_softmax_probs(
+                model=single_model, images_u8=x, context=c, device=device_str),
+            "single_tta8": lambda x=images_u8, c=context: tta_mean_softmax_probs(
+                model=single_model, images_u8=x, context=c, device=device_str),
+            ensemble_label: lambda x=images_u8, c=context: ensemble_mean_tta_probs(
+                models=ensemble_models, images_u8=x, context=c, device=device_str),
+        }
+
+        config_results: dict[str, dict[str, Any]] = {}
+        for config_name, step_fn in config_steps.items():
+            if device.type == "cuda":
+                torch.cuda.reset_peak_memory_stats(device)
+            stats = benchmark_callable_ms(step_fn, device=device, warmup=warmup, iterations=iterations)
+            per_chip_ms = stats["latency_batch_ms_mean"] / batch_size
+            result: dict[str, Any] = {
+                **stats,
+                "per_chip_ms": per_chip_ms,
+                "chips_per_s": 1000.0 / per_chip_ms,
+                "peak_cuda_memory_allocated_bytes": (
+                    int(torch.cuda.max_memory_allocated(device)) if device.type == "cuda" else None),
+            }
+            if event_chip_counts:
+                result["operational"] = derive_operational_times(per_chip_ms, event_chip_counts)
+            config_results[config_name] = result
+
+        batch_sweeps.append({"batch_size": batch_size, "configs": config_results})
+        _print_deployment_rows(batch_size=batch_size, config_results=config_results, event_chip_counts=event_chip_counts)
+
+    payload: dict[str, Any] = {
+        "mode": "deployment",
+        "torch_version": torch.__version__,
+        "device": str(device),
+        "gpu_name": gpu_name,
+        "checkpoint_dir": str(checkpoint_dir.resolve()),
+        "variant_root": str(variant_root.resolve()),
+        "split": split_root.name,
+        "backbone": cfg.model_name,
+        "chip_size": cfg.chip_size,
+        "ensemble_seed_dirs": [str(path) for path in fold_dirs],
+        "warmup": warmup,
+        "iterations": iterations,
+        "event_chip_counts": event_chip_counts,
+        "yardstick_chips": YARDSTICK_CHIPS,
+        "batch_sweeps": batch_sweeps,
+    }
+    if output_json is not None:
+        output_json.parent.mkdir(parents=True, exist_ok=True)
+        output_json.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        print(f"Wrote JSON report to {output_json.resolve()}")
+    return payload
+
+
+def _print_deployment_rows(*, batch_size: int, config_results: dict[str, dict[str, Any]],
+                           event_chip_counts: dict[str, int]) -> None:
+    """Print one batch size's deployment table rows."""
+
+    print(f"\nbatch_size={batch_size}")
+    event_headers = "  ".join(f"{event}({count})s" for event, count in event_chip_counts.items())
+    print(f"  {'config':<18s}  {'batch ms p50':>13s}  {'per-chip ms':>12s}  {'chips/s':>9s}  {'peak MB':>8s}  "
+          f"{event_headers}  yardstick_{YARDSTICK_CHIPS}s")
+    for config_name, result in config_results.items():
+        peak_mb = result["peak_cuda_memory_allocated_bytes"]
+        peak_text = f"{peak_mb / 2**20:8.1f}" if peak_mb is not None else f"{'n/a':>8s}"
+        operational = result.get("operational", {})
+        event_text = "  ".join(
+            f"{operational.get(f'{event}_s', float('nan')):>{len(event) + len(str(count)) + 4}.1f}"
+            for event, count in event_chip_counts.items()
+        )
+        yardstick = operational.get(f"yardstick_{YARDSTICK_CHIPS}_chips_s", float("nan"))
+        print(f"  {config_name:<18s}  {result['latency_batch_ms_p50']:>13.2f}  {result['per_chip_ms']:>12.3f}  "
+              f"{result['chips_per_s']:>9.1f}  {peak_text}  {event_text}  {yardstick:>12.1f}")
+
+
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Profile MCDN inference (latency, FLOPs, torch profiler).")
     parser.add_argument(
@@ -392,6 +664,12 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--amp", action="store_true", help="Use autocast FP16 on CUDA during latency timing.")
     parser.add_argument("--profiler-rows", type=int, default=20)
     parser.add_argument("--output-json", type=Path, default=None)
+    parser.add_argument("--deployment", action="store_true",
+                        help="Measure the three deployment configurations (no-TTA / TTA / ensemble) instead of the forward suite.")
+    parser.add_argument("--deployment-batch-sizes", type=int, nargs="+", default=[1, 16, 64],
+                        help="Batch sizes swept in deployment mode.")
+    parser.add_argument("--ensemble-size", type=int, default=10,
+                        help="Number of sibling seed checkpoints loaded for the ensemble configuration.")
     return parser.parse_args(argv)
 
 
@@ -402,6 +680,17 @@ def main(argv: list[str] | None = None) -> int:
     if not torch.cuda.is_available() and args.device == "cuda":
         print("CUDA is not available; use --device cpu or run on a GPU machine.", file=sys.stderr)
         return 1
+    if args.deployment:
+        run_deployment_suite(
+            checkpoint_dir=args.checkpoint_dir,
+            batch_sizes=args.deployment_batch_sizes,
+            warmup=args.warmup,
+            iterations=args.iterations,
+            device_str=args.device,
+            ensemble_size=args.ensemble_size,
+            output_json=args.output_json,
+        )
+        return 0
     run_profile_suite(
         checkpoint_dir=args.checkpoint_dir,
         batch_size=args.batch_size,

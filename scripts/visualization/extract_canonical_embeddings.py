@@ -55,7 +55,7 @@ _OUT_PATH: Final[Path] = _OUT_DIR / "typology_arm_sbe_val.pt"
 
 
 def _build_orthomosaic_to_event_map(data_dir: Path, sensor_profile: str) -> dict[str, str]:
-    """Build a dict mapping orthomosaic filename -> canonical event name.
+    """Build a dict mapping orthomosaic filename -> full event name.
 
     The Spatial_Block_East fold's manifest replaces per-chip ``event_name``
     with the spatial-block label (e.g. ``"Spatial_Block"``), so we recover
@@ -84,7 +84,7 @@ def _build_orthomosaic_to_event_map(data_dir: Path, sensor_profile: str) -> dict
 def _val_dataset_event_names(
     val_loader_dataset: object, ortho_to_event: dict[str, str]
 ) -> list[str]:
-    """Return per-chip canonical event names aligned to dataset row indices.
+    """Return per-chip full event names aligned to dataset row indices.
 
     Each chip's event is looked up by its source orthomosaic filename in the
     pre-built ``ortho_to_event`` dict (constructed from

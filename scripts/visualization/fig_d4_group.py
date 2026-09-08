@@ -38,7 +38,7 @@ import numpy as np
 
 from scripts.visualization._common import (
     WIDTH_2COL,
-    load_canonical_val_chip,
+    load_reference_val_chip,
     save_caption,
     save_figure,
     setup_publication_style,
@@ -140,7 +140,7 @@ def main() -> None:
 
     setup_publication_style()
 
-    chip = load_canonical_val_chip(class_name="Minor", rng_seed=1)
+    chip = load_reference_val_chip(class_name="Minor", rng_seed=1)
     rgb_base = chip["rgb"]
     mask_base = chip["mask"]
 

@@ -12,6 +12,8 @@ from pathlib import Path
 
 import matplotlib
 
+from matplotlib.figure import Figure
+
 matplotlib.use("Agg")
 
 import scripts.visualization.fig_mcdn_block as M
@@ -22,7 +24,7 @@ def main() -> None:
 
     _orig_save = M.save_figure
 
-    def _save_with_png(*, fig, name: str) -> None:
+    def _save_with_png(*, fig: Figure, name: str) -> None:
         _orig_save(fig=fig, name=name)
         out = Path("outputs/images") / f"_{name}_preview.png"
         fig.savefig(out, format="png", dpi=220,

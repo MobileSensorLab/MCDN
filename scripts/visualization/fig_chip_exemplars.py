@@ -1,8 +1,8 @@
 """F6 - Per-class chip exemplars from the Mayfield Tornado LOEO val set.
 
 Renders four rows, one per ordinal damage class, each row showing a real chip
-from the Mayfield val set alongside the canonical 10-seed ensemble's softmax
-distribution on that chip. The chips are picked via ``load_canonical_val_chip``
+from the Mayfield val set alongside the 10-seed ensemble's softmax
+distribution on that chip. The chips are picked via ``load_reference_val_chip``
 with ``require_correct=True`` so every shown exemplar is a chip the trained
 ensemble correctly classified, with a deterministic confidence-walk
 (``rng_seed``) used to pick a chip whose footprint polygon doesn't fill the
@@ -26,8 +26,8 @@ The bottom row's softmax x-axis is the only one labeled; other rows omit
 x-axis labels to reduce visual repetition.
 
 Source: ``outputs/ablation/baseline/Mayfield_Tornado/ensemble_probs.pt`` for
-softmax distributions; chip images extracted from the canonical val set per
-``load_canonical_val_chip`` in ``scripts/visualization/_common.py``.
+softmax distributions; chip images extracted from the reference val set per
+``load_reference_val_chip`` in ``scripts/visualization/_common.py``.
 
 Usage::
 
@@ -44,7 +44,7 @@ from scripts.visualization._common import (
     ORDINAL_CLASS_NAMES,
     ORDINAL_CLASS_PALETTE,
     WIDTH_2COL,
-    load_canonical_val_chip,
+    load_reference_val_chip,
     save_caption,
     save_figure,
     setup_publication_style,
@@ -155,7 +155,7 @@ CAPTION_TITLE: str = (
 )
 CAPTION_BODY: str = (
     "One representative chip per ordinal damage class is shown alongside the "
-    "canonical 10-seed ensemble's predicted softmax distribution. Each chip is "
+    "10-seed ensemble's predicted softmax distribution. Each chip is "
     "the highest-confidence correctly-classified exemplar of its class on the "
     "Mayfield val set (with a small confidence-walk on the *No Damage* row to "
     "skip an exemplar whose footprint polygon overlap fills the entire 25.6 m "
@@ -193,7 +193,7 @@ def main() -> None:
 
     for row_idx, class_name in enumerate(ORDINAL_CLASS_NAMES):
         rng_seed = EXEMPLAR_SEEDS[class_name]
-        chip = load_canonical_val_chip(class_name=class_name, rng_seed=rng_seed)
+        chip = load_reference_val_chip(class_name=class_name, rng_seed=rng_seed)
 
         ax_chip = axes[row_idx, 0]
         ax_bars = axes[row_idx, 1]

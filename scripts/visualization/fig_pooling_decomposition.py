@@ -40,7 +40,7 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 from scripts.visualization._common import (
     WIDTH_2COL,
-    load_canonical_val_chip,
+    load_reference_val_chip,
     save_caption,
     save_figure,
     setup_publication_style,
@@ -52,8 +52,8 @@ class BranchSpec:
     """Specification for one pooling branch in the schematic.
 
     Attributes:
-        name: Math symbol drawn at the top of the box (e.g., ``$g_{\\mathrm{max}}$``).
-            The math symbol alone is sufficient for an ML reader; the chapter
+        name: Mathtext symbol drawn at the top of the box (e.g., the global max
+            readout g_max). The symbol alone is sufficient for an ML reader; the chapter
             prose carries the long-form name.
         overlay: One of ``"uniform"``, ``"global_max"``, ``"mask_avg"``, or
             ``"mask_max"`` - selects which spatial-weighting visualization is
@@ -339,7 +339,7 @@ def main() -> None:
 
     setup_publication_style()
 
-    chip = load_canonical_val_chip(class_name="Minor", rng_seed=3)
+    chip = load_reference_val_chip(class_name="Minor", rng_seed=3)
     rgb = chip["rgb"]
     mask = chip["mask"]
 

@@ -8,7 +8,7 @@ single Mayfield val chip is rendered as:
     1. A small chip thumbnail at the top-left (with the footprint outline)
        so the reader knows what sample is being decoded.
     2. A 2x5 grid of per-seed softmax bar charts to the right of the chip,
-       one panel per seed in the canonical 10-seed pool.
+       one panel per seed in the fixed-seed 10-seed pool.
     3. A larger ensemble softmax bar chart along the bottom, with the truth-
        class marker, the argmax decision, and the EV decision (the EV
        expectation value drawn as a dashed vertical line) overlaid.
@@ -24,7 +24,7 @@ smoother than any single seed - the per-seed panels show this directly.
 
 Source artifacts: ``outputs/ablation/baseline/Mayfield_Tornado/ensemble_probs.pt``
 (per-seed and ensemble probability tensors plus targets) accessed via the
-``load_canonical_val_pool`` helper added to ``_common.py``.
+``load_reference_val_pool`` helper added to ``_common.py``.
 """
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ from scripts.visualization._common import (
     ORDINAL_CLASS_NAMES,
     ORDINAL_CLASS_PALETTE,
     WIDTH_2COL,
-    load_canonical_val_pool,
+    load_reference_val_pool,
     save_caption,
     save_figure,
     setup_publication_style,
@@ -50,7 +50,7 @@ _MASK_HALO_WIDTH: Final[float] = 1.6
 _MASK_OUTLINE_COLOR: Final[str] = "#FFFFFF"
 _MASK_OUTLINE_WIDTH: Final[float] = 0.8
 
-# Canonical D2 selection. Manifest index 1779 in the Mayfield Tornado val
+# Pinned D2 selection. Manifest index 1779 in the Mayfield Tornado val
 # pool is the highest-entropy chip in the argmax-vs-EV disagreement set.
 _HOLDOUT: Final[str] = "Mayfield_Tornado"
 _MANIFEST_IDX: Final[int] = 1779
@@ -171,7 +171,7 @@ def _draw_ensemble_panel(
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
-    # EV expectation line - the load-bearing visual annotation. Dashed,
+    # EV expectation line - the central visual annotation. Dashed,
     # drawn at the non-integer ordinal expectation so the reader sees where
     # it lands relative to the rounding boundary between Minor (x=1) and
     # Major (x=2). The dashed line is the only on-figure annotation; truth
@@ -231,7 +231,7 @@ def main() -> None:
 
     setup_publication_style()
 
-    pool = load_canonical_val_pool(holdout=_HOLDOUT)
+    pool = load_reference_val_pool(holdout=_HOLDOUT)
     dataset = pool["dataset"]
     targets = pool["targets"]
     individual_probs = pool["individual_probs"]  # [n_seeds, N, K]

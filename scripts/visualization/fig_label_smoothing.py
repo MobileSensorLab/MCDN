@@ -1,33 +1,33 @@
 """F3 - Adjacency-aware label smoothing comparison.
 
 Renders a 2 x 4 grid of bar charts showing how four label-smoothing schemes shape
-the target distribution :math:`q` for one interior and one extreme true class, at
-illustrative :math:`\\varepsilon = 0.10`. The four schemes are:
+the target distribution q for one interior and one extreme true class, at an
+illustrative epsilon = 0.10. The four schemes are:
 
 - Hard one-hot (no smoothing).
-- Naive uniform smoothing (canonical CE-style; spreads :math:`\\varepsilon` over
-  every non-target class equally).
-- Classical adjacency-aware [@diazSoftLabelsOrdinal2019]: full :math:`\\varepsilon`
-  to the sole adjacent neighbor at extreme classes; :math:`\\varepsilon / 2` per
-  neighbor at interiors.
-- Per-neighbor-rate-constant (canonical MCDN; reproduced verbatim from
-  ``src/model/loss.py`` lines 51-77): :math:`\\varepsilon / 2` per adjacent
-  neighbor regardless of position, so the per-neighbor smoothing rate stays
-  invariant across interior and extreme true classes.
+- Naive uniform smoothing (standard CE-style; spreads epsilon over every
+  non-target class equally).
+- Classical adjacency-aware [@diazSoftLabelsOrdinal2019]: full epsilon to the
+  sole adjacent neighbor at extreme classes; epsilon / 2 per neighbor at
+  interiors.
+- Per-neighbor-rate-constant (MCDN's; reproduced verbatim from
+  src/model/loss.py lines 51-77): epsilon / 2 per adjacent neighbor regardless
+  of position, so the per-neighbor smoothing rate stays invariant across
+  interior and extreme true classes.
 
 The two-row layout exposes the diagnostic difference. The interior row (true =
 Major) shows that classical and per-neighbor-rate-constant agree exactly on
 interior cases. The extreme row (true = Destroyed) shows the asymmetry the
-canonical scheme corrects: classical doubles the per-neighbor rate at extremes
-(:math:`\\varepsilon` on the sole neighbor instead of :math:`\\varepsilon / 2`),
-biasing extreme-class predictions toward their adjacent class. The
-per-neighbor-rate-constant scheme keeps the rate at :math:`\\varepsilon / 2`.
+MCDN scheme corrects: classical doubles the per-neighbor rate at extremes
+(epsilon on the sole neighbor instead of epsilon / 2), biasing extreme-class
+predictions toward their adjacent class. The per-neighbor-rate-constant scheme
+keeps the rate at epsilon / 2.
 
-Canonical training uses :math:`\\varepsilon = 0.02` (per
-``config/presets/ablation_baseline.yaml::training.label_smoothing``); the figure
+The training configuration uses epsilon = 0.02 (per
+config/presets/ablation_all_features.yaml, training.label_smoothing); the figure
 displays a larger illustrative value so the smoothing-mass differences are
 visually legible at print resolution. The schemes' relative shape is preserved
-at any :math:`\\varepsilon \\in [0, 1)`.
+at any epsilon in [0, 1).
 
 Usage::
 
@@ -47,7 +47,7 @@ from scripts.visualization._common import (
     setup_publication_style,
 )
 
-# Illustrative smoothing parameter for visual legibility; the canonical training
+# Illustrative smoothing parameter for visual legibility; the training
 # value is 0.02 and the schemes' shape is preserved at any value in [0, 1).
 EPSILON: float = 0.10
 NUM_CLASSES: int = 4
@@ -77,10 +77,10 @@ def hard_target(true_class: int) -> np.ndarray:
 
 
 def uniform_smoothed_target(true_class: int, epsilon: float) -> np.ndarray:
-    """Return the canonical CE-style smoothed target.
+    """Return the standard CE-style smoothed target.
 
-    Mass :math:`1 - \\varepsilon` stays on the true class; the remaining
-    :math:`\\varepsilon` spreads uniformly across the other ``K - 1`` classes.
+    Mass 1 - epsilon stays on the true class; the remaining epsilon spreads
+    uniformly across the other K - 1 classes.
     """
 
     q = np.full(NUM_CLASSES, epsilon / (NUM_CLASSES - 1), dtype=np.float64)
@@ -91,10 +91,9 @@ def uniform_smoothed_target(true_class: int, epsilon: float) -> np.ndarray:
 def classical_adjacency_target(true_class: int, epsilon: float) -> np.ndarray:
     """Return the Diaz/Marathe 2019 adjacency-aware smoothed target.
 
-    Interior classes receive :math:`\\varepsilon / 2` on each of two adjacent
-    neighbors; extreme classes (0 or :math:`K-1`) ship the full
-    :math:`\\varepsilon` to their sole adjacent neighbor, doubling the
-    per-neighbor smoothing rate at extremes.
+    Interior classes receive epsilon / 2 on each of two adjacent neighbors;
+    extreme classes (0 or K - 1) ship the full epsilon to their sole adjacent
+    neighbor, doubling the per-neighbor smoothing rate at extremes.
     """
 
     q = np.zeros(NUM_CLASSES, dtype=np.float64)
@@ -112,13 +111,12 @@ def classical_adjacency_target(true_class: int, epsilon: float) -> np.ndarray:
 
 
 def per_neighbor_constant_target(true_class: int, epsilon: float) -> np.ndarray:
-    """Return the canonical MCDN per-neighbor-rate-constant smoothed target.
+    """Return the MCDN per-neighbor-rate-constant smoothed target.
 
-    Reproduces ``src/model/loss.py`` lines 51-77. Each adjacent neighbor
-    receives :math:`\\varepsilon / 2` regardless of whether the true class is
-    interior or extreme. Extreme classes therefore retain
-    :math:`1 - \\varepsilon / 2` on self (versus :math:`1 - \\varepsilon` for
-    interiors), but the per-neighbor diffusion rate is invariant.
+    Reproduces src/model/loss.py lines 51-77. Each adjacent neighbor receives
+    epsilon / 2 regardless of whether the true class is interior or extreme.
+    Extreme classes therefore retain 1 - epsilon / 2 on self (versus
+    1 - epsilon for interiors), but the per-neighbor diffusion rate is invariant.
     """
 
     q = np.zeros(NUM_CLASSES, dtype=np.float64)
@@ -213,15 +211,15 @@ CAPTION_BODY: str = (
     "(extreme); the **classical** scheme [@diazSoftLabelsOrdinal2019] ships the "
     "full $\\varepsilon$ to the sole adjacent neighbor, doubling the "
     "per-neighbor smoothing rate relative to interior cases, while the "
-    "canonical MCDN **per-neighbor-rate-constant** scheme retains $\\varepsilon"
+    "MCDN's **per-neighbor-rate-constant** scheme retains $\\varepsilon"
     " / 2$ on the adjacent neighbor and keeps $1 - \\varepsilon / 2$ on self. "
     "Bars are colored by the FEMA-aligned damage-class palette (No Damage "
     "green, Minor orange, Major red, Destroyed purple) with a hatch overlay on "
     "the true-class bar so the figure remains parseable under "
     "color-vision-deficient and black-and-white reproduction. The displayed "
-    "$\\varepsilon = 0.10$ is illustrative; canonical training uses "
+    "$\\varepsilon = 0.10$ is illustrative; training uses "
     "$\\varepsilon = 0.02$ "
-    "(`config/presets/ablation_baseline.yaml::training.label_smoothing`) and "
+    "(`config/presets/ablation_all_features.yaml::training.label_smoothing`) and "
     "the schemes' relative shape is preserved at any "
     "$\\varepsilon \\in [0, 1)$."
 )

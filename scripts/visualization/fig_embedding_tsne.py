@@ -15,7 +15,7 @@ data and architecture the chapter's other claims are made about.
 
 Color and shape REDUNDANTLY encode typology (one categorical dimension via
 two visual channels). Damage class is intentionally not encoded - the
-chapter's load-bearing claim is about typology only; encoding damage
+chapter's central claim is about typology only; encoding damage
 class as a secondary shape (an earlier design iteration) added visual
 noise without informing the chapter's argument. Rare categories (Kinetic,
 Thermal) are drawn on top of the dense Wind/Flood mass with larger

@@ -1,366 +1,189 @@
-"""R2: ablation-delta signature plot across the three single-knob ablations.
+"""R2: ablation deltas of every arm against the full MCDN configuration, on the four reported columns.
 
-Compresses the three per-ablation tables in [doc/5-results.qmd](doc/5-results.qmd)
-into a single 2 x 3 grid: rows are the two headline metrics (delta F1, delta
-QWK) and columns are the three single-knob ablations (mask, typology, sensor
-modality). The mask and typology columns each render three bars (Spatial
-Block East, Hurricane Michael, Mayfield Tornado); the sensor column renders
-two bars centered in the panel (Spatial Block East, Hurricane Michael)
-because the manned-aircraft DROIDs subset contains zero orthomosaics from
-the Mayfield Tornado event - that gap is documented in the chapter caption
-rather than rendered as a placeholder slot in the figure.
+Renders the component factorial and the two training-recipe arms as a pair of
+horizontal grouped-bar panels (delta QWK on the left, delta Macro-F1 on the
+right). Each row is one ablation arm; within a row the four bars are the four
+reported evaluation columns (DROIDs default split, LOEO Michael, LOEO
+Mayfield, LOEO Ida). Deltas are the arm's 10-seed ensemble argmax metric minus
+the ``all_features`` ensemble's on the same column; whiskers show the per-seed
+argmax SD on the ablation arm, so a delta inside its whisker is
+indistinguishable from initialization variance.
 
-Visual conventions:
-    - Bars are colored by sign: a muted ColorBrewer-RdBu red for negative
-      deltas, a muted blue for positive deltas. The signs encode the chapter's
-      central claim - "geometric prior helps on hurricane data, fails on
-      tornado data; typology contributes a small distant-OOD QWK lift only;
-      sensor modality is a different scale entirely" - and color reinforces
-      direction at a glance.
-    - Per-bar whiskers show the per-seed argmax SD (sigma across the 10-seed
-      pool's best-checkpoint argmax F1 / QWK) on the ablation arm, drawn in
-      neutral dark grey. A delta whose magnitude lies inside its whisker is
-      indistinguishable from seed-only initialization variance.
-    - Per-bar value labels are placed OUTSIDE the bar at the whisker tip
-      (above the whisker for positive bars, below for negative), in plain
-      neutral dark text without bbox or special styling. Per-column shared
-      y-axis (F1 and QWK comparable within an ablation), per-row independent
-      y-axis (the sensor column's order-of-magnitude greater deltas are
-      encoded in the axis numbers rather than in the bar heights). A 20
-      percent y-margin is applied per column to ensure outside labels sit
-      clear of the panel frame without any per-bar overflow detection or
-      inside/outside flipping.
+The factorial rows are labeled by the mask-derived components the arm
+*retains* (C = mask input channel, P = mask-weighted pooling, T = typology
+FiLM); the two training arms swap the loss (CE for EMD) and remove label
+smoothing while retaining all three components. The ``C + T`` cell (channel
+and typology without pooling) was not trained and is absent from the grid.
 
-Source artifacts: `outputs/ablation/{baseline, mask, typology, resolution}/<split>/
-ensemble_metrics.json` (delta vs baseline) and `aggregate_metrics.json` (per-
-seed SD on the ablation arm). All deltas are computed at the canonical argmax
-ensemble decoding rule.
+Source artifacts: ``outputs/ablation_dgx/_ensembles/<arm>__<split>.json``.
+The ``mask`` and ``typology`` arms were trained on the DGX for the default
+split and LOEO Ida only; their LOEO Michael and Mayfield ensembles are the
+v1 local runs re-summarized under ``mask_local`` / ``typology_local`` with
+identical schema. Deltas are computed at the reported argmax decoding rule.
 """
 from __future__ import annotations
 
-import json
-from pathlib import Path
-from typing import Final
+from typing import Final, NamedTuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 
+from matplotlib.patches import Patch
+
 from scripts.visualization._common import (
+    REPORTED_COLUMNS,
     WIDTH_2COL,
+    ensemble_rule_metrics,
+    ensemble_summary_path,
+    per_seed_rule_metrics,
     save_caption,
     save_figure,
     setup_publication_style,
 )
 
-_REPO_ROOT: Final[Path] = Path(__file__).resolve().parents[2]
-_ABLATION_ROOT: Final[Path] = _REPO_ROOT / "outputs" / "ablation"
 
-# Column ordering: mask -> typology -> sensor matches the chapter's section
-# ordering (Geometric Prior -> Contextual Prior -> Sensor Modality).
-_COLUMNS: Final[tuple[tuple[str, str], ...]] = (
-    ("mask", "Mask ablation"),
-    ("typology", "Typology ablation"),
-    ("resolution", "Sensor modality"),
+class Arm(NamedTuple):
+    """One ablation arm: variant directory name, display label, and its group."""
+
+    variant: str
+    label: str
+    group: str
+
+
+# Row order: the component factorial from most to least retained, then the training arms.
+_ARMS: Final[tuple[Arm, ...]] = (
+    Arm("typology", "C + P  (no typology)", "factorial"),
+    Arm("pooling_typology", "P + T  (no channel)", "factorial"),
+    Arm("mask_channel_only", "C only", "factorial"),
+    Arm("pooling_only", "P only", "factorial"),
+    Arm("mask", "T only", "factorial"),
+    Arm("rgb_only", "RGB only", "factorial"),
+    Arm("ce_loss", "CE loss (for EMD)", "training"),
+    Arm("no_smoothing", "No label smoothing", "training")
 )
 
-# Split ordering matches the chapter's evaluation funnel (in-distribution ->
-# proximate OOD -> distant OOD) and the R1 confusion triptych panel order so
-# the two figures read consistently. The sensor column drops Mayfield because
-# the manned-aircraft DROIDs subset has zero Mayfield Tornado coverage.
-_SPLITS_FULL: Final[tuple[tuple[str, str], ...]] = (
-    ("Spatial_Block_East", "E/W"),
-    ("Hurricane_Michael", "Michael"),
-    ("Mayfield_Tornado", "Mayfield"),
-)
-_SPLITS_NO_MAYFIELD: Final[tuple[tuple[str, str], ...]] = _SPLITS_FULL[:2]
-# Shared x-axis range across all columns so bar visual widths read consistently
-# regardless of how many bars a column contains. Sensor's two bars are
-# centered within this range; mask and typology fill it.
-_X_LIM: Final[tuple[float, float]] = (-0.5, 2.5)
+# Arms whose LOEO Michael / Mayfield ensembles come from the v1 local lineage.
+_LOCAL_FALLBACK: Final[dict[str, str]] = {"mask": "mask_local", "typology": "typology_local"}
 
-# ColorBrewer RdBu (muted) for sign-based encoding. Negative bars (loss) use
-# a desaturated red; positive bars (gain) use a desaturated blue. Both are
-# colorblind-discriminable and print acceptably in greyscale (red darker
-# than blue under standard luminance mapping).
-_COLOR_NEGATIVE: Final[str] = "#d6604d"
-_COLOR_POSITIVE: Final[str] = "#4393c3"
-_COLOR_WHISKER: Final[str] = "#2c2c2c"
-# Y-axis padding (fraction of auto-determined yrange) applied via ax.margins.
-# 20% on each side comfortably accommodates outside-bar value labels at the
-# whisker tip plus a 3 pt offset, across all six subplots - eliminating the
-# need for per-bar overflow detection.
-_Y_MARGIN: Final[float] = 0.20
+# Colorblind-safe column palette (Okabe-Ito), one hue per evaluation column.
+_COLUMN_COLORS: Final[tuple[str, ...]] = ("#000000", "#0072B2", "#E69F00", "#CC79A7")
+_WHISKER_COLOR: Final[str] = "#555555"
+_BAR_HEIGHT: Final[float] = 0.19
+_GROUP_GAP: Final[float] = 0.6
 
 
-def _read_ensemble_argmax(arm: str, split: str) -> dict[str, float] | None:
-    """Read ensemble argmax F1/QWK for one (arm, split). Returns None if missing."""
+def _resolve_variant(variant: str, split: str) -> str | None:
+    """Return the ensemble variant name that holds ``(variant, split)``, or None if neither lineage has it."""
 
-    path = _ABLATION_ROOT / arm / split / "ensemble_metrics.json"
-    if not path.exists():
-        return None
-    with path.open("r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-    block = payload["ensemble"]["argmax"]
-    return {"macro_f1": float(block["macro_f1"]), "qwk": float(block["qwk"])}
-
-
-def _read_per_seed_sds(arm: str, split: str) -> dict[str, float] | None:
-    """Read per-seed argmax F1/QWK SDs for one (arm, split). Returns None if missing."""
-
-    path = _ABLATION_ROOT / arm / split / "aggregate_metrics.json"
-    if not path.exists():
-        return None
-    with path.open("r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-    rows = payload["per_seed"]
-    f1 = np.asarray([r["by_rule"]["argmax"]["best"]["macro_f1"] for r in rows])
-    qwk = np.asarray([r["by_rule"]["argmax"]["best_val_qwk"] for r in rows])
-    return {
-        "f1_sd": float(np.std(f1, ddof=1)),
-        "qwk_sd": float(np.std(qwk, ddof=1)),
-    }
+    if ensemble_summary_path(split, variant).exists():
+        return variant
+    fallback = _LOCAL_FALLBACK.get(variant)
+    if fallback is not None and ensemble_summary_path(split, fallback).exists():
+        return fallback
+    return None
 
 
-_LABEL_FONTSIZE: Final[float] = 6.8
-_LABEL_OFFSET_PTS: Final[float] = 3.0
+def _collect(metric: str) -> tuple[np.ndarray, np.ndarray]:
+    """Return ``[n_arms, n_columns]`` arrays of ensemble deltas and per-seed SDs for one metric (NaN where absent)."""
+
+    deltas = np.full((len(_ARMS), len(REPORTED_COLUMNS)), np.nan)
+    sds = np.full_like(deltas, np.nan)
+    for col_idx, (split, _label) in enumerate(REPORTED_COLUMNS):
+        reference = float(ensemble_rule_metrics(split, rule="argmax")[metric])
+        for arm_idx, arm in enumerate(_ARMS):
+            resolved = _resolve_variant(arm.variant, split)
+            if resolved is None:
+                print(f"[fig_ablation_deltas] Missing ensemble for ({arm.variant}, {split}); leaving the slot empty.")
+                continue
+            deltas[arm_idx, col_idx] = float(ensemble_rule_metrics(split, rule="argmax", variant=resolved)[metric]) - reference
+            per_seed = np.asarray([entry[metric] for entry in per_seed_rule_metrics(split, rule="argmax", variant=resolved)])
+            sds[arm_idx, col_idx] = float(per_seed.std(ddof=1))
+    return deltas, sds
 
 
-def _draw_panel(
-    ax: plt.Axes,
-    *,
-    x_positions: np.ndarray,
-    deltas: list[float],
-    sds: list[float],
-    split_labels: list[str],
-    y_label: str | None,
-    show_x_labels: bool,
-    is_top_row: bool,
-    column_title: str | None,
-) -> None:
-    """Render one ablation-delta subplot: bars + whiskers + outside value labels."""
+def _row_centers() -> np.ndarray:
+    """Return the y-center of each arm row, with an extra gap between the factorial and training groups."""
 
-    bar_colors = [
-        _COLOR_NEGATIVE if d < 0 else _COLOR_POSITIVE for d in deltas
-    ]
-
-    ax.bar(
-        x_positions,
-        deltas,
-        width=0.62,
-        color=bar_colors,
-        edgecolor="#444444",
-        linewidth=0.6,
-        zorder=2,
-    )
-
-    for x, delta, sd in zip(x_positions, deltas, sds):
-        ax.errorbar(
-            x,
-            delta,
-            yerr=sd,
-            fmt="none",
-            ecolor=_COLOR_WHISKER,
-            elinewidth=0.9,
-            capsize=2.5,
-            capthick=0.9,
-            zorder=4,
-        )
-
-    ax.axhline(0.0, color="black", linewidth=0.7, zorder=3)
-
-    # Outside value labels at whisker tip + 3 pt offset. Placement is purely
-    # rule-based (above whisker for positive bars, below for negative); the
-    # 20% y-margin applied in main() ensures every label fits inside the
-    # panel frame without per-bar overflow detection.
-    for x, delta, sd in zip(x_positions, deltas, sds):
-        if delta >= 0:
-            anchor_y = delta + sd
-            offset_pts = _LABEL_OFFSET_PTS
-            va = "bottom"
-        else:
-            anchor_y = delta - sd
-            offset_pts = -_LABEL_OFFSET_PTS
-            va = "top"
-        ax.annotate(
-            f"{delta:+.4f}",
-            xy=(x, anchor_y),
-            xytext=(0, offset_pts),
-            textcoords="offset points",
-            ha="center",
-            va=va,
-            fontsize=_LABEL_FONTSIZE,
-            color="#333333",
-        )
-
-    ax.set_xlim(*_X_LIM)
-    ax.set_xticks(x_positions)
-    if show_x_labels:
-        ax.set_xticklabels(split_labels, fontsize=8)
-    else:
-        ax.set_xticklabels([])
-
-    if y_label is not None:
-        ax.set_ylabel(y_label, fontsize=9)
-
-    if is_top_row and column_title is not None:
-        ax.set_title(column_title, fontsize=9, pad=4)
-
-    ax.tick_params(axis="both", which="both", labelsize=7, length=2)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+    centers = []
+    y = 0.0
+    previous_group = _ARMS[0].group
+    for arm in _ARMS:
+        if arm.group != previous_group:
+            y += _GROUP_GAP
+            previous_group = arm.group
+        centers.append(y)
+        y += 1.0
+    return -np.asarray(centers)  # top row first
 
 
-def _collect_column_data(
-    arm: str, splits: tuple[tuple[str, str], ...]
-) -> tuple[list[float], list[float], list[float], list[float], list[str]]:
-    """For one ablation arm, gather delta-F1/QWK and per-seed SDs across the given splits.
+def _draw_panel(ax: plt.Axes, *, deltas: np.ndarray, sds: np.ndarray, x_label: str, show_row_labels: bool) -> None:
+    """Render one metric's grouped horizontal bars with per-seed whiskers."""
 
-    Returns five parallel lists: delta-F1, delta-QWK, SD-F1, SD-QWK, and the
-    display-label tuple. Splits with missing artifacts are silently dropped
-    with a warning print so the caller's downstream rendering remains
-    monotone in length.
-    """
+    centers = _row_centers()
+    n_cols = len(REPORTED_COLUMNS)
+    offsets = (np.arange(n_cols) - (n_cols - 1) / 2.0) * _BAR_HEIGHT
+    for col_idx, color in enumerate(_COLUMN_COLORS):
+        y = centers - offsets[col_idx]
+        values = deltas[:, col_idx]
+        present = ~np.isnan(values)
+        ax.barh(y[present], values[present], height=_BAR_HEIGHT * 0.92, color=color, edgecolor="white", linewidth=0.4, zorder=3)
+        ax.errorbar(values[present], y[present], xerr=sds[present, col_idx], fmt="none", ecolor=_WHISKER_COLOR,
+                    elinewidth=0.7, capsize=1.5, capthick=0.7, zorder=4)
 
-    delta_f1: list[float] = []
-    delta_qwk: list[float] = []
-    sd_f1: list[float] = []
-    sd_qwk: list[float] = []
-    labels: list[str] = []
+    ax.axvline(0.0, color="black", linewidth=0.8, zorder=2)
+    # Separator between the factorial and the training-recipe arms.
+    boundary = next(i for i, arm in enumerate(_ARMS) if arm.group == "training")
+    ax.axhline((centers[boundary - 1] + centers[boundary]) / 2.0, color="#999999", linewidth=0.6, linestyle=":", zorder=1)
 
-    for split, label in splits:
-        baseline = _read_ensemble_argmax("baseline", split)
-        ablation = _read_ensemble_argmax(arm, split)
-        sds = _read_per_seed_sds(arm, split)
-
-        if baseline is None or ablation is None or sds is None:
-            print(
-                f"[fig_ablation_deltas] Dropping ({arm}, {split}): "
-                f"one or more required artifacts are missing."
-            )
-            continue
-
-        delta_f1.append(ablation["macro_f1"] - baseline["macro_f1"])
-        delta_qwk.append(ablation["qwk"] - baseline["qwk"])
-        sd_f1.append(sds["f1_sd"])
-        sd_qwk.append(sds["qwk_sd"])
-        labels.append(label)
-
-    return delta_f1, delta_qwk, sd_f1, sd_qwk, labels
-
-
-def _x_positions_for(n: int) -> np.ndarray:
-    """Return bar x-positions centered within ``_X_LIM``."""
-
-    if n <= 0:
-        return np.empty(0, dtype=float)
-    midpoint = 0.5 * (_X_LIM[0] + _X_LIM[1])
-    if n == 1:
-        return np.array([midpoint], dtype=float)
-    half = (n - 1) / 2.0
-    return midpoint + np.arange(-half, half + 0.5, 1.0)
+    ax.set_yticks(centers)
+    ax.set_yticklabels([arm.label for arm in _ARMS] if show_row_labels else [], fontsize=8)
+    ax.set_ylim(centers[-1] - 0.6, centers[0] + 0.6)
+    ax.set_xlabel(x_label, fontsize=9)
+    ax.tick_params(axis="y", length=0)
+    ax.tick_params(axis="x", labelsize=7.5, length=2)
+    ax.spines["left"].set_visible(False)
+    ax.margins(x=0.12)
 
 
 def main() -> None:
-    """Render the 2 x 3 ablation-delta signature plot."""
+    """Render the ablation-delta figure and its caption."""
 
     setup_publication_style()
 
-    column_data = []
-    for arm, arm_label in _COLUMNS:
-        splits = _SPLITS_NO_MAYFIELD if arm == "resolution" else _SPLITS_FULL
-        delta_f1, delta_qwk, sd_f1, sd_qwk, labels = _collect_column_data(arm, splits)
-        x_positions = _x_positions_for(len(labels))
-        column_data.append({
-            "title": arm_label,
-            "x_positions": x_positions,
-            "labels": labels,
-            "delta_f1": delta_f1,
-            "delta_qwk": delta_qwk,
-            "sd_f1": sd_f1,
-            "sd_qwk": sd_qwk,
-        })
+    delta_qwk, sd_qwk = _collect("qwk")
+    delta_f1, sd_f1 = _collect("macro_f1")
 
     fig, axes = plt.subplots(
-        2,
-        3,
-        figsize=(WIDTH_2COL, 4.0),
-        sharey="col",
-        gridspec_kw={
-            "wspace": 0.18,
-            "hspace": 0.22,
-            "left": 0.085,
-            "right": 0.985,
-            "top": 0.92,
-            "bottom": 0.10,
-        },
+        1, 2, figsize=(WIDTH_2COL, 3.6),
+        gridspec_kw={"wspace": 0.12, "left": 0.24, "right": 0.985, "top": 0.86, "bottom": 0.13}
     )
+    _draw_panel(axes[0], deltas=delta_qwk, sds=sd_qwk, x_label="$\\Delta$ QWK vs. full configuration", show_row_labels=True)
+    _draw_panel(axes[1], deltas=delta_f1, sds=sd_f1, x_label="$\\Delta$ Macro-F1 vs. full configuration", show_row_labels=False)
 
-    # Single-pass render: bars + whiskers + outside labels per panel. The
-    # 20% y-margin applied below guarantees outside labels fit within the
-    # panel frame without per-bar overflow detection.
-    for col_idx, col in enumerate(column_data):
-        _draw_panel(
-            axes[0, col_idx],
-            x_positions=col["x_positions"],
-            deltas=col["delta_f1"],
-            sds=col["sd_f1"],
-            split_labels=col["labels"],
-            y_label="$\\Delta$ F1" if col_idx == 0 else None,
-            show_x_labels=False,
-            is_top_row=True,
-            column_title=col["title"],
-        )
-        _draw_panel(
-            axes[1, col_idx],
-            x_positions=col["x_positions"],
-            deltas=col["delta_qwk"],
-            sds=col["sd_qwk"],
-            split_labels=col["labels"],
-            y_label="$\\Delta$ QWK" if col_idx == 0 else None,
-            show_x_labels=True,
-            is_top_row=False,
-            column_title=None,
-        )
-
-    # Apply y-margin per column (sharey="col" propagates through the shared
-    # axis so applying once per column suffices). 20% padding on each side
-    # of the auto-determined data range is enough room for the outside-bar
-    # value labels without further geometry work.
-    for col_idx in range(3):
-        axes[0, col_idx].margins(y=_Y_MARGIN)
+    handles = [Patch(facecolor=color, label=label) for color, (_split, label) in zip(_COLUMN_COLORS, REPORTED_COLUMNS, strict=True)]
+    fig.legend(handles=handles, loc="upper center", ncol=4, frameon=False, fontsize=7.5, bbox_to_anchor=(0.6, 0.97),
+               handlelength=1.4, columnspacing=1.2)
 
     save_figure(fig=fig, name="ablation_deltas")
 
+    def _fmt(values: np.ndarray) -> str:
+        return " / ".join("n/a" if np.isnan(v) else f"{v:+.3f}" for v in values)
+
+    rows = "; ".join(f"{arm.label}: QWK {_fmt(delta_qwk[i])}, F1 {_fmt(delta_f1[i])}" for i, arm in enumerate(_ARMS))
     save_caption(
         name="ablation_deltas",
-        title=(
-            "Ablation deltas (vs. canonical baseline) across the three "
-            "single-knob ablations and the evaluation funnel."
-        ),
+        title="Ablation deltas against the full MCDN configuration across the four reported evaluation columns.",
         body=(
-            "Rows are the two headline metrics (delta Macro-F1, delta QWK); "
-            "columns are the three ablations (mask removal, typology removal, "
-            "sensor-modality swap from sUAS to manned-aircraft imagery). The "
-            "mask and typology columns each render three bars (Spatial Block "
-            "East, Hurricane Michael, Mayfield Tornado); the sensor column "
-            "renders two bars centered in the panel (Spatial Block East, "
-            "Hurricane Michael) because the manned-aircraft DROIDs subset "
-            "contains zero orthomosaics from the Mayfield Tornado event. "
-            "Bar color encodes the sign of the delta (red = ablation worsens "
-            "the metric, blue = ablation improves it). Per-bar whiskers show "
-            "the per-seed argmax SD on the ablation arm (sigma across the "
-            "10-seed pool's best-checkpoint argmax F1 / QWK); a delta whose "
-            "magnitude lies inside its whisker is indistinguishable from "
-            "seed-only initialization variance. Per-bar value labels are "
-            "placed outside the bar at the whisker tip (above for positive "
-            "bars, below for negative). Per-column shared y-axis (F1 and QWK "
-            "comparable within an ablation), per-row independent y-axis (the "
-            "sensor column's order-of-magnitude greater deltas are encoded "
-            "in the axis numbers rather than in the bar heights). A 20 "
-            "percent y-margin is applied per column to ensure outside labels "
-            "sit clear of the panel frame. Source: "
-            "ensemble_metrics.json for delta computation, aggregate_metrics.json "
-            "for per-seed SD."
+            "Each row is one ablation arm; bars are the arm's 10-seed ensemble argmax metric minus the full "
+            "configuration's on the same column (left: QWK, right: Macro-F1), colored by evaluation column (DROIDs "
+            "default split, LOEO Michael, LOEO Mayfield, LOEO Ida). Whiskers show the per-seed argmax SD on the "
+            "ablation arm; a delta inside its whisker is indistinguishable from initialization variance. Factorial "
+            "rows are labeled by the mask-derived components retained (C = mask input channel, P = mask-weighted "
+            "pooling, T = typology FiLM); the two rows below the dotted separator retain all three components and "
+            "change the training recipe (cross-entropy in place of the EMD loss; label smoothing removed). "
+            f"Values in column order (default / Michael / Mayfield / Ida) - {rows}. "
+            "Source: `outputs/ablation_dgx/_ensembles/<arm>__<split>.json`; the `mask` and `typology` arms' LOEO "
+            "Michael and Mayfield ensembles are the v1 local runs (`mask_local`, `typology_local`)."
         ),
     )
 

@@ -1,37 +1,34 @@
-"""Companion to R1: precision-normalized confusion-matrix triptych.
+"""Companion to R1: precision-normalized confusion-matrix panels.
 
-Sibling figure to ``fig_confusion_triptych`` that renders the same three
-ensemble-argmax confusion matrices but column-normalized rather than
-row-normalized. Where the recall view (``confusion_triptych``) answers
-"given truth = X, what was predicted?", this view answers "given prediction
-= X, what was the truth?". The diagonal of each column equals the per-class
-**precision**.
+Sibling figure to ``fig_confusion_triptych`` that renders the same four
+ensemble-argmax confusion matrices (DROIDs default split, LOEO Michael,
+Mayfield, Ida) but column-normalized rather than row-normalized. Where the
+recall view (``confusion_triptych``) answers "given truth = X, what was
+predicted?", this view answers "given prediction = X, what was the truth?".
+The diagonal of each column equals the per-class **precision**.
 
-The figure surfaces a chapter-5 claim that the recall view does not visualize:
-the distant-OOD Mayfield Tornado holdout exhibits a **Destroyed precision
-collapse** (0.677, against 0.918 in-distribution and 0.933 on Hurricane
-Michael), driven by Major-as-Destroyed false positives concentrating in the
-Destroyed column. Reading down the Destroyed column on Mayfield, 130 of the
-192 ensemble Destroyed predictions are correct; 57 of the remaining 62 are
-true Major - exactly the chapter's prose claim, now made visually evident
-at the same prominence as the recall view's per-row pattern.
+The figure surfaces a claim that the recall view does not visualize: the
+distant-OOD Mayfield Tornado holdout exhibits a **Destroyed precision
+shortfall** driven by Major-as-Destroyed false positives concentrating in the
+Destroyed column, while the hurricane holdouts' under-calling shows up as
+impure No Damage / Minor columns instead. The caption reports the per-column
+Destroyed precision values computed at render time.
 
-Visual conventions are deliberately identical to the recall triptych so the
+Visual conventions are deliberately identical to the recall view so the
 two figures read as a paired recall-precision view:
     - Cells colored by per-column percent under a shared sequential ``Blues``
       colormap, 0 to 100 percent across all panels for direct comparability.
     - Cell text shows count above per-column percent; text color flips white
       above 50 percent for contrast.
     - Diagonal cells outlined in solid black to emphasize correct predictions.
-    - Per-panel title carries the split name plus ensemble Macro-F1 and QWK.
+    - Per-panel title carries the column label plus ensemble Macro-F1 and QWK.
 
-Source artifacts: ``outputs/ablation/baseline/<split>/ensemble_metrics.json``
--> ``ensemble.argmax.confusion_matrix``. Same JSON the recall triptych reads.
+Source artifacts: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json``
+-> ``cross_variant.equal_seed_metrics.argmax.confusion_matrix``. Same JSON the
+recall view reads.
 """
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Final
 
 import matplotlib.pyplot as plt
@@ -40,42 +37,26 @@ from matplotlib.patches import Rectangle
 
 from scripts.visualization._common import (
     ORDINAL_CLASS_NAMES,
+    REPORTED_COLUMNS,
     WIDTH_2COL,
+    ensemble_rule_metrics,
     save_caption,
     save_figure,
     setup_publication_style,
-)
-
-_REPO_ROOT: Final[Path] = Path(__file__).resolve().parents[2]
-_BASELINE_DIR: Final[Path] = _REPO_ROOT / "outputs" / "ablation" / "baseline"
-
-# Funnel ordering matches fig_confusion_triptych so the two figures display
-# their splits in the same left-to-right order when paired in the chapter.
-_PANELS: Final[tuple[tuple[str, str], ...]] = (
-    ("Spatial_Block_East", "Spatial Block East"),
-    ("Hurricane_Michael", "Hurricane Michael"),
-    ("Mayfield_Tornado", "Mayfield Tornado"),
 )
 
 _SHORT_LABELS: Final[tuple[str, ...]] = ("None", "Minor", "Major", "Destr.")
 
 
 def _load_panel(split_dir: str) -> dict[str, object]:
-    """Read the argmax block from ``ensemble_metrics.json`` for one split."""
+    """Read the ensemble argmax block for one split."""
 
-    metrics_path = _BASELINE_DIR / split_dir / "ensemble_metrics.json"
-    if not metrics_path.exists():
-        raise FileNotFoundError(f"Ensemble metrics not found: {metrics_path}")
-    with metrics_path.open("r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-
-    argmax = payload["ensemble"]["argmax"]
+    argmax = ensemble_rule_metrics(split_dir, rule="argmax")
     return {
         "confusion_matrix": np.asarray(argmax["confusion_matrix"], dtype=np.int64),
         "macro_f1": float(argmax["macro_f1"]),
         "qwk": float(argmax["qwk"]),
     }
-
 
 def _draw_panel(
     ax: plt.Axes,
@@ -115,7 +96,7 @@ def _draw_panel(
                 ha="center",
                 va="center",
                 color=text_color,
-                fontsize=7.5,
+                fontsize=6.5,
                 linespacing=1.0,
             )
 
@@ -132,7 +113,7 @@ def _draw_panel(
         )
 
     ax.set_xticks(range(n_classes))
-    ax.set_xticklabels(_SHORT_LABELS, fontsize=8)
+    ax.set_xticklabels(_SHORT_LABELS, fontsize=7)
     ax.set_yticks(range(n_classes))
     if show_y_labels:
         ax.set_yticklabels(ORDINAL_CLASS_NAMES, fontsize=8)
@@ -140,7 +121,7 @@ def _draw_panel(
     else:
         ax.set_yticklabels([])
     ax.set_xlabel("Predicted class")
-    ax.set_title(title, fontsize=9, pad=6)
+    ax.set_title(title, fontsize=8, pad=5)
 
     ax.tick_params(axis="both", which="both", length=0)
     for spine in ax.spines.values():
@@ -150,27 +131,26 @@ def _draw_panel(
 
 
 def main() -> None:
-    """Render the precision (column-normalized) confusion-matrix triptych."""
+    """Render the precision (column-normalized) confusion-matrix panels across the four reported columns."""
 
     setup_publication_style()
 
-    panels = [(_load_panel(d), label) for d, label in _PANELS]
+    panels = [(_load_panel(d), label) for d, label in REPORTED_COLUMNS]
 
     fig, axes = plt.subplots(
         1,
-        3,
-        figsize=(WIDTH_2COL, 2.85),
-        gridspec_kw={"wspace": 0.18, "left": 0.085, "right": 0.91, "top": 0.88, "bottom": 0.18},
+        4,
+        figsize=(WIDTH_2COL, 2.35),
+        gridspec_kw={"wspace": 0.16, "left": 0.085, "right": 0.915, "top": 0.85, "bottom": 0.2},
     )
 
     cmap = plt.get_cmap("Blues")
     image = None
-    for idx, ((data, label), ax) in enumerate(zip(panels, axes)):
+    for idx, ((data, label), ax) in enumerate(zip(panels, axes, strict=True)):
         cm_counts = data["confusion_matrix"]
         title = (
             f"{label}\n"
-            f"F1 = {data['macro_f1']:.3f}    "
-            f"QWK = {data['qwk']:.3f}"
+            f"F1 {data['macro_f1']:.3f}  QWK {data['qwk']:.3f}"
         )
         image = _draw_panel(
             ax,
@@ -182,7 +162,7 @@ def main() -> None:
             vmax=100.0,
         )
 
-    cbar_ax = fig.add_axes([0.925, 0.22, 0.012, 0.6])
+    cbar_ax = fig.add_axes([0.93, 0.24, 0.01, 0.55])
     cbar = fig.colorbar(image, cax=cbar_ax)
     cbar.set_label("Column-normalized %", fontsize=8)
     cbar.ax.tick_params(labelsize=7, length=2)
@@ -190,32 +170,31 @@ def main() -> None:
 
     save_figure(fig=fig, name="precision_triptych")
 
+    destroyed_notes = []
+    for data, label in panels:
+        cm = data["confusion_matrix"]
+        predicted_destroyed = int(cm[:, 3].sum())
+        precision = cm[3, 3] / predicted_destroyed if predicted_destroyed else float("nan")
+        destroyed_notes.append(f"{label} {precision:.3f} ({int(cm[3, 3])} of {predicted_destroyed}, {int(cm[2, 3])} from true Major)")
+
     save_caption(
         name="precision_triptych",
         title=(
-            "Ensemble argmax precision (column-normalized) confusion matrices "
-            "across the evaluation funnel."
+            "Ensemble argmax precision (column-normalized) confusion matrices of the full MCDN configuration "
+            "across the four reported evaluation columns."
         ),
         body=(
-            "Companion to the row-normalized recall triptych. Rows are "
-            "ground-truth classes; columns are predicted classes; cells are "
-            "tinted by per-COLUMN percent (the share of a given prediction "
-            "that came from each true class). The diagonal of each column is "
-            "the corresponding per-class precision. Diagonal cells are "
-            "outlined in solid black; cell tinting follows a shared `Blues` "
-            "sequential colormap on the same 0-100 percent scale as the "
-            "recall view, so the two figures read as paired views over the "
-            "same data. Source: `outputs/ablation/baseline/<split>/"
-            "ensemble_metrics.json` -> `ensemble.argmax.confusion_matrix`. "
-            "Per-panel headline F1 and QWK are the corresponding ensemble "
-            "scalars from the same JSON. The chapter's central per-class "
-            "Mayfield signature is encoded in the Destroyed column of the "
-            "right-most panel: 130 of 192 ensemble Destroyed predictions are "
-            "correct (precision = 0.677), with 57 of the remaining 62 false "
-            "positives drawn from true Major - the harder Major-versus-"
-            "Destroyed visual boundary on tornado debris fields. The same "
-            "Destroyed column on the in-distribution and proximate-OOD "
-            "panels is nearly pure (precision = 0.918, 0.933 respectively)."
+            "Companion to the row-normalized recall view. Rows are ground-truth classes; columns are predicted "
+            "classes; cells are tinted by per-COLUMN percent (the share of a given prediction that came from each "
+            "true class). The diagonal of each column is the corresponding per-class precision. Diagonal cells are "
+            "outlined in solid black; cell tinting follows a shared `Blues` sequential colormap on the same 0-100 "
+            "percent scale as the recall view, so the two figures read as paired views over the same data. Source: "
+            "`outputs/ablation_dgx/_ensembles/all_features__<split>.json` -> "
+            "`cross_variant.equal_seed_metrics.argmax.confusion_matrix`. Per-panel headline F1 and QWK are the "
+            "corresponding ensemble scalars from the same JSON. Destroyed-column precision by column: "
+            + "; ".join(destroyed_notes) + ". The Mayfield shortfall is the Major-versus-Destroyed visual boundary "
+            "on tornado debris fields; on the hurricane holdouts the impurity sits instead in the No Damage and "
+            "Minor columns, where confidently under-called Minor and Major buildings accumulate."
         ),
     )
 

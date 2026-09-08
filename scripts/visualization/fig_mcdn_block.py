@@ -1,8 +1,8 @@
 """F-MCDN - MCDN architecture overview block diagram.
 
 Renders the Mask Centered Damage Net as a top-down block diagram for the
-journal Methodology section
-(``.cursor/paper/v1_mask_conditioned_damage_net.tex``, ``\\ref{fig:mcdn-block}``).
+journal Methodology section (doc/v2/mask_centered_damage_net_rev2.tex,
+figure label fig:mcdn-block).
 The four MCDN-specific architectural commitments beyond a stock ConvNeXt~v2
 Nano backbone - early-fusion four-channel stem, FiLM typology conditioning,
 mask-weighted pooling at each consumed stage, and cross-scale fusion - are
@@ -37,6 +37,9 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 from scripts.visualization._common import (
+    FIG_ANNOT_PT,
+    FIG_FONT_PT,
+    WIDTH_1COL,
     save_caption,
     save_figure,
     setup_publication_style,
@@ -51,6 +54,13 @@ _X_LEFT: Final[float] = 0.40
 _X_RIGHT: Final[float] = 5.80
 _X_TOTAL: Final[float] = _X_RIGHT - _X_LEFT
 _Y_TOTAL: Final[float] = 6.30
+
+# The canvas is wider than the single column it is placed in, so LaTeX scales it down by
+# WIDTH_1COL / _X_TOTAL. Font sizes are scaled up by the inverse so labels print at
+# FIG_FONT_PT and sublabels at FIG_ANNOT_PT once the figure is at column width.
+_PLACEMENT_SCALE: Final[float] = _X_TOTAL / WIDTH_1COL
+_LABEL_PT: Final[float] = FIG_FONT_PT * _PLACEMENT_SCALE
+_SUBLABEL_PT: Final[float] = FIG_ANNOT_PT * _PLACEMENT_SCALE
 
 # Y-positions for each band's top edge (descending). The Input and Backbone
 # tops sit just above their pre-compression values; the +0.04 lift over
@@ -98,8 +108,8 @@ _H_OUTPUT: Final[float] = 0.50
 # kinking the trunk into a dogleg or making the fork manifold
 # asymmetric about its trunk landing point.
 _X_CENTER: Final[float] = 3.10
-_X_S3: Final[float] = 2.10
-_X_S4: Final[float] = 4.10
+_X_S3: Final[float] = 2.05
+_X_S4: Final[float] = 4.15
 _X_INPUT_BACKBONE: Final[float] = 2.10
 _X_TYPOLOGY: Final[float] = 4.80
 _X_MLP: Final[float] = 4.80
@@ -109,8 +119,8 @@ _W_INPUT: Final[float] = 2.6
 _W_TYPOLOGY: Final[float] = 1.6
 _W_BACKBONE: Final[float] = 3.0
 _W_MLP: Final[float] = 1.6
-_W_FILM: Final[float] = 1.6
-_W_POOL: Final[float] = 1.6
+_W_FILM: Final[float] = 1.7
+_W_POOL: Final[float] = 1.9  # sized for "Mask-Weighted Pool" at column-width 8 pt bold
 _W_FUSION: Final[float] = 3.6
 _W_HEAD: Final[float] = 2.4
 _W_OUTPUT: Final[float] = 4.0
@@ -215,14 +225,14 @@ def _draw_box(ax: plt.Axes, *, spec: BoxSpec) -> None:
     if spec.sublabel is None:
         ax.text(spec.x_center, y_center, spec.label,
                 ha="center", va="center",
-                fontsize=8.5, fontweight=weight, zorder=4)
+                fontsize=_LABEL_PT, fontweight=weight, zorder=4)
     else:
-        ax.text(spec.x_center, y_center + 0.08, spec.label,
+        ax.text(spec.x_center, y_center + 0.09, spec.label,
                 ha="center", va="center",
-                fontsize=8.5, fontweight=weight, zorder=4)
-        ax.text(spec.x_center, y_center - 0.10, spec.sublabel,
+                fontsize=_LABEL_PT, fontweight=weight, zorder=4)
+        ax.text(spec.x_center, y_center - 0.11, spec.sublabel,
                 ha="center", va="center",
-                fontsize=8, color="#555555", style="italic",
+                fontsize=_SUBLABEL_PT, color="#555555", style="italic",
                 zorder=4)
 
 
@@ -429,7 +439,7 @@ def main() -> None:
         width=_W_BACKBONE,
         height=_H_BACKBONE,
         label="ConvNeXt v2 Nano Backbone",
-        sublabel="(FCMAE+IN22k, 4-ch stem, mask channel zero-init)",
+        sublabel="(FCMAE+IN22k, 4-ch stem, zero-init mask)",
     ))
     _draw_box(ax=ax, spec=BoxSpec(
         x_center=_X_MLP,

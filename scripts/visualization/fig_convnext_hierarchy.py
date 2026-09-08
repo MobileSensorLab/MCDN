@@ -15,17 +15,17 @@ Each abstract block (Stem, Stage 1-4) is a beveled rectangular prism with
 three pieces of texture that carry information beyond the block's overall
 size:
 
-- The **front face** carries an :math:`N \\times N` grid suggesting feature-map
+- The **front face** carries an N x N grid suggesting feature-map
   discretization at the relevant spatial resolution. The grid density scales
   log-linearly with the spatial dimension.
-- The **right face** carries :math:`M` parallel depth-direction lines
-  suggesting the stack of :math:`M`-binned channels at this level. The line
+- The **right face** carries M parallel depth-direction lines suggesting the
+  stack of M-binned channels at this level. The line
   density scales log-linearly with the channel count.
 - The **front-face side length** is square-root scaled to spatial extent and
   the **depth extent** is square-root scaled to channel count, so the visual
   reads as "input is a tall thin slab (large spatial, three channels), Stage 4
   is a small deep cube (small spatial, six-hundred-forty channels)" - the
-  canonical convolutional-network compression-and-channel-expansion trade.
+  classic convolutional-network compression-and-channel-expansion trade.
 
 The mixed convention (real chip at input, abstract prisms downstream) is
 deliberate: the input *is* literally an image, while the stage outputs are
@@ -63,7 +63,7 @@ from PIL import Image
 
 from scripts.visualization._common import (
     WIDTH_2COL,
-    load_canonical_val_chip,
+    load_reference_val_chip,
     save_caption,
     save_figure,
     setup_publication_style,
@@ -175,7 +175,7 @@ def _grid_cell_count(spatial: int) -> int:
     """Number of front-face grid cells per side, log-scaled to spatial extent.
 
     Derived from ``round(log2(spatial)) - 1``, clamped to ``[2, 8]``. For the
-    canonical hierarchy this yields ``[8, 6, 6, 5, 4, 3]`` for input through
+    reference hierarchy this yields ``[8, 6, 6, 5, 4, 3]`` for input through
     Stage 4 - a clear visual progression that matches the spatial-halving
     pattern without packing the smallest blocks too densely.
     """
@@ -187,7 +187,7 @@ def _grid_cell_count(spatial: int) -> int:
 def _stack_line_count(channels: int) -> int:
     """Number of right-face stacked-channel lines, log-scaled to channel count.
 
-    Derived from ``max(0, round(log2(channels)) - 3)``. For the canonical
+    Derived from ``max(0, round(log2(channels)) - 3)``. For the reference
     hierarchy this yields ``[0, 3, 3, 4, 5, 6]`` for input through Stage 4 -
     a discrete-but-suggestive depth texture that says "more channels = more
     visible layers" without claiming literal channel counts.
@@ -449,7 +449,7 @@ CAPTION_BODY: str = (
     "3 at Stage 4). **Right-face stacked lines** are log-scaled to channel "
     "count as a stylized representation of the channel stack "
     "(3 lines at the stem - 80 channels - up to 6 lines at Stage 4 - "
-    "640 channels). The visual progression encodes the canonical "
+    "640 channels). The visual progression encodes the classic "
     "convolutional-network compression-with-channel-expansion trade: the "
     "input is a flat photograph, the stem patchifies it into a tall but "
     "shallow feature volume, and the deeper stages compress spatially while "
@@ -479,7 +479,7 @@ def main() -> None:
     # exemplar). Downsampled to 256x256 to keep the input-block raster
     # embedding small; at the ~0.7 axis-unit (~0.7 inch) front-face display
     # size the visible quality loss is negligible.
-    chip = load_canonical_val_chip(class_name="Minor", rng_seed=1)
+    chip = load_reference_val_chip(class_name="Minor", rng_seed=1)
     chip_rgb = _downsample_array(chip["rgb"], target=256, mode="bilinear")
     chip_mask = _downsample_array(chip["mask"], target=256, mode="nearest")
 

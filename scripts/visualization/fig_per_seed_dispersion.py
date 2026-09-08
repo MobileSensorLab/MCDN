@@ -1,11 +1,9 @@
-"""R4: per-seed F1 dispersion across the canonical 10-seed baseline funnel.
+"""R4: per-seed F1 dispersion of the full MCDN configuration across the four reported columns.
 
 Visualizes the per-seed initialization-variance signature behind the
-chapter's "dispersion scales with domain shift" claim: per-seed F1 SD
-widens from 0.0034 (Spatial Block East, in-distribution) to 0.0046
-(Hurricane Michael, proximate-OOD) to 0.0164 (Mayfield Tornado, distant-OOD).
-Each split renders ten jittered dots (one per seed at the best-checkpoint
-argmax F1) plus a single horizontal bar at the ensemble argmax F1 (the
+"dispersion scales with domain shift" claim. Each column renders ten jittered
+dots (one per seed at the best-checkpoint argmax F1, replayed from the stored
+checkpoints) plus a single horizontal bar at the ensemble argmax F1 (the
 softmax-mean of per-seed probabilities decoded under argmax). The bar
 typically sits at or above the per-seed cluster top, encoding the
 ensemble-lift mechanism: averaging across the seed pool's softmax outputs
@@ -15,39 +13,29 @@ calibration noise cancels in expectation.
 Visual conventions:
     - Per-seed dots in neutral medium grey with white edges, slight
       horizontal jitter so 10 samples don't pile on a single x-coordinate.
-    - Ensemble F1 rendered as a short horizontal bar centered on each split
+    - Ensemble F1 rendered as a short horizontal bar centered on each column
       position, dark grey, drawn above the dots in the layer stack.
     - Per-bar value annotation (3-decimal F1) above each ensemble bar.
 
-Source: ``outputs/ablation/baseline/<split>/aggregate_metrics.json`` ->
-``per_seed[*].by_rule.argmax.best.macro_f1`` and ``ensemble_metrics.json``
--> ``ensemble.argmax.macro_f1``. All values from the canonical 10-seed
-baseline runs.
+Source: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json`` ->
+``variants[0].per_seed[*].replay_metrics.argmax.macro_f1`` (dots) and
+``cross_variant.equal_seed_metrics.argmax.macro_f1`` (bar).
 """
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Final
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from scripts.visualization._common import (
+    REPORTED_COLUMNS,
     WIDTH_2COL,
+    ensemble_rule_metrics,
+    per_seed_rule_metrics,
     save_caption,
     save_figure,
     setup_publication_style,
-)
-
-_REPO_ROOT: Final[Path] = Path(__file__).resolve().parents[2]
-_BASELINE_DIR: Final[Path] = _REPO_ROOT / "outputs" / "ablation" / "baseline"
-
-# Funnel ordering matches R1, R2, R3 panel ordering for chapter consistency.
-_SPLITS: Final[tuple[tuple[str, str], ...]] = (
-    ("Spatial_Block_East", "E/W"),
-    ("Hurricane_Michael", "Michael"),
-    ("Mayfield_Tornado", "Mayfield"),
 )
 
 _DOT_COLOR: Final[str] = "#7a7a7a"
@@ -60,26 +48,13 @@ _DOT_SIZE: Final[float] = 26.0
 def _load_per_seed_argmax_f1(split_dir: str) -> np.ndarray:
     """Read the 10-seed per-seed best-checkpoint argmax F1 array."""
 
-    aggregate_path = _BASELINE_DIR / split_dir / "aggregate_metrics.json"
-    if not aggregate_path.exists():
-        raise FileNotFoundError(f"Aggregate metrics not found: {aggregate_path}")
-    with aggregate_path.open("r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-    return np.asarray(
-        [row["by_rule"]["argmax"]["best"]["macro_f1"] for row in payload["per_seed"]],
-        dtype=np.float64,
-    )
+    return np.asarray([entry["macro_f1"] for entry in per_seed_rule_metrics(split_dir, rule="argmax")], dtype=np.float64)
 
 
 def _load_ensemble_argmax_f1(split_dir: str) -> float:
     """Read the ensemble argmax F1 (softmax-mean across seeds)."""
 
-    ensemble_path = _BASELINE_DIR / split_dir / "ensemble_metrics.json"
-    if not ensemble_path.exists():
-        raise FileNotFoundError(f"Ensemble metrics not found: {ensemble_path}")
-    with ensemble_path.open("r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-    return float(payload["ensemble"]["argmax"]["macro_f1"])
+    return float(ensemble_rule_metrics(split_dir, rule="argmax")["macro_f1"])
 
 
 def main() -> None:
@@ -101,9 +76,15 @@ def main() -> None:
         },
     )
 
-    for x_idx, (split_dir, _split_label) in enumerate(_SPLITS):
+    dispersion_notes: list[str] = []
+    all_values: list[float] = []
+    for x_idx, (split_dir, split_label) in enumerate(REPORTED_COLUMNS):
         per_seed = _load_per_seed_argmax_f1(split_dir)
         ensemble = _load_ensemble_argmax_f1(split_dir)
+        all_values.extend([*per_seed.tolist(), ensemble])
+        dispersion_notes.append(
+            f"{split_label}: SD {per_seed.std(ddof=1):.4f}, ensemble lift over the per-seed mean {ensemble - per_seed.mean():+.4f}"
+        )
 
         jitter = rng.uniform(-_JITTER_HALF_WIDTH, _JITTER_HALF_WIDTH, size=per_seed.size)
         ax.scatter(
@@ -137,10 +118,10 @@ def main() -> None:
             fontweight="medium",
         )
 
-    ax.set_xticks(range(len(_SPLITS)))
-    ax.set_xticklabels([label for _, label in _SPLITS], fontsize=8)
-    ax.set_xlim(-0.5, len(_SPLITS) - 0.5)
-    ax.set_ylim(0.70, 0.82)
+    ax.set_xticks(range(len(REPORTED_COLUMNS)))
+    ax.set_xticklabels([label for _, label in REPORTED_COLUMNS], fontsize=8)
+    ax.set_xlim(-0.5, len(REPORTED_COLUMNS) - 0.5)
+    ax.set_ylim(np.floor(min(all_values) * 50) / 50, np.ceil(max(all_values) * 50) / 50 + 0.01)
     ax.set_ylabel("Macro-F1 (best checkpoint, argmax)", fontsize=9)
     ax.tick_params(axis="both", which="both", labelsize=8, length=3)
     ax.spines["top"].set_visible(False)
@@ -150,30 +131,15 @@ def main() -> None:
 
     save_caption(
         name="per_seed_dispersion",
-        title=(
-            "Per-seed F1 dispersion across the canonical 10-seed baseline "
-            "evaluation funnel."
-        ),
+        title="Per-seed F1 dispersion of the full MCDN configuration across the four reported evaluation columns.",
         body=(
-            "Each grey dot is one of the ten fixed-seed best-checkpoint "
-            "argmax Macro-F1 values for that holdout (seeds 0, 11, 22, 33, "
-            "44, 55, 66, 77, 88, 99); horizontal jitter is purely visual "
-            "(deterministic via ``numpy.random.default_rng(seed=0)``) and "
-            "carries no semantic content. The dark horizontal bar marks the "
-            "ensemble argmax Macro-F1 - the softmax-mean of the ten per-seed "
-            "probability tensors decoded under argmax. The figure visualizes "
-            "two interrelated chapter claims: (i) per-seed dispersion scales "
-            "with domain shift - per-seed F1 SD widens from 0.0034 on the "
-            "in-distribution Spatial Block East holdout to 0.0046 on the "
-            "proximate-OOD Hurricane Michael LOEO to 0.0164 on the "
-            "distant-OOD Mayfield Tornado LOEO; and (ii) the ensemble bar "
-            "sits at or above the per-seed cluster top on every split, "
-            "encoding the ensemble-lift mechanism (seed-specific calibration "
-            "noise cancels in softmax-mean expectation), with the ensemble "
-            "lift over per-seed mean F1 amplifying on harder splits "
-            "(+0.0093 on E/W, +0.0052 on Michael, +0.0120 on Mayfield). "
-            "Source: ``outputs/ablation/baseline/<split>/aggregate_metrics.json`` "
-            "for per-seed values; ``ensemble_metrics.json`` for the ensemble bar."
+            "Each grey dot is one of the ten fixed-seed best-checkpoint argmax Macro-F1 values for that column "
+            "(seeds 0, 11, 22, 33, 44, 55, 66, 77, 88, 99); horizontal jitter is purely visual (deterministic via "
+            "``numpy.random.default_rng(seed=0)``) and carries no semantic content. The dark horizontal bar marks "
+            "the 10-seed ensemble argmax Macro-F1 - the softmax-mean of the ten per-seed probability tensors decoded "
+            "under argmax. Per-column dispersion and ensemble lift: " + "; ".join(dispersion_notes) + ". "
+            "Source: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json`` (per-seed replayed metrics for "
+            "the dots, ``cross_variant.equal_seed_metrics.argmax`` for the bar)."
         ),
     )
 

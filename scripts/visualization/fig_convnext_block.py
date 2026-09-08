@@ -1,6 +1,6 @@
 """F2 - ConvNeXt-V2 block internal computation.
 
-Renders the canonical ConvNeXt-V2 block as a vertical flow diagram suitable for
+Renders the standard ConvNeXt-V2 block as a vertical flow diagram suitable for
 the [Chapter 4 Backbone subsection](../../doc/4-modeling.qmd#sec-modeling-backbone).
 The seven operations - depthwise 7x7 conv, LayerNorm, pointwise expansion,
 GELU, GRN, pointwise compression, DropPath - sit on a vertical main chain

@@ -1,6 +1,6 @@
 """F8 - Augmentation gallery on a Mayfield Tornado chip.
 
-Renders 16 independent samples of the canonical training augmentation pipeline
+Renders 16 independent samples of the standard training augmentation pipeline
 (``src.data.transform.get_train_transforms``) applied to the same Mayfield
 Tornado chip, in a 4 x 4 grid. The full pipeline runs on each panel:
 
@@ -47,7 +47,7 @@ from PIL import Image
 
 from scripts.visualization._common import (
     WIDTH_2COL,
-    load_canonical_val_chip,
+    load_reference_val_chip,
     save_caption,
     save_figure,
     setup_publication_style,
@@ -99,7 +99,7 @@ CAPTION_TITLE: str = (
     "Augmentation gallery: 16 samples of the training pipeline on a Mayfield val chip."
 )
 CAPTION_BODY: str = (
-    "Each panel applies the full canonical training augmentation pipeline "
+    "Each panel applies the full training augmentation pipeline "
     "(``src/data/transform.py::get_train_transforms``) to the same base "
     "Mayfield Tornado chip ($Minor$ class, ``rng_seed=1``, the same exemplar "
     "shown in F6 and F7). The pipeline composes: D4 spatial transforms "
@@ -132,7 +132,7 @@ def main() -> None:
 
     setup_publication_style()
 
-    chip = load_canonical_val_chip(class_name="Minor", rng_seed=1)
+    chip = load_reference_val_chip(class_name="Minor", rng_seed=1)
     rgb_base = chip["rgb"]
     mask_base = chip["mask"].astype(np.uint8)
 
@@ -145,8 +145,10 @@ def main() -> None:
     )
 
     for panel_idx in range(_NUM_PANELS):
+        # Stock albumentations transforms draw from the Compose-owned RNG (seeded
+        # here); MaskCorruption draws from the stdlib global, so seed both.
         random.seed(panel_idx)
-        np.random.seed(panel_idx)
+        transform.set_random_seed(panel_idx)
 
         result = transform(image=rgb_base, mask=mask_base)
         rgb_aug = result["image"]

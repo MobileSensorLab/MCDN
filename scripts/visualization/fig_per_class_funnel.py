@@ -1,40 +1,27 @@
-"""R3: per-class F1 across the canonical 10-seed baseline evaluation funnel.
+"""R3: per-class F1 of the full MCDN configuration across the four reported columns.
 
-Compresses the three per-class-decomposition tables in
-[doc/5-results.qmd](doc/5-results.qmd) into a single polyline plot. Each line
-tracks one ordinal damage class across the three holdouts (in-distribution
-Spatial Block East, proximate-OOD Hurricane Michael, distant-OOD Mayfield
-Tornado), so the chapter's per-class narrative reads as visual trajectories
-rather than three separately-tabulated rows:
-
-    - **No Damage** dips on Hurricane Michael, then *rises* sharply on
-      Mayfield (the prevalent class is easier on the imbalanced distant-OOD
-      holdout).
-    - **Minor** is roughly flat across the funnel - the bottleneck class on
-      every split.
-    - **Major** drops on Hurricane Michael and stays flat on Mayfield (recall
-      collapse on the unseen-event splits).
-    - **Destroyed** holds across the hurricane funnel (slight rise on
-      Michael) and *collapses* on Mayfield - the chapter's central per-class
-      signature, driven by precision falling against still-strong recall as
-      Major-as-Destroyed false positives concentrate on tornado debris fields.
+Compresses the per-class-decomposition tables into a single polyline plot.
+Each line tracks one ordinal damage class across the DROIDs default split and
+the three leave-one-event-out holdouts (Michael, Mayfield, Ida), so the
+per-class narrative reads as visual trajectories rather than four separately
+tabulated rows. The Ida column is where the interior classes diverge most:
+Minor F1 collapses while Major F1 rises, the signature of the confident
+Minor-to-No Damage under-calling documented in the error inventory.
 
 Visual conventions:
     - Lines colored by the FEMA-aligned ColorBrewer Set1 ordinal palette
       from ``_common.py`` (green / orange / red / purple) for sign-level
-      visual consistency with the other chapter figures.
+      visual consistency with the other figures.
     - Markers are class-specific shapes (circle, square, triangle, diamond)
       for redundant non-color encoding - the figure remains parseable in
       greyscale print and for color-vision-deficient readers.
-    - Compact single-column figure footprint with a 2 x 2 in-axes legend.
+    - Compact figure footprint with a 2 x 2 in-axes legend.
 
-Source: ``outputs/ablation/baseline/<split>/ensemble_metrics.json`` ->
-``ensemble.argmax.per_class.<class>.f1``.
+Source: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json`` ->
+``cross_variant.equal_seed_metrics.argmax.per_class_f1``.
 """
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Final
 
 import matplotlib.pyplot as plt
@@ -43,21 +30,12 @@ import numpy as np
 from scripts.visualization._common import (
     ORDINAL_CLASS_NAMES,
     ORDINAL_CLASS_PALETTE,
+    REPORTED_COLUMNS,
     WIDTH_2COL,
+    ensemble_rule_metrics,
     save_caption,
     save_figure,
     setup_publication_style,
-)
-
-_REPO_ROOT: Final[Path] = Path(__file__).resolve().parents[2]
-_BASELINE_DIR: Final[Path] = _REPO_ROOT / "outputs" / "ablation" / "baseline"
-
-# Funnel ordering matches R1 confusion triptych and R2 ablation deltas so
-# the three figures read consistently across the chapter.
-_SPLITS: Final[tuple[tuple[str, str], ...]] = (
-    ("Spatial_Block_East", "E/W"),
-    ("Hurricane_Michael", "Michael"),
-    ("Mayfield_Tornado", "Mayfield"),
 )
 
 # Class-specific marker shapes for redundant non-color encoding. Order
@@ -69,22 +47,16 @@ _CLASS_MARKERS: Final[tuple[str, ...]] = ("o", "s", "^", "D")
 def _load_per_class_f1(split_dir: str) -> dict[str, float]:
     """Read per-class ensemble argmax F1 for one split."""
 
-    metrics_path = _BASELINE_DIR / split_dir / "ensemble_metrics.json"
-    if not metrics_path.exists():
-        raise FileNotFoundError(f"Ensemble metrics not found: {metrics_path}")
-    with metrics_path.open("r", encoding="utf-8") as handle:
-        payload = json.load(handle)
-
-    per_class = payload["ensemble"]["argmax"]["per_class"]
-    return {name: float(per_class[name]["f1"]) for name in ORDINAL_CLASS_NAMES}
+    per_class = ensemble_rule_metrics(split_dir, rule="argmax")["per_class_f1"]
+    return {name: float(per_class[name]) for name in ORDINAL_CLASS_NAMES}
 
 
 def main() -> None:
-    """Render the per-class F1 funnel polyline plot."""
+    """Render the per-class F1 polyline plot."""
 
     setup_publication_style()
 
-    splits_data = [(label, _load_per_class_f1(d)) for d, label in _SPLITS]
+    splits_data = [(label, _load_per_class_f1(d)) for d, label in REPORTED_COLUMNS]
     split_labels = [label for label, _ in splits_data]
     x_positions = np.arange(len(splits_data))
 
@@ -103,9 +75,7 @@ def main() -> None:
         },
     )
 
-    for class_name, color, marker in zip(
-        ORDINAL_CLASS_NAMES, ORDINAL_CLASS_PALETTE, _CLASS_MARKERS
-    ):
+    for class_name, color, marker in zip(ORDINAL_CLASS_NAMES, ORDINAL_CLASS_PALETTE, _CLASS_MARKERS, strict=True):
         ax.plot(
             x_positions,
             class_trajectories[class_name],
@@ -119,10 +89,11 @@ def main() -> None:
             zorder=3,
         )
 
+    all_values = np.concatenate(list(class_trajectories.values()))
     ax.set_xlim(-0.2, len(splits_data) - 0.8)
     ax.set_xticks(x_positions)
     ax.set_xticklabels(split_labels, fontsize=8)
-    ax.set_ylim(0.65, 0.95)
+    ax.set_ylim(np.floor(all_values.min() * 20) / 20, min(1.0, np.ceil(all_values.max() * 20) / 20))
     ax.set_ylabel("Per-class F1 (ensemble argmax)", fontsize=9)
     ax.tick_params(axis="both", which="both", labelsize=8, length=3)
     ax.spines["top"].set_visible(False)
@@ -140,33 +111,22 @@ def main() -> None:
 
     save_figure(fig=fig, name="per_class_funnel")
 
+    trajectory_text = "; ".join(
+        f"{name}: " + " / ".join(f"{value:.3f}" for value in class_trajectories[name])
+        for name in ORDINAL_CLASS_NAMES
+    )
     save_caption(
         name="per_class_funnel",
-        title=(
-            "Per-class F1 across the canonical 10-seed baseline evaluation "
-            "funnel."
-        ),
+        title="Per-class F1 of the full MCDN configuration across the four reported evaluation columns.",
         body=(
-            "Polylines show the ensemble argmax F1 for each ordinal damage "
-            "class as the holdout shifts from in-distribution (Spatial Block "
-            "East), through proximate-OOD (Hurricane Michael LOEO), to "
-            "distant-OOD (Mayfield Tornado LOEO). Class colors come from the "
-            "FEMA-aligned ColorBrewer Set1 ordinal palette in `_common.py`; "
-            "marker shapes (circle / square / triangle / diamond) provide "
-            "redundant non-color encoding for greyscale print and "
-            "color-vision-deficient readers. Four trajectories, four "
-            "different stories: No Damage dips on Hurricane Michael then "
-            "rises sharply on Mayfield (the prevalent class is easier on "
-            "the imbalanced distant-OOD split); Minor is roughly flat - the "
-            "consistent bottleneck class; Major drops on Hurricane Michael "
-            "and stays flat on Mayfield (recall collapse on the unseen-event "
-            "splits); and Destroyed holds across the hurricane funnel and "
-            "collapses on Mayfield - the chapter's central per-class "
-            "signature, driven by precision falling against still-strong "
-            "recall as Major-as-Destroyed false positives concentrate on "
-            "tornado debris fields. Source: "
-            "`outputs/ablation/baseline/<split>/ensemble_metrics.json` -> "
-            "`ensemble.argmax.per_class.<class>.f1`."
+            "Polylines show the 10-seed ensemble argmax F1 for each ordinal damage class across the DROIDs "
+            "default split (the dataset's published train/test partition) and the LOEO Michael, Mayfield and Ida "
+            "holdouts. Class colors come from the FEMA-aligned ColorBrewer Set1 ordinal palette in `_common.py`; "
+            "marker shapes (circle / square / triangle / diamond) provide redundant non-color encoding for "
+            "greyscale print and color-vision-deficient readers. Values in column order "
+            f"({', '.join(split_labels)}) - {trajectory_text}. "
+            "Source: `outputs/ablation_dgx/_ensembles/all_features__<split>.json` -> "
+            "`cross_variant.equal_seed_metrics.argmax.per_class_f1`."
         ),
     )
 

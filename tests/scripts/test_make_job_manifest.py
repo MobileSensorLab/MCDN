@@ -7,10 +7,10 @@ from train import ABLATION_PRESET_FILES, FIXED_ABLATION_SEEDS
 
 
 def test_build_job_matrix_composition() -> None:
-    """Matrix is 310 runs: 6 arms x 4 holdouts x 10 seeds + typology completion + baseline block + deployed_split."""
+    """Matrix is 430 runs: 6 arms x 4 holdouts x 10 seeds + typology completion + all_features block + crewed-GSD + deliverable + mask completion + pooling+typology + crewed-geometry."""
 
     jobs = mjm.build_job_matrix()
-    assert len(jobs) == 310
+    assert len(jobs) == 430
 
     per_arm: dict[str, int] = {}
     for preset, _holdout, _seed in jobs:
@@ -23,9 +23,67 @@ def test_build_job_matrix_composition() -> None:
         "ce_loss": 40,
         "downsample_15cm": 40,
         "typology": 20,
-        "baseline": 40,
-        "deployed_split": 10
+        "all_features": 50,
+        "downsample_crewed": 20,
+        "downsample_deliverable": 20,
+        "mask": 20,
+        "pooling_typology": 40,
+        "downsample_crewed_fov": 20
     }
+
+
+def test_crewed_gsd_arm_appended_after_original_rows() -> None:
+    """Crewed-GSD rows occupy positions 311-330 only: rows 1-310 keep their launch-time meaning.
+
+    The shepherd maps done-markers to manifest rows by line number, so the appended arm
+    must never displace an original row.
+    """
+
+    jobs = mjm.build_job_matrix()
+    assert all(preset != "downsample_crewed" for preset, _holdout, _seed in jobs[:310])
+    assert all(preset == "downsample_crewed" for preset, _holdout, _seed in jobs[310:330])
+    crewed_holdouts = {holdout for preset, holdout, _seed in jobs if preset == "downsample_crewed"}
+    assert crewed_holdouts == {mjm.DEFAULT_SPLIT_HOLDOUT, "Hurricane Ida"}
+
+
+def test_deliverable_arm_appended_after_crewed_rows() -> None:
+    """Deliverable-matched rows occupy positions 331-350 only: rows 1-330 keep their meaning."""
+
+    jobs = mjm.build_job_matrix()
+    assert all(preset != "downsample_deliverable" for preset, _holdout, _seed in jobs[:330])
+    assert all(preset == "downsample_deliverable" for preset, _holdout, _seed in jobs[330:350])
+    deliverable_holdouts = {holdout for preset, holdout, _seed in jobs if preset == "downsample_deliverable"}
+    assert deliverable_holdouts == {mjm.DEFAULT_SPLIT_HOLDOUT, "Hurricane Ida"}
+
+
+def test_mask_completion_arm_appended_after_deliverable_rows() -> None:
+    """Mask-ablated completion rows occupy positions 351-370 only: rows 1-350 keep their meaning."""
+
+    jobs = mjm.build_job_matrix()
+    assert all(preset != "mask" for preset, _holdout, _seed in jobs[:350])
+    assert all(preset == "mask" for preset, _holdout, _seed in jobs[350:370])
+    mask_holdouts = {holdout for preset, holdout, _seed in jobs if preset == "mask"}
+    assert mask_holdouts == {mjm.DEFAULT_SPLIT_HOLDOUT, "Hurricane Ida"}
+
+
+def test_pooling_typology_arm_runs_full_protocol_after_mask_rows() -> None:
+    """Pooling+typology rows occupy positions 371-410 and cover all four reported columns."""
+
+    jobs = mjm.build_job_matrix()
+    assert all(preset != "pooling_typology" for preset, _holdout, _seed in jobs[:370])
+    assert all(preset == "pooling_typology" for preset, _holdout, _seed in jobs[370:410])
+    pt_holdouts = {holdout for preset, holdout, _seed in jobs if preset == "pooling_typology"}
+    assert pt_holdouts == {mjm.DEFAULT_SPLIT_HOLDOUT, "Hurricane Ida", "Hurricane Michael", "Mayfield Tornado"}
+
+
+def test_fov_arm_occupies_final_rows() -> None:
+    """Crewed-geometry rows occupy positions 411-430 only, so a truncated deploy can hold them back."""
+
+    jobs = mjm.build_job_matrix()
+    assert all(preset != "downsample_crewed_fov" for preset, _holdout, _seed in jobs[:410])
+    assert all(preset == "downsample_crewed_fov" for preset, _holdout, _seed in jobs[410:])
+    fov_holdouts = {holdout for preset, holdout, _seed in jobs if preset == "downsample_crewed_fov"}
+    assert fov_holdouts == {mjm.DEFAULT_SPLIT_HOLDOUT, "Hurricane Ida"}
 
 
 def test_full_protocol_arms_cover_default_split_and_all_feasible_loeo() -> None:
@@ -37,7 +95,7 @@ def test_full_protocol_arms_cover_default_split_and_all_feasible_loeo() -> None:
         assert holdouts == {mjm.DEFAULT_SPLIT_HOLDOUT, "Hurricane Ida", "Hurricane Michael", "Mayfield Tornado"}
 
 
-def test_default_split_composite_matches_deployed_split_preset() -> None:
+def test_default_split_composite_names_the_droids_test_events() -> None:
     """The '+'-joined composite names exactly the four DROIDs test events."""
 
     events = set(mjm.DEFAULT_SPLIT_HOLDOUT.split("+"))
@@ -52,14 +110,23 @@ def test_typology_factorial_completion_runs_only_new_columns() -> None:
     assert typology_holdouts == {mjm.DEFAULT_SPLIT_HOLDOUT, "Hurricane Ida"}
 
 
-def test_baseline_block_covers_ida_column_and_t23_sanity() -> None:
-    """Baseline runs LOEO-Ida (new column) plus the spatial/Michael/Mayfield T-23 sanity reruns."""
+def test_all_features_block_covers_sanity_loeo_and_default_split() -> None:
+    """all_features runs the T-23 spatial sanity block, all three LOEO columns, and the dataset-default split."""
 
     jobs = mjm.build_job_matrix()
-    baseline_jobs = [job for job in jobs if job[0] == "baseline"]
-    assert len(baseline_jobs) == 40
-    holdouts = {holdout for _preset, holdout, _seed in baseline_jobs}
-    assert holdouts == {mjm.PRESET_DEFAULT_HOLDOUT, "Hurricane Ida", "Hurricane Michael", "Mayfield Tornado"}
+    all_features_jobs = [job for job in jobs if job[0] == "all_features"]
+    assert len(all_features_jobs) == 50
+    holdouts = {holdout for _preset, holdout, _seed in all_features_jobs}
+    assert holdouts == {mjm.PRESET_DEFAULT_HOLDOUT, "Hurricane Ida", "Hurricane Michael", "Mayfield Tornado", mjm.DEFAULT_SPLIT_HOLDOUT}
+
+
+def test_all_features_rows_keep_their_pre_rename_positions() -> None:
+    """Rows 261-310 are all_features, with the former deployed_split rows (301-310) on the composite holdout."""
+
+    jobs = mjm.build_job_matrix()
+    assert all(preset == "all_features" for preset, _holdout, _seed in jobs[260:310])
+    assert all(holdout == mjm.DEFAULT_SPLIT_HOLDOUT for _preset, holdout, _seed in jobs[300:310])
+    assert all(holdout == mjm.PRESET_DEFAULT_HOLDOUT for _preset, holdout, _seed in jobs[260:270])
 
 
 def test_build_job_matrix_stays_consistent_with_train_cli() -> None:
@@ -74,14 +141,6 @@ def test_build_job_matrix_stays_consistent_with_train_cli() -> None:
         assert seeds == FIXED_ABLATION_SEEDS
 
 
-def test_deployed_split_uses_preset_default_holdout() -> None:
-    """The deployed-baseline arm never overrides the holdout: its split lives in the preset."""
-
-    jobs = mjm.build_job_matrix()
-    deployed_holdouts = {holdout for preset, holdout, _seed in jobs if preset == "deployed_split"}
-    assert deployed_holdouts == {mjm.PRESET_DEFAULT_HOLDOUT}
-
-
 def test_write_manifest_emits_tab_separated_lf_lines(tmp_path: Path) -> None:
     """Manifest lines are three tab-separated fields with LF endings (sbatch-side sed/read contract)."""
 
@@ -93,7 +152,7 @@ def test_write_manifest_emits_tab_separated_lf_lines(tmp_path: Path) -> None:
     assert raw.endswith("\n")
 
     lines = raw.splitlines()
-    assert len(lines) == 310
+    assert len(lines) == 430
     for line in lines:
         fields = line.split("\t")
         assert len(fields) == 3

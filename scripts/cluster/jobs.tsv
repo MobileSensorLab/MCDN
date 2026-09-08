@@ -258,53 +258,173 @@ typology	Hurricane Ida	66
 typology	Hurricane Ida	77
 typology	Hurricane Ida	88
 typology	Hurricane Ida	99
-baseline	-	0
-baseline	-	11
-baseline	-	22
-baseline	-	33
-baseline	-	44
-baseline	-	55
-baseline	-	66
-baseline	-	77
-baseline	-	88
-baseline	-	99
-baseline	Hurricane Ida	0
-baseline	Hurricane Ida	11
-baseline	Hurricane Ida	22
-baseline	Hurricane Ida	33
-baseline	Hurricane Ida	44
-baseline	Hurricane Ida	55
-baseline	Hurricane Ida	66
-baseline	Hurricane Ida	77
-baseline	Hurricane Ida	88
-baseline	Hurricane Ida	99
-baseline	Hurricane Michael	0
-baseline	Hurricane Michael	11
-baseline	Hurricane Michael	22
-baseline	Hurricane Michael	33
-baseline	Hurricane Michael	44
-baseline	Hurricane Michael	55
-baseline	Hurricane Michael	66
-baseline	Hurricane Michael	77
-baseline	Hurricane Michael	88
-baseline	Hurricane Michael	99
-baseline	Mayfield Tornado	0
-baseline	Mayfield Tornado	11
-baseline	Mayfield Tornado	22
-baseline	Mayfield Tornado	33
-baseline	Mayfield Tornado	44
-baseline	Mayfield Tornado	55
-baseline	Mayfield Tornado	66
-baseline	Mayfield Tornado	77
-baseline	Mayfield Tornado	88
-baseline	Mayfield Tornado	99
-deployed_split	-	0
-deployed_split	-	11
-deployed_split	-	22
-deployed_split	-	33
-deployed_split	-	44
-deployed_split	-	55
-deployed_split	-	66
-deployed_split	-	77
-deployed_split	-	88
-deployed_split	-	99
+all_features	-	0
+all_features	-	11
+all_features	-	22
+all_features	-	33
+all_features	-	44
+all_features	-	55
+all_features	-	66
+all_features	-	77
+all_features	-	88
+all_features	-	99
+all_features	Hurricane Ida	0
+all_features	Hurricane Ida	11
+all_features	Hurricane Ida	22
+all_features	Hurricane Ida	33
+all_features	Hurricane Ida	44
+all_features	Hurricane Ida	55
+all_features	Hurricane Ida	66
+all_features	Hurricane Ida	77
+all_features	Hurricane Ida	88
+all_features	Hurricane Ida	99
+all_features	Hurricane Michael	0
+all_features	Hurricane Michael	11
+all_features	Hurricane Michael	22
+all_features	Hurricane Michael	33
+all_features	Hurricane Michael	44
+all_features	Hurricane Michael	55
+all_features	Hurricane Michael	66
+all_features	Hurricane Michael	77
+all_features	Hurricane Michael	88
+all_features	Hurricane Michael	99
+all_features	Mayfield Tornado	0
+all_features	Mayfield Tornado	11
+all_features	Mayfield Tornado	22
+all_features	Mayfield Tornado	33
+all_features	Mayfield Tornado	44
+all_features	Mayfield Tornado	55
+all_features	Mayfield Tornado	66
+all_features	Mayfield Tornado	77
+all_features	Mayfield Tornado	88
+all_features	Mayfield Tornado	99
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	0
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	11
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	22
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	33
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	44
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	55
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	66
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	77
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	88
+all_features	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	99
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	0
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	11
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	22
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	33
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	44
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	55
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	66
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	77
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	88
+downsample_crewed	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	99
+downsample_crewed	Hurricane Ida	0
+downsample_crewed	Hurricane Ida	11
+downsample_crewed	Hurricane Ida	22
+downsample_crewed	Hurricane Ida	33
+downsample_crewed	Hurricane Ida	44
+downsample_crewed	Hurricane Ida	55
+downsample_crewed	Hurricane Ida	66
+downsample_crewed	Hurricane Ida	77
+downsample_crewed	Hurricane Ida	88
+downsample_crewed	Hurricane Ida	99
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	0
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	11
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	22
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	33
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	44
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	55
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	66
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	77
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	88
+downsample_deliverable	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	99
+downsample_deliverable	Hurricane Ida	0
+downsample_deliverable	Hurricane Ida	11
+downsample_deliverable	Hurricane Ida	22
+downsample_deliverable	Hurricane Ida	33
+downsample_deliverable	Hurricane Ida	44
+downsample_deliverable	Hurricane Ida	55
+downsample_deliverable	Hurricane Ida	66
+downsample_deliverable	Hurricane Ida	77
+downsample_deliverable	Hurricane Ida	88
+downsample_deliverable	Hurricane Ida	99
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	0
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	11
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	22
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	33
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	44
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	55
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	66
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	77
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	88
+mask	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	99
+mask	Hurricane Ida	0
+mask	Hurricane Ida	11
+mask	Hurricane Ida	22
+mask	Hurricane Ida	33
+mask	Hurricane Ida	44
+mask	Hurricane Ida	55
+mask	Hurricane Ida	66
+mask	Hurricane Ida	77
+mask	Hurricane Ida	88
+mask	Hurricane Ida	99
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	0
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	11
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	22
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	33
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	44
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	55
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	66
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	77
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	88
+pooling_typology	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	99
+pooling_typology	Hurricane Ida	0
+pooling_typology	Hurricane Ida	11
+pooling_typology	Hurricane Ida	22
+pooling_typology	Hurricane Ida	33
+pooling_typology	Hurricane Ida	44
+pooling_typology	Hurricane Ida	55
+pooling_typology	Hurricane Ida	66
+pooling_typology	Hurricane Ida	77
+pooling_typology	Hurricane Ida	88
+pooling_typology	Hurricane Ida	99
+pooling_typology	Hurricane Michael	0
+pooling_typology	Hurricane Michael	11
+pooling_typology	Hurricane Michael	22
+pooling_typology	Hurricane Michael	33
+pooling_typology	Hurricane Michael	44
+pooling_typology	Hurricane Michael	55
+pooling_typology	Hurricane Michael	66
+pooling_typology	Hurricane Michael	77
+pooling_typology	Hurricane Michael	88
+pooling_typology	Hurricane Michael	99
+pooling_typology	Mayfield Tornado	0
+pooling_typology	Mayfield Tornado	11
+pooling_typology	Mayfield Tornado	22
+pooling_typology	Mayfield Tornado	33
+pooling_typology	Mayfield Tornado	44
+pooling_typology	Mayfield Tornado	55
+pooling_typology	Mayfield Tornado	66
+pooling_typology	Mayfield Tornado	77
+pooling_typology	Mayfield Tornado	88
+pooling_typology	Mayfield Tornado	99
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	0
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	11
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	22
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	33
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	44
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	55
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	66
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	77
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	88
+downsample_crewed_fov	Hurricane Michael+Hurricane Idalia+Mussett Bayou Fire+Mayfield Tornado	99
+downsample_crewed_fov	Hurricane Ida	0
+downsample_crewed_fov	Hurricane Ida	11
+downsample_crewed_fov	Hurricane Ida	22
+downsample_crewed_fov	Hurricane Ida	33
+downsample_crewed_fov	Hurricane Ida	44
+downsample_crewed_fov	Hurricane Ida	55
+downsample_crewed_fov	Hurricane Ida	66
+downsample_crewed_fov	Hurricane Ida	77
+downsample_crewed_fov	Hurricane Ida	88
+downsample_crewed_fov	Hurricane Ida	99

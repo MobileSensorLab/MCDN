@@ -65,6 +65,49 @@ def test_create_criterion_returns_cross_entropy_with_wired_parameters() -> None:
     assert torch.equal(criterion.weight, weight)
 
 
+def test_emd_loss_rejects_out_of_range_smoothing() -> None:
+    """The smoothing rate must lie in [0, 1)."""
+
+    with pytest.raises(ValueError, match="label_smoothing"):
+        OrdinalEarthMoversDistanceLoss(label_smoothing=1.0)
+
+
+def test_emd_loss_smoothing_keeps_per_neighbor_rate_constant() -> None:
+    """Extreme and interior targets both push epsilon/2 onto each adjacent class.
+
+    With smoothing active the loss against the hard one-hot prediction is strictly positive,
+    and the extreme-class penalty equals half the interior-class penalty's neighbour mass
+    (one neighbour versus two), which is only true under the per-neighbour-constant scheme.
+    """
+
+    criterion = OrdinalEarthMoversDistanceLoss(label_smoothing=0.2)
+    sharp = torch.tensor([[50.0, 0.0, 0.0, 0.0], [0.0, 0.0, 50.0, 0.0], [0.0, 0.0, 0.0, 50.0]])
+    targets = torch.tensor([0, 2, 3])
+    per_sample = torch.stack([criterion(sharp[i:i + 1], targets[i:i + 1]) for i in range(3)])
+    assert torch.all(per_sample > 0.0)
+    # Extreme targets (0 and 3) are symmetric; the interior target moves more mass.
+    assert per_sample[0] == pytest.approx(per_sample[2].item(), abs=1e-6)
+    assert per_sample[1] > per_sample[0]
+
+    unsmoothed = OrdinalEarthMoversDistanceLoss(label_smoothing=0.0)
+    assert unsmoothed(sharp, targets).item() < 1e-6
+
+
+def test_emd_loss_class_weights_normalize_by_batch_weight_sum() -> None:
+    """Weighted reduction divides by the batch's total sample weight; all-zero weights give zero loss."""
+
+    logits = torch.tensor([[0.0, 0.0, 0.0, 3.0], [0.0, 0.0, 0.0, 3.0]])  # sample 0 wrong, sample 1 right
+    targets = torch.tensor([0, 3])
+    unweighted = OrdinalEarthMoversDistanceLoss()(logits, targets)
+    only_first = OrdinalEarthMoversDistanceLoss(weight=torch.tensor([1.0, 0.0, 0.0, 0.0]))(logits, targets)
+    per_sample_first = OrdinalEarthMoversDistanceLoss()(logits[:1], targets[:1])
+    assert only_first.item() == pytest.approx(per_sample_first.item(), rel=1e-5)
+    assert only_first.item() != pytest.approx(unweighted.item())
+
+    zero_weighted = OrdinalEarthMoversDistanceLoss(weight=torch.tensor([0.0, 1.0, 1.0, 0.0]))(logits, targets)
+    assert zero_weighted.item() == 0.0
+
+
 def test_create_criterion_rejects_unknown_selector() -> None:
     """Factory raises for selectors outside the emd/ce pair."""
 

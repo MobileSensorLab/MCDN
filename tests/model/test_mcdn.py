@@ -20,6 +20,17 @@ def sample_batch() -> tuple[torch.Tensor, torch.Tensor]:
     return images, context
 
 
+@pytest.mark.parametrize(
+    ("kwargs", "match"),
+    [({"gate_strength": 1.5}, "gate_strength"), ({"drop_path_rate": 1.0}, "drop_path_rate")]
+)
+def test_model_initialization_rejects_out_of_range_hyperparameters(kwargs: dict[str, float], match: str) -> None:
+    """Gate strength must lie in [0, 1] and drop-path rate in [0, 1)."""
+
+    with pytest.raises(ValueError, match=match):
+        MaskCenteredDamageNet(backbone_name="resnet18", pretrained=False, **kwargs)
+
+
 def test_model_initialization() -> None:
     """Verifies the model initializes with 4 input channels correctly."""
     # Using a tiny test model to keep memory footprint low during pytest

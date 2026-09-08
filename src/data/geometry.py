@@ -30,6 +30,31 @@ VALID_ORDINAL_LABELS: frozenset[str] = frozenset({
 })
 
 
+def raster_ground_gsd_m(raster_path: str | Path) -> float:
+    """Geometric-mean ground sample distance of a raster in meters, CRS-aware.
+
+    Projected rasters return their native grid step directly. Geographic-CRS rasters
+    (the crewed NOAA products are gridded in degrees) convert the per-axis degree steps
+    to meters at the raster's central latitude, where ground pixels are anisotropic by
+    the cos(latitude) factor; the geometric mean collapses the two axes to one scalar.
+
+    Args:
+        raster_path: Path to the raster.
+
+    Returns:
+        Ground sample distance in meters per pixel (geometric mean of the two axes).
+    """
+
+    with rasterio.open(raster_path) as src:
+        step_x, step_y = abs(src.transform.a), abs(src.transform.e)
+        if src.crs is None or not src.crs.is_geographic:
+            return math.sqrt(step_x * step_y)
+        lat = math.radians((src.bounds.bottom + src.bounds.top) / 2.0)
+        m_per_deg_lat = 111132.954 - 559.822 * math.cos(2.0 * lat) + 1.175 * math.cos(4.0 * lat)
+        m_per_deg_lon = 111412.84 * math.cos(lat) - 93.5 * math.cos(3.0 * lat)
+        return math.sqrt((step_x * m_per_deg_lon) * (step_y * m_per_deg_lat))
+
+
 def filter_polygons_valid_labels(gdf: gpd.GeoDataFrame, valid_labels: frozenset[str] | set[str] | None = None) -> gpd.GeoDataFrame:
     """Keep polygons whose label is in the valid ordinal set.
 

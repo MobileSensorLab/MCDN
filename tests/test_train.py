@@ -247,7 +247,7 @@ def test_main_executes_fixed_seed_protocol_for_ablation_preset(monkeypatch: pyte
                 data_dir=None,
                 seeds=None,
                 fixed_seeds=True,
-                ablation_preset="baseline"
+                ablation_preset="all_features"
             )
 
     config = _build_minimal_config()
@@ -268,9 +268,9 @@ def test_main_executes_fixed_seed_protocol_for_ablation_preset(monkeypatch: pyte
 
     main()
 
-    assert loaded_paths[0].as_posix().endswith("config/presets/ablation_baseline.yaml")
+    assert loaded_paths[0].as_posix().endswith("config/presets/ablation_all_features.yaml")
     assert [call["seed"] for call in calls] == [0, 11, 22, 33, 44, 55, 66, 77, 88, 99]
-    expected_base = "outputs/ablation/baseline/Spatial_Block_East"
+    expected_base = "outputs/ablation/all_features/Spatial_Block_East"
     for call, seed in zip(calls, [0, 11, 22, 33, 44, 55, 66, 77, 88, 99], strict=True):
         assert str(call["checkpoint_root"]).replace("\\", "/").endswith(f"{expected_base}/seed_{seed:02d}")
 
@@ -507,7 +507,7 @@ def test_main_rejects_conflicting_seed_flags(monkeypatch: pytest.MonkeyPatch) ->
                 data_dir=None,
                 seeds=[11],
                 fixed_seeds=True,
-                ablation_preset="baseline"
+                ablation_preset="all_features"
             )
 
         @staticmethod

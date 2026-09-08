@@ -71,7 +71,7 @@ def test_format_sel_delta_none_renders_dashes() -> None:
 
 
 def test_format_param_count_units() -> None:
-    """Parameter count formatter applies ``M``/``K`` suffixes at the canonical thresholds."""
+    """Parameter count formatter applies ``M``/``K`` suffixes at the expected thresholds."""
 
     assert _format_param_count(17_400_000) == "17.4M"
     assert _format_param_count(1_024) == "1.0K"
@@ -79,7 +79,7 @@ def test_format_param_count_units() -> None:
 
 
 def test_format_split_counts_uses_short_names() -> None:
-    """Split counts render with the short ordinal names in canonical order."""
+    """Split counts render with the short ordinal names in severity order."""
 
     result = _format_split_counts({
         "no damage": 4320,

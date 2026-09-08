@@ -9,7 +9,7 @@ from src.config.settings import load_config
 
 
 PRESET_EXPECTATIONS = {
-    "ablation_baseline.yaml": {
+    "ablation_all_features.yaml": {
         "mask_enabled": True,
         "typology_enabled": True,
         "mask_weighted_pooling_enabled": True,
@@ -73,6 +73,14 @@ PRESET_EXPECTATIONS = {
         "label_smoothing": 0.02,
         "loss": "emd"
     },
+    "ablation_pooling_typology.yaml": {
+        "mask_enabled": False,
+        "typology_enabled": True,
+        "mask_weighted_pooling_enabled": True,
+        "sensor_profile": "uas_5cm",
+        "label_smoothing": 0.02,
+        "loss": "emd"
+    },
     "ablation_ce_loss.yaml": {
         "mask_enabled": True,
         "typology_enabled": True,
@@ -90,14 +98,43 @@ PRESET_EXPECTATIONS = {
         "loss": "emd",
         "synthetic_gsd_factor": 3.0
     },
-    "ablation_deployed_split.yaml": {
+    "ablation_downsample_15cm_mtf.yaml": {
         "mask_enabled": True,
         "typology_enabled": True,
         "mask_weighted_pooling_enabled": True,
         "sensor_profile": "uas_5cm",
         "label_smoothing": 0.02,
         "loss": "emd",
-        "holdout_event": ["Hurricane Michael", "Hurricane Idalia", "Mussett Bayou Fire", "Mayfield Tornado"]
+        "synthetic_gsd_factor": 3.0,
+        "synthetic_gsd_mtf_at_nyquist": 0.3
+    },
+    "ablation_downsample_crewed.yaml": {
+        "mask_enabled": True,
+        "typology_enabled": True,
+        "mask_weighted_pooling_enabled": True,
+        "sensor_profile": "uas_5cm",
+        "label_smoothing": 0.02,
+        "loss": "emd",
+        "synthetic_gsd_factor": 7.0
+    },
+    "ablation_downsample_deliverable.yaml": {
+        "mask_enabled": True,
+        "typology_enabled": True,
+        "mask_weighted_pooling_enabled": True,
+        "sensor_profile": "uas_5cm",
+        "label_smoothing": 0.02,
+        "loss": "emd",
+        "synthetic_gsd_factor": 7.0,
+        "synthetic_gsd_post_sharpen": 0.2
+    },
+    "ablation_downsample_crewed_fov.yaml": {
+        "mask_enabled": True,
+        "typology_enabled": True,
+        "mask_weighted_pooling_enabled": True,
+        "sensor_profile": "uas_5cm",
+        "label_smoothing": 0.02,
+        "loss": "emd",
+        "chip_window_scale": 7.0
     }
 }
 
@@ -130,6 +167,9 @@ def test_ablation_presets_define_expected_matrix_values(preset_name: str, expect
     assert raw_payload["training"]["label_smoothing"] == expected["label_smoothing"]
     assert raw_payload["training"].get("loss", "emd") == expected["loss"]
     assert raw_payload["data"].get("synthetic_gsd_factor", 1.0) == expected.get("synthetic_gsd_factor", 1.0)
+    assert raw_payload["data"].get("synthetic_gsd_mtf_at_nyquist") == expected.get("synthetic_gsd_mtf_at_nyquist")
+    assert raw_payload["data"].get("synthetic_gsd_post_sharpen") == expected.get("synthetic_gsd_post_sharpen")
+    assert raw_payload["data"].get("chip_window_scale", 1.0) == expected.get("chip_window_scale", 1.0)
     assert raw_payload["data"].get("holdout_event") == expected.get("holdout_event")
 
 

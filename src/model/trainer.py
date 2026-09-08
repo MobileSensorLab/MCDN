@@ -1212,25 +1212,37 @@ class SplitSummary(TypedDict):
 def _build_dataloaders(train_df: pd.DataFrame, val_df: pd.DataFrame, chip_size: int, batch_size: int, num_workers: int,
                        pin_memory: bool, persistent_workers: bool, prefetch_factor: int, drop_last: bool,
                        val_batch_size_factor: float, seed: int | None, sampler_mode: str,
-                       mask_dilation_px: int = 0, synthetic_gsd_factor: float = 1.0) -> tuple[DataLoader, DataLoader, SplitSummary]:
+                       mask_dilation_px: int = 0, synthetic_gsd_factor: float = 1.0,
+                       synthetic_gsd_mtf_at_nyquist: float | None = None,
+                       synthetic_gsd_post_sharpen: float | None = None,
+                       chip_window_scale: float = 1.0,
+                       chip_window_ground_m: float | None = None) -> tuple[DataLoader, DataLoader, SplitSummary]:
     """Build train/validation datasets and dataloaders from split manifests."""
 
     train_dataset = CRASARUnitemporalDataset(
         train_df,
         chip_size=chip_size,
-        transform=get_train_transforms(synthetic_gsd_factor=synthetic_gsd_factor),
+        transform=get_train_transforms(synthetic_gsd_factor=synthetic_gsd_factor,
+                                       synthetic_gsd_mtf_at_nyquist=synthetic_gsd_mtf_at_nyquist,
+                                       synthetic_gsd_post_sharpen=synthetic_gsd_post_sharpen),
         is_train=True,
         mask_dilation_px=mask_dilation_px,
+        window_scale=chip_window_scale,
+        window_ground_m=chip_window_ground_m,
     )
     # cache_validation_tensors: speeds validation from epoch 2 onward (~4MB per val instance in RAM).
     # The GSD degradation models the sensor, so it applies to validation too (deterministic, cache-safe).
     val_dataset = CRASARUnitemporalDataset(
         val_df,
         chip_size=chip_size,
-        transform=get_val_transforms(synthetic_gsd_factor=synthetic_gsd_factor),
+        transform=get_val_transforms(synthetic_gsd_factor=synthetic_gsd_factor,
+                                     synthetic_gsd_mtf_at_nyquist=synthetic_gsd_mtf_at_nyquist,
+                                     synthetic_gsd_post_sharpen=synthetic_gsd_post_sharpen),
         is_train=False,
         cache_validation_tensors=True,
         mask_dilation_px=mask_dilation_px,
+        window_scale=chip_window_scale,
+        window_ground_m=chip_window_ground_m,
     )
 
     train_sampler = create_weighted_sampler(train_dataset) if sampler_mode == "weighted" else None
@@ -1409,7 +1421,7 @@ def _resolve_run_label(checkpoint_root: Path) -> str:
     """Derive a human-readable run label from the checkpoint-root directory name.
 
     Walks upward from the checkpoint root and returns the first ancestor nested directly
-    inside an ``ablation/`` directory. This matches both the canonical layout
+    inside an ``ablation/`` directory. This matches both the standard layout
     (``outputs/ablation/<variant>/<split>/seed_<n>``) and the legacy layout
     (``outputs/ablation/<variant>/seed_<n>``) because the variant folder is always the
     immediate child of ``ablation``. If no ``ablation`` ancestor is found, the ``seed_<n>``
@@ -1530,6 +1542,10 @@ def _execute_training_pipeline(
         sampler_mode=config.training.sampler_mode,
         mask_dilation_px=config.ablation.mask_dilation_px,
         synthetic_gsd_factor=config.data.synthetic_gsd_factor,
+        synthetic_gsd_mtf_at_nyquist=config.data.synthetic_gsd_mtf_at_nyquist,
+        synthetic_gsd_post_sharpen=config.data.synthetic_gsd_post_sharpen,
+        chip_window_scale=config.data.chip_window_scale,
+        chip_window_ground_m=config.data.chip_window_ground_m,
     )
 
     class_weights_tensor: torch.Tensor | None = None

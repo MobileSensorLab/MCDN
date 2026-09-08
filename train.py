@@ -10,7 +10,7 @@ import yaml
 from pathlib import Path
 
 ABLATION_PRESET_FILES = {
-    "baseline": "ablation_baseline.yaml",
+    "all_features": "ablation_all_features.yaml",
     "mask": "ablation_mask.yaml",
     "typology": "ablation_typology.yaml",
     "resolution": "ablation_resolution.yaml",
@@ -18,9 +18,13 @@ ABLATION_PRESET_FILES = {
     "no_smoothing": "ablation_no_smoothing.yaml",
     "mask_channel_only": "ablation_mask_channel_only.yaml",
     "pooling_only": "ablation_pooling_only.yaml",
+    "pooling_typology": "ablation_pooling_typology.yaml",
     "ce_loss": "ablation_ce_loss.yaml",
     "downsample_15cm": "ablation_downsample_15cm.yaml",
-    "deployed_split": "ablation_deployed_split.yaml"
+    "downsample_15cm_mtf": "ablation_downsample_15cm_mtf.yaml",
+    "downsample_crewed": "ablation_downsample_crewed.yaml",
+    "downsample_crewed_fov": "ablation_downsample_crewed_fov.yaml",
+    "downsample_deliverable": "ablation_downsample_deliverable.yaml"
 }
 
 def _resolve_early_config_path_for_cuda_launch_blocking() -> Path:

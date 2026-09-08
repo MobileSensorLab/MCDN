@@ -30,6 +30,7 @@ from src.data.geometry import align_vector_to_raster
 from src.data.geometry import apply_alignment_adjustments
 from src.data.geometry import filter_polygons_valid_labels
 from src.data.geometry import load_alignment_adjustments
+from src.data.geometry import raster_ground_gsd_m
 from src.data.io import parse_crasar_json
 
 ORDINAL_MAP = {
@@ -104,6 +105,17 @@ class CRASARUnitemporalDataset(Dataset):
             final-chip pixel units, to compensate for systematic label-source under-segmentation.
             Applied post-augmentation (so radius is consistent under all spatial transforms).
             A value of ``0`` disables the correction and preserves legacy behavior byte-for-byte.
+        window_scale: Ground-window scale factor. The read window spans
+            ``chip_size * window_scale`` source pixels and is resampled to ``chip_size``
+            (area-average when shrinking, bilinear when enlarging); the footprint mask is
+            rasterized directly on the final chip grid. ``> 1`` reproduces the wide-context,
+            small-building chip geometry of coarser-GSD capture workflows; ``1.0`` (default)
+            preserves legacy behavior byte-for-byte.
+        window_ground_m: Explicit target ground window in meters. Overrides ``window_scale``
+            with a per-mosaic window of ``window_ground_m / gsd`` source pixels (CRS-aware),
+            so chips present a fixed ground extent regardless of the source grid — the
+            matched-presentation contract for cross-sensor transfer evaluation. ``None``
+            (default) disables it.
     """
 
     # Typology mappings designed to aggregate physical destructive forces
@@ -123,11 +135,16 @@ class CRASARUnitemporalDataset(Dataset):
 
     def __init__(self, manifest: pd.DataFrame, chip_size: int = 512, transform: albumentations.Compose | None = None,
                  is_train: bool = False, cache_validation_tensors: bool = False,
-                 mask_dilation_px: int = 0) -> None:
+                 mask_dilation_px: int = 0, window_scale: float = 1.0,
+                 window_ground_m: float | None = None) -> None:
         """Initialize dataset cache from orthomosaic manifest."""
 
         if mask_dilation_px < 0:
             raise ValueError("mask_dilation_px must be a non-negative integer.")
+        if window_scale <= 0.0:
+            raise ValueError("window_scale must be positive.")
+        if window_ground_m is not None and window_ground_m <= 0.0:
+            raise ValueError("window_ground_m must be positive when set.")
 
         self.manifest = manifest
         self.chip_size = chip_size
@@ -135,6 +152,8 @@ class CRASARUnitemporalDataset(Dataset):
         self.is_train = is_train
         self.cache_validation_tensors = cache_validation_tensors
         self.mask_dilation_px = mask_dilation_px
+        self.window_scale = window_scale
+        self.window_ground_m = window_ground_m
 
         # Pre-build the footprint-mask dilation kernel once. Elliptical kernel keeps the correction
         # isotropic so label under-segmentation is compensated uniformly around the polygon boundary.
@@ -204,10 +223,26 @@ class CRASARUnitemporalDataset(Dataset):
             "context_tensor": typology_tensor
         }
 
+    def _resolve_read_window_px(self, img_path: Path) -> int:
+        """Source-pixel width of the read window for one mosaic.
+
+        ``window_ground_m`` yields a per-mosaic width from the CRS-aware ground GSD;
+        ``window_scale`` yields a global multiple of ``chip_size``; the default is
+        ``chip_size`` itself (legacy read path, byte-for-byte).
+        """
+
+        if self.window_ground_m is not None:
+            gsd_m = raster_ground_gsd_m(img_path)
+            return max(8, round(self.window_ground_m / gsd_m))
+        if self.window_scale != 1.0:
+            return max(8, round(self.chip_size * self.window_scale))
+        return self.chip_size
+
     def _build_instance_index(self) -> list[InstanceRecord]:
         """Parse all orthomosaics and flatten to structure-level instance records."""
 
         self.gdf_cache = {}
+        self._read_window_px: dict[str, int] = {}
         instances: list[InstanceRecord] = []
         for _, row in self.manifest.iterrows():
             img_path = Path(row["image_path"])
@@ -217,6 +252,7 @@ class CRASARUnitemporalDataset(Dataset):
 
             gdf_valid = self._load_clean_polygons(image_path=img_path, label_path=lbl_path, alignment_path=align_path)
             self.gdf_cache[str(img_path)] = gdf_valid
+            self._read_window_px[str(img_path)] = self._resolve_read_window_px(img_path)
 
             with rasterio.open(img_path) as src:
                 transform = src.transform
@@ -247,6 +283,31 @@ class CRASARUnitemporalDataset(Dataset):
 
         return len(self.instances)
 
+    def _read_chip_window(self, src: rasterio.DatasetReader, window: Window, read_px: int) -> tuple[np.ndarray, Affine, tuple[float, float, float, float]]:
+        """Read one RGB window resampled to the final chip grid.
+
+        With the legacy geometry (``read_px == chip_size``) the read call is unchanged
+        byte-for-byte. Otherwise the full native-resolution window is read and resampled
+        with cv2: area-average when shrinking and bilinear when enlarging — the exact
+        kernels of the synthetic-GSD chain. GDAL's read-time ``out_shape`` decimation is
+        deliberately avoided: it serves coarse reads from the mosaics' embedded overview
+        pyramids, whose producer-side resampling kernel is unrecorded and measurably
+        diverges from a true box average (probed 30 Aug: mean |diff| 1.8 uint8 levels,
+        16.6% of pixels off by >2). The returned transform maps final-chip pixel
+        coordinates to the CRS so the footprint mask rasterizes on the chip grid.
+        """
+
+        rgb = src.read(window=window, indexes=(1, 2, 3), boundless=True, fill_value=0)
+        if read_px == self.chip_size:
+            win_transform = src.window_transform(window)
+        else:
+            interp = cv2.INTER_AREA if read_px > self.chip_size else cv2.INTER_LINEAR
+            rgb_hwc = cv2.resize(np.moveaxis(rgb, 0, -1), (self.chip_size, self.chip_size), interpolation=interp)
+            rgb = np.moveaxis(rgb_hwc, -1, 0)
+            win_transform = src.window_transform(window) * Affine.scale(read_px / self.chip_size)
+        win_bounds = rasterio.windows.bounds(window, src.transform)
+        return rgb, win_transform, win_bounds
+
     def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
         """Retrieves a mask-conditioned 4-channel tensor for a specific structure."""
         if self.cache_validation_tensors and not self.is_train and idx in self._val_tensor_cache:
@@ -259,20 +320,22 @@ class CRASARUnitemporalDataset(Dataset):
 
         instance = self.instances[idx]
         col_c, row_c = instance["centroid_px"]
+        read_px = self._read_window_px[instance["image_path"]]
 
         # Apply deterministic jitter during training to prevent perfect centering priors.
-        # Max jitter is 25% of the chip size in any direction.
+        # Max jitter is 25% of the read window in any direction, so the building's
+        # position within the final chip is distributed identically at every window scale.
         if self.is_train:
-            max_jitter = self.chip_size // 4
+            max_jitter = read_px // 4
             col_c += random.randint(-max_jitter, max_jitter)
             row_c += random.randint(-max_jitter, max_jitter)
 
-        half_size = self.chip_size // 2
+        half_size = read_px // 2
         window = Window(
             col_off=col_c - half_size,
             row_off=row_c - half_size,
-            width=self.chip_size,
-            height=self.chip_size
+            width=read_px,
+            height=read_px
         )
 
         # Open per read (no persistent handles across chips) to avoid multiprocess GDAL/rasterio issues.
@@ -283,9 +346,7 @@ class CRASARUnitemporalDataset(Dataset):
         # visible rather than masked by a zero-chip silently corrupting training.
         try:
             with rasterio.open(instance["image_path"]) as src:
-                rgb = src.read(window=window, indexes=(1, 2, 3), boundless=True, fill_value=0)
-                win_transform = src.window_transform(window)
-                win_bounds = rasterio.windows.bounds(window, src.transform)
+                rgb, win_transform, win_bounds = self._read_chip_window(src=src, window=window, read_px=read_px)
         except RasterioIOError as err:
             print(
                 f"[dataset] RasterioIOError on {Path(instance['image_path']).name} "
@@ -297,13 +358,11 @@ class CRASARUnitemporalDataset(Dataset):
             window = Window(
                 col_off=centered_col - half_size,
                 row_off=centered_row - half_size,
-                width=self.chip_size,
-                height=self.chip_size
+                width=read_px,
+                height=read_px
             )
             with rasterio.open(instance["image_path"]) as src:
-                rgb = src.read(window=window, indexes=(1, 2, 3), boundless=True, fill_value=0)
-                win_transform = src.window_transform(window)
-                win_bounds = rasterio.windows.bounds(window, src.transform)
+                rgb, win_transform, win_bounds = self._read_chip_window(src=src, window=window, read_px=read_px)
 
         rgb_hwc = np.moveaxis(rgb, 0, -1)  # [C, H, W] -> [H, W, C] for albumentations/numpy
 

@@ -24,6 +24,30 @@ class DataConfig(BaseModel):
             the original pixel grid (RGB only; the vector-derived mask channel is untouched), so
             the chip inventory is identical to the source-profile arm. ``1.0`` (default) disables
             the degradation; ``3.0`` simulates 15 cm GSD from the 5 cm sUAS imagery.
+        synthetic_gsd_mtf_at_nyquist: Optional target system MTF at the post-decimation Nyquist
+            for the degradation's Gaussian optics pre-blur (sigma = 2 * factor *
+            sqrt(-ln(MTF)/(2 pi^2)) source pixels; 0.3 recovers the sigma ~= 0.5 * factor rule).
+            ``None`` (default) keeps the sampling-only decimation, whose measured end-to-end
+            transfer (~0.37 at the new Nyquist) matches real crewed ~15 cm products; the
+            Gaussian option stacks additional blur as a pessimistic sensor bound (see
+            ``SyntheticGsdDegradation``). Requires ``synthetic_gsd_factor > 1.0``.
+        synthetic_gsd_post_sharpen: Optional product-referenced unsharp-mask amount applied on
+            the low-resolution grid after decimation, mirroring the MTF-compensation step of
+            operational ortho-production chains. The stage's transfer at the low-res Nyquist is
+            ~(1 + amount); the amount is regressed against measured transfer of co-located
+            crewed deliverables (see ``SyntheticGsdDegradation``). ``None`` (default) disables
+            the stage. Requires ``synthetic_gsd_factor > 1.0``.
+        chip_window_scale: Ground-window scale factor for chip extraction. The read window spans
+            ``chip_size * chip_window_scale`` source pixels, decimated (area-average) or enlarged
+            (bilinear) to ``chip_size``; the footprint mask rasterizes on the final chip grid.
+            Unlike ``synthetic_gsd_factor`` (which degrades resolution but keeps the ground
+            window), this reproduces the wide-context, small-building chip geometry of
+            coarser-GSD capture workflows. ``1.0`` (default) preserves legacy chip geometry.
+            Mutually exclusive with ``synthetic_gsd_factor > 1.0``.
+        chip_window_ground_m: Explicit target ground window in meters for chip extraction,
+            resolved per mosaic from its CRS-aware ground GSD. The matched-presentation contract
+            for cross-sensor transfer evaluation: chips present a fixed ground extent regardless
+            of the source grid. Overrides ``chip_window_scale``; ``None`` (default) disables it.
     """
 
     dir: Path
@@ -31,6 +55,20 @@ class DataConfig(BaseModel):
     holdout_event: str | list[str] | None = None
     sensor_profile: Literal["uas_5cm", "manned_15cm"] = "uas_5cm"
     synthetic_gsd_factor: float = Field(default=1.0, ge=1.0)
+    synthetic_gsd_mtf_at_nyquist: float | None = Field(default=None, gt=0.0, lt=1.0)
+    synthetic_gsd_post_sharpen: float | None = Field(default=None, gt=0.0)
+    chip_window_scale: float = Field(default=1.0, gt=0.0)
+    chip_window_ground_m: float | None = Field(default=None, gt=0.0)
+
+    @model_validator(mode="after")
+    def _validate_mtf_requires_degradation(self) -> Self:
+        if self.synthetic_gsd_mtf_at_nyquist is not None and self.synthetic_gsd_factor <= 1.0:
+            raise ValueError("data.synthetic_gsd_mtf_at_nyquist requires data.synthetic_gsd_factor > 1.0.")
+        if self.synthetic_gsd_post_sharpen is not None and self.synthetic_gsd_factor <= 1.0:
+            raise ValueError("data.synthetic_gsd_post_sharpen requires data.synthetic_gsd_factor > 1.0.")
+        if self.synthetic_gsd_factor > 1.0 and (self.chip_window_scale != 1.0 or self.chip_window_ground_m is not None):
+            raise ValueError("data.chip_window_scale / data.chip_window_ground_m are mutually exclusive with data.synthetic_gsd_factor > 1.0.")
+        return self
 
     @field_validator("dir", mode="before")
     @classmethod

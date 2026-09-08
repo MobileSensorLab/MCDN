@@ -8,6 +8,7 @@ import numpy as np
 from src.data.transform import (
     MaskCorruption,
     SyntheticGsdDegradation,
+    gaussian_sigma_for_mtf,
     get_train_transforms,
     get_val_transforms
 )
@@ -66,7 +67,7 @@ def _checkerboard_rgb(size: int = 96) -> np.ndarray:
 def test_synthetic_gsd_degradation_rejects_invalid_factor() -> None:
     """Factors below 1.0 (upsampling) are not a resolution degradation."""
 
-    with pytest.raises(ValueError, match="factor must be >= 1.0"):
+    with pytest.raises(ValueError, match=r"factor must be >= 1\.0"):
         SyntheticGsdDegradation(factor=0.5)
 
 
@@ -143,3 +144,132 @@ def test_val_pipeline_gsd_degradation_is_deterministic() -> None:
 
     np.testing.assert_array_equal(first, second)
     assert not np.array_equal(first, img)
+
+
+def test_gaussian_sigma_for_mtf_matches_rule_of_thumb() -> None:
+    """MTF 0.3 at Nyquist recovers sigma ~= 0.494 * factor; the bracket endpoints scale correctly."""
+
+    assert gaussian_sigma_for_mtf(3.0, 0.3) == pytest.approx(0.494 * 3.0, abs=0.01)
+    assert gaussian_sigma_for_mtf(3.0, 0.15) == pytest.approx(0.62 * 3.0, abs=0.02)
+    assert gaussian_sigma_for_mtf(3.0, 0.45) == pytest.approx(0.40 * 3.0, abs=0.01)
+    # Sigma scales linearly with the decimation factor at a fixed MTF target.
+    assert gaussian_sigma_for_mtf(6.0, 0.3) == pytest.approx(2.0 * gaussian_sigma_for_mtf(3.0, 0.3))
+
+
+def test_gaussian_sigma_for_mtf_rejects_degenerate_targets() -> None:
+    """MTF targets at or beyond the [0, 1] endpoints have no finite Gaussian solution."""
+
+    with pytest.raises(ValueError, match="mtf_at_nyquist"):
+        gaussian_sigma_for_mtf(3.0, 0.0)
+    with pytest.raises(ValueError, match="mtf_at_nyquist"):
+        gaussian_sigma_for_mtf(3.0, 1.0)
+
+
+def test_mtf_matched_degradation_blurs_more_than_sampling_only() -> None:
+    """The optics pre-blur removes strictly more mid-frequency detail than pure decimation.
+
+    A 6 px-period checkerboard survives 3x area decimation (it sits below the new Nyquist)
+    but is strongly attenuated by the sigma ~= 1.48 px Gaussian, so the MTF-matched output
+    must show lower contrast than the sampling-only output.
+    """
+
+    size = 96
+    coords = np.indices((size, size)).sum(axis=0)
+    board = (((coords // 3) % 2) * 255).astype(np.uint8)
+    img = np.stack([board, board, board], axis=-1)
+
+    sampling_only = SyntheticGsdDegradation(factor=3.0)(image=img)["image"]
+    mtf_matched = SyntheticGsdDegradation(factor=3.0, mtf_at_nyquist=0.3)(image=img)["image"]
+
+    assert mtf_matched.std() < 0.8 * sampling_only.std()
+    # Both preserve mean brightness: blur redistributes energy, it does not remove it.
+    assert abs(float(mtf_matched.mean()) - float(img.mean())) < 5.0
+
+
+def test_mtf_matched_degradation_is_deterministic_and_mask_safe() -> None:
+    """MTF-matched mode stays deterministic (cache-safe) and never touches the mask channel."""
+
+    pipeline = get_val_transforms(synthetic_gsd_factor=3.0, synthetic_gsd_mtf_at_nyquist=0.3)
+    rng = np.random.default_rng(seed=11)
+    img = rng.integers(0, 255, (96, 96, 3), dtype=np.uint8)
+    mask = np.zeros((96, 96), dtype=np.uint8)
+    mask[30:60, 30:60] = 1
+
+    first = pipeline(image=img, mask=mask)
+    second = pipeline(image=img, mask=mask)
+
+    np.testing.assert_array_equal(first["image"], second["image"])
+    np.testing.assert_array_equal(first["mask"], mask)
+    assert not np.array_equal(first["image"], img)
+
+
+def test_pipeline_builders_thread_mtf_target() -> None:
+    """Both pipeline builders forward the MTF target into the degradation transform."""
+
+    train_pipe = get_train_transforms(synthetic_gsd_factor=3.0, synthetic_gsd_mtf_at_nyquist=0.3)
+    val_pipe = get_val_transforms(synthetic_gsd_factor=3.0, synthetic_gsd_mtf_at_nyquist=0.3)
+
+    assert train_pipe.transforms[0].mtf_at_nyquist == 0.3
+    assert train_pipe.transforms[0].blur_sigma == pytest.approx(0.494 * 3.0, abs=0.01)
+    assert val_pipe.transforms[0].mtf_at_nyquist == 0.3
+    # Default remains sampling-only: no blur.
+    assert get_val_transforms(synthetic_gsd_factor=3.0).transforms[0].blur_sigma == 0.0
+
+
+def test_post_sharpen_restores_high_frequency_content() -> None:
+    """The product-referenced unsharp mask boosts detail the plain decimation attenuates.
+
+    Sharpening operates on the low-resolution grid, so the deliverable-matched output must
+    carry more residual contrast than the sampling-only output on the same textured chip,
+    while leaving a flat chip untouched (unsharp of a constant is the constant).
+    """
+
+    rng = np.random.default_rng(seed=23)
+    img = rng.integers(0, 255, (96, 96, 3), dtype=np.uint8)
+
+    sampling_only = SyntheticGsdDegradation(factor=7.0)(image=img)["image"]
+    deliverable = SyntheticGsdDegradation(factor=7.0, post_sharpen_amount=0.2)(image=img)["image"]
+
+    assert deliverable.std() > sampling_only.std()
+    assert not np.array_equal(deliverable, sampling_only)
+
+    flat = np.full((96, 96, 3), 137, dtype=np.uint8)
+    np.testing.assert_array_equal(SyntheticGsdDegradation(factor=7.0, post_sharpen_amount=0.2)(image=flat)["image"], flat)
+
+
+def test_post_sharpen_rejects_non_positive_amounts() -> None:
+    """A zero or negative unsharp amount is a configuration error, not a silent no-op."""
+
+    with pytest.raises(ValueError, match="post_sharpen_amount"):
+        SyntheticGsdDegradation(factor=7.0, post_sharpen_amount=0.0)
+    with pytest.raises(ValueError, match="post_sharpen_amount"):
+        SyntheticGsdDegradation(factor=7.0, post_sharpen_amount=-0.2)
+
+
+def test_post_sharpen_is_deterministic_and_mask_safe() -> None:
+    """Deliverable-matched mode stays deterministic (cache-safe) and never touches the mask channel."""
+
+    pipeline = get_val_transforms(synthetic_gsd_factor=7.0, synthetic_gsd_post_sharpen=0.2)
+    rng = np.random.default_rng(seed=29)
+    img = rng.integers(0, 255, (96, 96, 3), dtype=np.uint8)
+    mask = np.zeros((96, 96), dtype=np.uint8)
+    mask[30:60, 30:60] = 1
+
+    first = pipeline(image=img, mask=mask)
+    second = pipeline(image=img, mask=mask)
+
+    np.testing.assert_array_equal(first["image"], second["image"])
+    np.testing.assert_array_equal(first["mask"], mask)
+    assert not np.array_equal(first["image"], img)
+
+
+def test_pipeline_builders_thread_post_sharpen() -> None:
+    """Both pipeline builders forward the unsharp amount into the degradation transform."""
+
+    train_pipe = get_train_transforms(synthetic_gsd_factor=7.0, synthetic_gsd_post_sharpen=0.2)
+    val_pipe = get_val_transforms(synthetic_gsd_factor=7.0, synthetic_gsd_post_sharpen=0.2)
+
+    assert train_pipe.transforms[0].post_sharpen_amount == 0.2
+    assert val_pipe.transforms[0].post_sharpen_amount == 0.2
+    # Default remains un-sharpened.
+    assert get_val_transforms(synthetic_gsd_factor=7.0).transforms[0].post_sharpen_amount is None

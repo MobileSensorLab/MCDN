@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import pandas as pd
 import pytest
 import torch
 import torch.nn as nn
@@ -730,6 +731,180 @@ def test_main_raises_when_variant_has_no_seed_directories(monkeypatch: pytest.Mo
     )
     with pytest.raises(FileNotFoundError, match="No usable seed"):
         ens.main()
+
+
+# Fold reconstruction and loader plumbing --------------------------------------
+
+def _three_event_manifest() -> pd.DataFrame:
+    """Valid-manifest stand-in with three events so LOEO and multi-event folds are non-trivial."""
+
+    rows = []
+    for event, image in (("Hurricane Ian", "ian_01"), ("Hurricane Ida", "ida_01"), ("Mayfield Tornado", "mayfield_01")):
+        rows.append({"image_path": f"/nonexistent/{image}.tif", "label_path": f"/nonexistent/{image}.json",
+                     "alignment_path": None, "event": event, "image_name": image, "valid": True})
+    return pd.DataFrame(rows)
+
+
+def _fold_cfg(*, holdout_event: str | list[str] | None, holdout_selection: str | None = None) -> dict:
+    cfg: dict = {"data": {"dir": "data", "sensor_profile": "uas_5cm", "holdout_event": holdout_event}}
+    if holdout_selection is not None:
+        cfg["metadata"] = {"holdout_selection": holdout_selection}
+    return cfg
+
+
+def test_get_fold_dataframes_explicit_holdout(monkeypatch: pytest.MonkeyPatch) -> None:
+    """An explicit holdout event selects that event as validation and the rest as training."""
+
+    monkeypatch.setattr(ens, "build_valid_manifest", lambda *_args, **_kwargs: _three_event_manifest())
+    train_df, val_df, holdout = ens.get_fold_dataframes_from_config(_fold_cfg(holdout_event="Hurricane Ida"))
+    assert holdout == "Hurricane Ida"
+    assert val_df["event"].tolist() == ["Hurricane Ida"]
+    assert sorted(train_df["event"]) == ["Hurricane Ian", "Mayfield Tornado"]
+
+
+def test_get_fold_dataframes_multi_event_holdout(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A list-valued holdout rebuilds the composite fold directly."""
+
+    monkeypatch.setattr(ens, "build_valid_manifest", lambda *_args, **_kwargs: _three_event_manifest())
+    train_df, val_df, holdout = ens.get_fold_dataframes_from_config(
+        _fold_cfg(holdout_event=["Hurricane Ian", "mayfield-tornado"]))
+    assert holdout == "Hurricane Ian+Mayfield Tornado"
+    assert sorted(val_df["event"]) == ["Hurricane Ian", "Mayfield Tornado"]
+    assert train_df["event"].tolist() == ["Hurricane Ida"]
+
+
+def test_get_fold_dataframes_default_spatial_and_data_dir_override(monkeypatch: pytest.MonkeyPatch) -> None:
+    """default_spatial routes through the spatial-block manifest; the data-dir override reaches the scan."""
+
+    seen: dict[str, str] = {}
+
+    def _fake_scan(data_dir: str, sensor_profile: str) -> pd.DataFrame:
+        seen["data_dir"] = data_dir
+        seen["sensor_profile"] = sensor_profile
+        return _three_event_manifest()
+
+    monkeypatch.setattr(ens, "build_valid_manifest", _fake_scan)
+    train_df, val_df, holdout = ens.get_fold_dataframes_from_config(
+        _fold_cfg(holdout_event=None, holdout_selection="default_spatial"), data_dir_override="/elsewhere")
+    assert seen == {"data_dir": "/elsewhere", "sensor_profile": "uas_5cm"}
+    assert holdout == "Spatial_Block_East"
+    assert len(train_df) == 2
+    assert len(val_df) == 1
+
+
+def _loader_cfg(*, num_workers: int = 0, persistent_workers: bool = False) -> dict:
+    """Resolved-config sections consumed by the loader builders."""
+
+    return {
+        "data": {"chip_size": 64, "dir": "data", "sensor_profile": "uas_5cm"},
+        "runtime": {"num_workers": num_workers, "pin_memory": False, "persistent_workers": persistent_workers,
+                    "prefetch_factor": 2, "drop_last": False, "val_batch_size_factor": 2.0, "seed": 11},
+        "training": {"batch_size": 1, "sampler_mode": "uniform"},
+        "ablation": _ensemble_ablation_cfg(),
+    }
+
+
+def test_build_val_loader_from_config_reconstructs_validation_loader(sample_manifest: pd.DataFrame,
+                                                                     monkeypatch: pytest.MonkeyPatch) -> None:
+    """The val loader mirrors the trainer: val transforms, scaled batch size, no shuffling."""
+
+    monkeypatch.setattr(ens, "get_fold_dataframes_from_config",
+                        lambda *_args, **_kwargs: (sample_manifest, sample_manifest, "Hurricane Ian"))
+    val_loader, holdout = ens.build_val_loader_from_config(cfg=_loader_cfg())
+    assert holdout == "Hurricane Ian"
+    assert val_loader.batch_size == 2
+    batch = next(iter(val_loader))
+    assert batch["image"].shape == (2, 4, 64, 64)
+    assert batch["label"].tolist() == [1, 3]
+
+
+def test_build_deterministic_train_loader_is_ordered_and_unjittered(sample_manifest: pd.DataFrame,
+                                                                    monkeypatch: pytest.MonkeyPatch) -> None:
+    """The teacher-aligned train loader keeps manifest order and is bitwise repeatable across passes."""
+
+    monkeypatch.setattr(ens, "get_fold_dataframes_from_config",
+                        lambda *_args, **_kwargs: (sample_manifest, sample_manifest.iloc[:0], "Hurricane Ian"))
+    loader, holdout = ens.build_deterministic_train_loader_from_config(cfg=_loader_cfg())
+    assert holdout == "Hurricane Ian"
+    assert loader.batch_size == 1
+    assert not loader.dataset.is_train
+    first_pass = [batch["image"].clone() for batch in loader]
+    second_pass = [batch["image"].clone() for batch in loader]
+    assert [batch["label"].item() for batch in loader] == [1, 3]
+    assert all(torch.equal(a, b) for a, b in zip(first_pass, second_pass, strict=True))
+
+
+def test_build_deterministic_train_loader_rejects_bad_worker_config(sample_manifest: pd.DataFrame,
+                                                                    monkeypatch: pytest.MonkeyPatch) -> None:
+    """persistent_workers without workers is refused; with workers the prefetch factor is forwarded."""
+
+    monkeypatch.setattr(ens, "get_fold_dataframes_from_config",
+                        lambda *_args, **_kwargs: (sample_manifest, sample_manifest.iloc[:0], "Hurricane Ian"))
+    with pytest.raises(ValueError, match="persistent_workers"):
+        ens.build_deterministic_train_loader_from_config(cfg=_loader_cfg(persistent_workers=True))
+    loader, _ = ens.build_deterministic_train_loader_from_config(cfg=_loader_cfg(num_workers=1, persistent_workers=True))
+    assert loader.prefetch_factor == 2
+
+
+def test_build_student_model_from_config_is_trainable() -> None:
+    """The student builder honours the YAML pretrained flag and leaves the network in train mode."""
+
+    cfg = {"ablation": _ensemble_ablation_cfg(), "model": {"name": "resnet18", "pretrained": False, "drop_path_rate": 0.0}}
+    student = ens.build_student_model_from_config(cfg=cfg, device="cpu")
+    assert isinstance(student, MaskCenteredDamageNet)
+    assert student.training
+    assert student(torch.randn(1, 4, 32, 32), torch.zeros(1, 4)).shape == (1, 4)
+
+
+def test_ensemble_mean_tta_probs_averages_member_models() -> None:
+    """Seed-ensemble probabilities are the mean of each member's TTA-averaged distribution."""
+
+    class _Constant(nn.Module):
+        def __init__(self, logits: list[float]) -> None:
+            super().__init__()
+            self.logits = torch.tensor(logits)
+
+        def forward(self, x: torch.Tensor, _context: torch.Tensor) -> torch.Tensor:
+            return self.logits.expand(x.shape[0], -1)
+
+    members = [_Constant([4.0, 0.0, 0.0, 0.0]), _Constant([0.0, 0.0, 0.0, 4.0])]
+    images = torch.zeros((3, 4, 8, 8), dtype=torch.uint8)
+    context = torch.zeros((3, 4))
+    probs = ens.ensemble_mean_tta_probs(models=members, images_u8=images, context=context, device="cpu")
+    assert probs.shape == (3, 4)
+    assert torch.allclose(probs[:, 0], probs[:, 3])
+    assert torch.allclose(probs.sum(dim=1), torch.ones(3), atol=1e-6)
+
+
+def test_run_variant_with_data_override_skips_replay_check(monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+                                                           capsys: pytest.CaptureFixture[str]) -> None:
+    """Transfer evaluation replaces the data section, forces explicit holdout, and reports replay as n/a."""
+
+    split = "Spatial_Block_East"
+    variant = tmp_path / "baseline"
+    tiny = _TinyLogitModel()
+    _write_seed_fold(variant / split / "seed_00", metrics={"best_val_qwk": 0.9}, state=tiny.state_dict())
+    seen_cfgs: list[dict] = []
+
+    def _fake_build_val_loader(cfg: dict, data_dir_override: str | None = None) -> tuple[DataLoader, str]:
+        _ = data_dir_override
+        seen_cfgs.append(cfg)
+        return DataLoader(_OneBatchDataset(), batch_size=2), "Crewed Holdout"
+
+    monkeypatch.setattr(ens, "build_val_loader_from_config", _fake_build_val_loader)
+    monkeypatch.setattr(ens, "build_model_from_config", lambda *_args, **kwargs: tiny.to(kwargs["device"]))
+
+    override = {"sensor_profile": "manned_15cm", "holdout_event": "Hurricane Ian", "chip_window_ground_m": 25.6}
+    out = ens.run_variant(variant_root=variant, seeds=[0], split_name=split, data_dir=None, device="cpu",
+                          data_override=override)
+
+    assert seen_cfgs[0]["data"] == override
+    assert seen_cfgs[0]["metadata"]["holdout_selection"] == "explicit"
+    assert out["per_seed"][0]["replay_delta_vs_stored"] is None
+    assert out["per_seed"][0]["replay_ok"] is None
+    captured = capsys.readouterr().out
+    assert "data override active: sensor_profile=manned_15cm" in captured
+    assert "[n/a]" in captured
 
 
 def test_default_seeds_tuple_covers_expected_values() -> None:

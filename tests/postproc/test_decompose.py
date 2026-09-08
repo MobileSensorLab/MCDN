@@ -238,3 +238,102 @@ def test_main_requires_variant_roots_without_cache(monkeypatch: pytest.MonkeyPat
     monkeypatch.setattr(sys, "argv", ["decompose"])
     with pytest.raises(SystemExit):
         dec.main()
+
+
+# Variant-level orchestration -------------------------------------------------
+
+def _write_seed_fold(fold_dir: Path, state: dict[str, torch.Tensor]) -> Path:
+    """Persist a minimal resolved config and checkpoint into ``<variant>/<split>/seed_NN``."""
+
+    fold_dir.mkdir(parents=True, exist_ok=True)
+    (fold_dir / "config_resolved.yaml").write_text("model:\n  name: resnet18\nablation: {}\n", encoding="utf-8")
+    torch.save(state, fold_dir / "best_model.pt")
+    return fold_dir
+
+
+def _stub_io(monkeypatch: pytest.MonkeyPatch, model: nn.Module) -> None:
+    """Route loader and model construction to in-memory stand-ins."""
+
+    monkeypatch.setattr(dec, "build_val_loader_from_config",
+                        lambda *_args, **_kwargs: (DataLoader(_TwoSampleDataset(), batch_size=1), "Hurricane Ian"))
+    monkeypatch.setattr(dec, "build_model_from_config", lambda *_args, **kwargs: model.to(kwargs["device"]))
+
+
+def test_run_variant_decomposition_stacks_seeds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+                                                capsys: pytest.CaptureFixture[str]) -> None:
+    """Present seeds are discovered in order, view stacks are collected per seed, and the record is assembled."""
+
+    model = _CornerLogitModel()
+    variant = tmp_path / "baseline"
+    for seed in (0, 11):
+        _write_seed_fold(variant / "Hurricane_Ian" / f"seed_{seed:02d}", model.state_dict())
+    _stub_io(monkeypatch, model)
+
+    record = dec.run_variant_decomposition(variant_root=variant, seeds=[0, 11, 99], split_name="Hurricane_Ian",
+                                           data_dir=None, device="cpu")
+
+    assert record["holdout_event"] == "Hurricane Ian"
+    assert record["seeds"] == [0, 11]
+    assert record["view_probs"].shape == (2, 8, 2, 4)
+    assert record["targets"].tolist() == [0, 1]
+    assert set(record["decomposition"]["cells"]) == {"single_seed_no_tta", "single_seed_tta", "ensemble_no_tta", "ensemble_tta"}
+    captured = capsys.readouterr().out
+    assert "seeds present: [0, 11]" in captured
+    assert "seed 11: collected view stack (8, 2, 4)" in captured
+
+
+def test_run_variant_decomposition_requires_seed_folds(tmp_path: Path) -> None:
+    """A variant root with none of the requested seeds is rejected."""
+
+    with pytest.raises(FileNotFoundError, match="No seed folds"):
+        dec.run_variant_decomposition(variant_root=tmp_path / "missing", seeds=[0], split_name="Hurricane_Ian",
+                                      data_dir=None, device="cpu")
+
+
+def test_run_variant_decomposition_detects_target_mismatch(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Seeds whose loaders disagree on target order abort the decomposition."""
+
+    model = _CornerLogitModel()
+    variant = tmp_path / "baseline"
+    for seed in (0, 1):
+        _write_seed_fold(variant / "Hurricane_Ian" / f"seed_{seed:02d}", model.state_dict())
+    _stub_io(monkeypatch, model)
+    calls: list[int] = []
+
+    def _drifting_collect(model: nn.Module, val_loader: object, device: str) -> tuple[torch.Tensor, torch.Tensor]:
+        _ = model, val_loader, device
+        calls.append(1)
+        return torch.full((8, 2, 4), 0.25), torch.tensor([0, 1]) if len(calls) == 1 else torch.tensor([1, 0])
+
+    monkeypatch.setattr(dec, "collect_view_probabilities", _drifting_collect)
+    with pytest.raises(RuntimeError, match="Target mismatch between seed 0 and seed 1"):
+        dec.run_variant_decomposition(variant_root=variant, seeds=[0, 1], split_name="Hurricane_Ian",
+                                      data_dir=None, device="cpu")
+
+
+def test_main_with_variant_roots_runs_models_and_writes_cache(tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+                                                              capsys: pytest.CaptureFixture[str]) -> None:
+    """The model-execution path resolves the device, decomposes each variant, and writes artifact plus view cache."""
+
+    model = _CornerLogitModel()
+    variant = tmp_path / "baseline"
+    _write_seed_fold(variant / "Hurricane_Ian" / "seed_00", model.state_dict())
+    _stub_io(monkeypatch, model)
+    artifact_path = tmp_path / "decomposition.json"
+    cache_path = tmp_path / "view_probs.pt"
+
+    monkeypatch.setattr(sys, "argv", [
+        "decompose", "--variant-roots", str(variant), "--split", "Hurricane_Ian", "--seeds", "0",
+        "--device", "cpu", "--output-json", str(artifact_path), "--view-cache", str(cache_path)
+    ])
+    dec.main()
+
+    payload = json.loads(artifact_path.read_text(encoding="utf-8"))
+    assert payload["split"] == "Hurricane_Ian"
+    assert payload["variants"][0]["variant_root"] == str(variant)
+    cache = dec.load_view_cache(cache_path)
+    assert cache["variants"][0]["seeds"] == [0]
+    assert cache["variants"][0]["view_probs"].shape == (1, 8, 2, 4)
+    captured = capsys.readouterr().out
+    assert "Device: cpu" in captured
+    assert "Variants: ['baseline']" in captured

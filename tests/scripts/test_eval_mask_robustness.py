@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pytest
 import rasterio
+import torch
+import yaml
 from rasterio.transform import from_origin
 from shapely.geometry import Polygon
 
@@ -276,3 +279,263 @@ def test_deltas_vs_aligned_reference() -> None:
             assert deltas["raw_cache"][rule][metric] == pytest.approx(-0.05)
 
     assert emr.compute_deltas_vs_aligned([records[1]]) == {}
+
+
+def test_count_polygon_sources_warns_on_unreadable_file(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """Unreadable or malformed annotation files are skipped with a warning rather than aborting."""
+
+    broken = tmp_path / "broken.json"
+    broken.write_text("{not json", encoding="utf-8")
+    counts = emr.count_polygon_sources([str(broken), str(tmp_path / "absent.json")])
+    assert counts == {}
+    assert capsys.readouterr().out.count("WARNING: skipping unreadable annotation file") == 2
+
+
+# Inference orchestration -----------------------------------------------------
+
+CHIP = 64
+
+
+def _fold_cfg(*, num_workers: int = 0, persistent_workers: bool = False) -> dict:
+    """Resolved-config snapshot sufficient for loader construction and model rebuilding."""
+
+    return {
+        "data": {"chip_size": CHIP, "dir": "data", "sensor_profile": "uas_5cm"},
+        "runtime": {"num_workers": num_workers, "pin_memory": False, "persistent_workers": persistent_workers,
+                    "prefetch_factor": 2, "val_batch_size_factor": 1.0, "seed": 3},
+        "training": {"batch_size": 2},
+        "model": {"name": "resnet18", "drop_path_rate": 0.0},
+        "ablation": {"mask_enabled": True, "typology_enabled": True, "mask_weighted_pooling_enabled": True,
+                     "mask_dilation_px": 0},
+    }
+
+
+def _write_fold(fold_dir: Path) -> Path:
+    """Persist a resolved config and real resnet18 MCDN weights into one seed fold directory."""
+
+    fold_dir.mkdir(parents=True, exist_ok=True)
+    (fold_dir / "config_resolved.yaml").write_text(yaml.safe_dump(_fold_cfg()), encoding="utf-8")
+    model = emr.build_model_from_config(cfg=_fold_cfg(), device="cpu")
+    torch.save(model.state_dict(), fold_dir / "best_model.pt")
+    return fold_dir
+
+
+@pytest.fixture
+def variant_root(tmp_path: Path) -> Path:
+    """Two-seed variant layout ``<variant>/<split>/seed_NN`` with loadable checkpoints."""
+
+    root = tmp_path / "outputs" / "all_features"
+    for seed in (0, 1):
+        _write_fold(root / "Hurricane_Ian" / f"seed_{seed:02d}")
+    return root
+
+
+def test_build_perturbed_val_loader_batches_the_holdout(robustness_world: dict) -> None:
+    """The loader wraps a RobustnessDataset with the configured batch size and yields loader-shaped chips."""
+
+    loader = emr.build_perturbed_val_loader(cfg=_fold_cfg(), val_df=robustness_world["manifest"],
+                                            perturbation=emr.PerturbationSpec(mode="aligned"))
+    assert isinstance(loader.dataset, emr.RobustnessDataset)
+    batch = next(iter(loader))
+    assert batch["image"].shape == (2, 4, CHIP, CHIP)
+    assert batch["image"].dtype == torch.uint8
+    assert batch["context"].shape == (2, 4)
+    assert batch["label"].tolist() == [1, 3]
+
+
+def test_build_perturbed_val_loader_rejects_persistent_workers_without_workers(robustness_world: dict) -> None:
+    """persistent_workers=True with num_workers=0 is an invalid runtime combination."""
+
+    with pytest.raises(ValueError, match="persistent_workers"):
+        emr.build_perturbed_val_loader(cfg=_fold_cfg(persistent_workers=True), val_df=robustness_world["manifest"],
+                                       perturbation=emr.PerturbationSpec(mode="aligned"))
+
+
+def test_build_perturbed_val_loader_forwards_prefetch_with_workers(robustness_world: dict) -> None:
+    """With workers enabled the prefetch factor is forwarded to the DataLoader."""
+
+    loader = emr.build_perturbed_val_loader(cfg=_fold_cfg(num_workers=1, persistent_workers=True),
+                                            val_df=robustness_world["manifest"],
+                                            perturbation=emr.PerturbationSpec(mode="aligned"))
+    assert loader.num_workers == 1
+    assert loader.prefetch_factor == 2
+
+
+def test_collect_tta_probs_returns_softmax_rows_and_targets(robustness_world: dict) -> None:
+    """TTA collection concatenates per-batch probabilities and targets over the loader."""
+
+    loader = emr.build_perturbed_val_loader(cfg=_fold_cfg(), val_df=robustness_world["manifest"],
+                                            perturbation=emr.PerturbationSpec(mode="aligned"))
+    model = emr.build_model_from_config(cfg=_fold_cfg(), device="cpu")
+    probs, targets = emr.collect_tta_probs(model=model, val_loader=loader, device="cpu")
+    assert probs.shape == (2, 4)
+    assert torch.allclose(probs.sum(dim=1), torch.ones(2), atol=1e-5)
+    assert targets.tolist() == [1, 3]
+
+
+def test_evaluate_condition_stacks_seeds_and_summarises(robustness_world: dict, variant_root: Path,
+                                                        capsys: pytest.CaptureFixture[str]) -> None:
+    """Every seed is evaluated once; the record carries per-seed, summary, ensemble metrics and tensors."""
+
+    fold_dirs = {0: variant_root / "Hurricane_Ian" / "seed_00", 1: variant_root / "Hurricane_Ian" / "seed_01"}
+    record = emr.evaluate_condition(fold_dirs=fold_dirs, cfg=_fold_cfg(), val_df=robustness_world["manifest"],
+                                    spec=emr.PerturbationSpec(mode="raw_cache"), device="cpu")
+
+    assert record["condition"] == "raw_cache"
+    assert record["seeds"] == [0, 1]
+    assert record["probs"].shape == (2, 2, 4)
+    assert record["targets"].tolist() == [1, 3]
+    assert [entry["seed"] for entry in record["per_seed"]] == [0, 1]
+    assert set(record["ensemble"]) == set(emr.RULE_FNS)
+    assert set(record["summary"]) == set(emr.RULE_FNS)
+    assert "seed 1: probs (2, 4)" in capsys.readouterr().out
+
+
+def test_evaluate_condition_detects_target_order_drift(robustness_world: dict, variant_root: Path,
+                                                       monkeypatch: pytest.MonkeyPatch) -> None:
+    """Seeds whose loaders disagree on target order raise SeedTargetMismatchError."""
+
+    fold_dirs = {0: variant_root / "Hurricane_Ian" / "seed_00", 1: variant_root / "Hurricane_Ian" / "seed_01"}
+    calls: list[int] = []
+
+    def _drifting_collect(model: torch.nn.Module, val_loader: object, device: str) -> tuple[torch.Tensor, torch.Tensor]:
+        _ = model, val_loader, device
+        calls.append(1)
+        return torch.full((2, 4), 0.25), torch.tensor([1, 3]) if len(calls) == 1 else torch.tensor([3, 1])
+
+    monkeypatch.setattr(emr, "collect_tta_probs", _drifting_collect)
+    with pytest.raises(emr.SeedTargetMismatchError, match="diverged between seeds 0 and 1"):
+        emr.evaluate_condition(fold_dirs=fold_dirs, cfg=_fold_cfg(), val_df=robustness_world["manifest"],
+                               spec=emr.PerturbationSpec(mode="aligned"), device="cpu")
+
+
+def test_run_variant_robustness_resolves_auto_rate_and_writes_caches(robustness_world: dict, variant_root: Path,
+                                                                     monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    """The variant driver discovers seeds, calibrates mask_zero:auto, and persists per-condition caches."""
+
+    manifest = robustness_world["manifest"]
+    monkeypatch.setattr(emr, "get_fold_dataframes_from_config",
+                        lambda *_args, **_kwargs: (manifest.iloc[:0], manifest, "Hurricane Ian"))
+    cache_dir = tmp_path / "caches"
+    specs = [emr.parse_condition("aligned"), emr.parse_condition("mask_zero:auto")]
+
+    result = emr.run_variant_robustness(variant_root=variant_root, seeds=[0, 1, 7], split_name="Hurricane_Ian",
+                                        condition_specs=specs, data_dir=None, device="cpu", probs_cache_dir=cache_dir)
+
+    assert result["holdout_event"] == "Hurricane Ian"
+    assert [record["condition"] for record in result["conditions"]] == ["aligned", "mask_zero_0.5"]
+    assert result["conditions"][1]["spec"]["rate"] == pytest.approx(0.5)
+    cached = torch.load(cache_dir / "all_features_Hurricane_Ian_aligned.pt", weights_only=True)
+    assert cached["probs"].shape == (2, 2, 4)
+    assert cached["class_names"] == list(emr.ORDINAL_CLASS_DISPLAY_NAMES)
+
+
+def test_run_variant_robustness_requires_seed_folds(tmp_path: Path) -> None:
+    """A variant root with none of the requested seeds is rejected."""
+
+    with pytest.raises(FileNotFoundError, match="No seed folds"):
+        emr.run_variant_robustness(variant_root=tmp_path / "missing", seeds=[0], split_name="Hurricane_Ian",
+                                   condition_specs=[emr.parse_condition("aligned")], data_dir=None, device="cpu")
+
+
+# Reporting -------------------------------------------------------------------
+
+def _metrics(offset: float) -> dict:
+    return {rule: {"qwk": 0.8 + offset, "macro_f1": 0.6 + offset, "accuracy": 0.7 + offset,
+                   "macro_precision": 0.65 + offset, "macro_recall": 0.62 + offset} for rule in emr.RULE_FNS}
+
+
+def _condition_record(name: str, offset: float) -> dict:
+    per_seed = [{"seed": seed, "metrics": _metrics(offset + 0.01 * seed)} for seed in (0, 1)]
+    return {
+        "condition": name,
+        "spec": {"mode": name},
+        "seeds": [0, 1],
+        "per_seed": per_seed,
+        "summary": emr._summarize_across_seeds([entry["metrics"] for entry in per_seed]),
+        "ensemble": _metrics(offset),
+        "probs": torch.zeros(2, 3, 4),
+        "targets": torch.zeros(3, dtype=torch.long),
+    }
+
+
+def test_print_robustness_table_reports_deltas(capsys: pytest.CaptureFixture[str]) -> None:
+    """The table shows a delta for perturbed conditions and a placeholder for the aligned row."""
+
+    record = {"variant_root": "outputs/ablation/all_features", "holdout_event": "Hurricane Ian",
+              "conditions": [_condition_record("aligned", 0.0), _condition_record("raw_cache", -0.05)]}
+    emr.print_robustness_table(record)
+    out = capsys.readouterr().out
+    assert "FOOTPRINT ROBUSTNESS  variant=all_features  holdout=Hurricane Ian  seeds=2" in out
+    assert " -0.0500" in out
+    assert "--" in out
+    for rule in emr.RULE_FNS:
+        assert f"rule={rule}" in out
+
+
+def test_write_robustness_artifact_excludes_tensors(tmp_path: Path) -> None:
+    """The JSON artifact carries metrics and deltas for every variant but no probability tensors."""
+
+    record = {"variant_root": "outputs/ablation/all_features", "holdout_event": "Hurricane Ian",
+              "conditions": [_condition_record("aligned", 0.0), _condition_record("offset_60px", -0.1)]}
+    path = tmp_path / "nested" / "mask_robustness.json"
+    emr.write_robustness_artifact(path=path, variant_records=[record], split_name="Hurricane_Ian")
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert payload["split"] == "Hurricane_Ian"
+    assert payload["holdout_event"] == "Hurricane Ian"
+    variant = payload["variants"][0]
+    assert [condition["condition"] for condition in variant["conditions"]] == ["aligned", "offset_60px"]
+    assert all("probs" not in condition for condition in variant["conditions"])
+    assert variant["deltas_vs_aligned"]["offset_60px"]["EV"]["qwk"] == pytest.approx(-0.1)
+
+
+# CLI -------------------------------------------------------------------------
+
+def test_main_report_custom_rate_only(robustness_world: dict, variant_root: Path, monkeypatch: pytest.MonkeyPatch,
+                                      capsys: pytest.CaptureFixture[str]) -> None:
+    """--report-custom-rate prints the custom-source fraction per variant and exits before evaluation."""
+
+    manifest = robustness_world["manifest"]
+    monkeypatch.setattr(emr, "get_fold_dataframes_from_config",
+                        lambda *_args, **_kwargs: (manifest.iloc[:0], manifest, "Hurricane Ian"))
+    monkeypatch.setattr(emr, "run_variant_robustness", lambda **_kwargs: pytest.fail("evaluation must not run"))
+    monkeypatch.setattr(sys, "argv", ["eval_mask_robustness", "--variant-roots", str(variant_root),
+                                      "--split", "Hurricane_Ian", "--report-custom-rate"])
+    emr.main()
+    out = capsys.readouterr().out
+    assert "=== all_features ===  holdout=Hurricane Ian" in out
+    assert "custom-source polygons: 1/2 = 0.5000" in out
+
+
+def test_main_report_custom_rate_requires_seed_folds(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The rate-only mode still validates that seed folds exist."""
+
+    monkeypatch.setattr(sys, "argv", ["eval_mask_robustness", "--variant-roots", str(tmp_path / "none"),
+                                      "--report-custom-rate"])
+    with pytest.raises(FileNotFoundError, match="No seed folds"):
+        emr.main()
+
+
+def test_main_end_to_end_writes_artifact(robustness_world: dict, variant_root: Path, monkeypatch: pytest.MonkeyPatch,
+                                         tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    """The full CLI evaluates the requested conditions, prints the table, and writes the JSON artifact."""
+
+    manifest = robustness_world["manifest"]
+    monkeypatch.setattr(emr, "get_fold_dataframes_from_config",
+                        lambda *_args, **_kwargs: (manifest.iloc[:0], manifest, "Hurricane Ian"))
+    out_json = tmp_path / "artifact" / "mask_robustness.json"
+    monkeypatch.setattr(sys, "argv", ["eval_mask_robustness", "--variant-roots", str(variant_root),
+                                      "--split", "Hurricane_Ian", "--seeds", "0", "--conditions", "aligned", "offset:5",
+                                      "--device", "cpu", "--output-json", str(out_json)])
+    emr.main()
+
+    payload = json.loads(out_json.read_text(encoding="utf-8"))
+    conditions = payload["variants"][0]["conditions"]
+    assert [condition["condition"] for condition in conditions] == ["aligned", "offset_5px"]
+    assert conditions[0]["seeds"] == [0]
+    assert "offset_5px" in payload["variants"][0]["deltas_vs_aligned"]
+    out = capsys.readouterr().out
+    assert "Device: cpu" in out
+    assert "Conditions: ['aligned', 'offset_5px']" in out
+    assert "FOOTPRINT ROBUSTNESS" in out

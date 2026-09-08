@@ -1,0 +1,270 @@
+Orthomosaic,Train/Test,Mapper,Source,Platform / Provider,Event,Date (mm/dd/yyy),Pre/Post Event,GSD (m/px),Gigapixels Counted,Area (mi^2),BDA: No Damage,BDA: Minor Damage,BDA: Major Damage,BDA: Destroyed,BDA: Un-classified,Total Buildings,ADJ Count
+0827-B-02.geo.tif_20200829b_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Harvey,8/29/2020,POST,0.150166693,0.01081,0.081432436,575,0,0,0,22,621,12
+090302-Pecan-Grove-Levee.geo.tif_20170830_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Harvey,8/30/2017,POST,0.29999615,0.008997,0.27173691,581,0,0,0,19,623,57
+090302-Pecan-Grove-Levee.geo.tif_20170903a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Harvey,9/3/2017,POST,0.29999615,0.018281,0.551564475,582,0,0,0,15,620,44
+090401-DMS-Assessment-Westpark.geo.tif_20170830_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Harvey,8/30/2017,POST,0.29999615,0.001,0.030171495,138,0,0,1,9,159,1
+090402-DMS-Assessment-Sienna-Village.geo.tif_20170903a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Harvey,9/3/2017,POST,0.29999615,0.002608,0.078851113,142,0,0,1,7,159,0
+090403-Lancaster-Canyon-Gate.geo.tif_20170830_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Harvey,8/30/2017,POST,0.29999615,0.011327,0.341844239,146,0,0,1,7,159,15
+1001-Ft-Myers-Beach-Boone.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.076164362,1.648668132,593,258,29,52,10,942,162
+1001-Ft-Myers-Beach-DIRT.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.03760907,0.814259309,363,277,82,210,9,942,104
+1001-Harlem-Heights.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.001621434,0.05053434,27,3,1,1,27,59,3
+1001-Harlem-Heights.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.015210135,0.329164654,428,351,125,8,63,975,117
+1001-Iona-Point.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.021816519,0.67672681,50,14,0,0,44,108,125
+1001-Iona-Point.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.002988254,0.064660492,572,100,8,2,26,708,13
+1001-Kennedy-Green-Mobile-Homes.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.011631992,0.362568456,310,260,411,17,57,1055,129
+1001-Kennedy-Green-Mobile-Homes.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.013264996,0.287079123,348,286,193,15,58,901,43
+1001-McGregor-College-Pkwy-South.1.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.011135576,0.346963133,225,84,1,0,29,339,30
+1001-McGregor-College-Pkwy-South.1.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.013370423,0.289252464,277,61,2,1,23,364,46
+1001-McGregor-College-Pkwy-South.2.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.007449801,0.232118396,202,45,1,1,28,277,36
+1001-McGregor-College-Pkwy-South.2.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.010691619,0.231294215,219,36,0,1,25,281,36
+1001-McGregor-College-Pkwy-South.3.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.008686856,0.270646949,167,28,0,0,29,224,22
+1001-McGregor-College-Pkwy-South.3.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.004571398,0.098859587,27,2,0,0,64,93,13
+1001-Palmeto-Palms.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.00717406,0.221804791,340,530,157,12,40,1081,120
+1001-Palmeto-Palms.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.014864523,0.319774862,708,771,95,13,55,1642,87
+1001-San-Carlos-Island.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.020667369,0.447380373,155,216,101,58,16,546,72
+1001-Summerlin-San-Carlos.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.048960847,1.059469013,1619,1001,356,4,70,3050,133
+1002-Boca-Grande.1.geo.tif_20220930a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.054853168,1.184528675,525,156,30,5,11,727,144
+1002-Boca-Grande.1.geo.tif_20221001b_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,10/1/2022,POST,0.250268012,0.014394889,0.310834129,14,5,0,0,29,48,4
+1002-Boca-Grande.2.geo.tif_20220930a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.013719264,0.29617653,68,27,2,0,3,100,27
+1002-Boca-Grande.2.geo.tif_20221001b_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,10/1/2022,POST,0.250268012,0.013719264,0.296177631,68,27,2,0,3,100,18
+1002-Boca-Grande.3.geo.tif_20220930a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.016081003,0.347212687,108,35,8,0,5,156,30
+1002-Boca-Grande.3.geo.tif_20221001b_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,10/1/2022,POST,0.250268012,0.010273195,0.221804498,53,16,5,0,10,84,19
+1002-Boca-Grande.4.geo.tif_20220930a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.029874745,0.645248766,194,43,14,1,2,254,72
+1002-Boca-Grande.5.geo.tif_20220930a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.033009517,0.712502299,181,62,13,0,3,259,88
+1002-Boca-Grande.5.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.020106309,0.433975697,95,29,10,0,1,135,83
+1002-Boca-Grande.5.geo.tif_20221001b_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,10/1/2022,POST,0.250268012,0.033009517,0.712507868,186,56,14,0,3,259,70
+1002-Boca-Grande.6.geo.tif_20220930a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.020813276,0.449402847,82,26,5,0,6,119,37
+1002-Boca-Grande.6.geo.tif_20221001b_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,10/1/2022,POST,0.250268012,0.020369122,0.439808053,76,25,2,0,1,104,44
+1002-Ft-Myers-Beach-LCSO.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.028193824,0.60969839,262,286,54,191,12,805,27
+1002-Ft-Myers-Beach-TFD.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.022260791,0.480774017,341,210,75,147,9,782,136
+1002-Kelly-Road.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.002971305,0.092607278,105,54,7,1,7,174,20
+1002-Kelly-Road.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.008704739,0.188370368,64,17,0,0,12,93,18
+1002-Palm-Acers.1.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.006505174,0.202773728,64,63,25,0,12,164,37
+1002-Palm-Acers.2.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.012437776,0.387615547,155,37,1,0,2,195,27
+1002-Palm-Acers.2.geo.tif_20220930c_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.01791156,0.387556174,157,34,1,0,2,194,38
+1002-Palm-Acers.3.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.007211892,0.22481539,46,9,0,0,0,55,15
+1002-Palm-Acers.4.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.010443288,0.325513224,25,3,6,2,15,51,35
+1002-Palm-Acers.4.geo.tif_20220930d_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/30/2022,POST,0.250268012,0.001408572,0.030482875,318,222,108,5,40,693,3
+1002-Sanibel-Causeway-North.geo.tif_20220929a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ian,9/29/2022,POST,0.300353516,0.001493883,0.046571436,6,1,0,1,3,11,2
+10132018-MexicoBeach.geo.tif_20181011a_RGB.geo.tif,Test,N/A,Crewed Aircraft,NOAA,Hurricane Michael,10/11/2018,POST,0.300349465,0.020433211,0.616505392,51,147,107,195,19,519,40
+10142018-MexicoBeach.geo.tif_20181011a_RGB.geo.tif,Test,N/A,Crewed Aircraft,NOAA,Hurricane Michael,10/11/2018,POST,0.300349465,0.025954768,0.781312041,108,307,118,80,21,634,18
+20210831-LA-DIV-01.geo.tif_20210831a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ida,8/31/2021,POST,0.150160807,0.134170047,1.019167733,161,164,213,16,10,564,132
+20210901-Cocodrie-2.geo.tif_20210831a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ida,8/31/2021,POST,0.150160807,0.003268482,0.024819516,3,1,9,1,0,14,2
+20210901-Cocodrie-3.geo.tif_20210831a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ida,8/31/2021,POST,0.150160807,0.017810254,0.135229157,7,12,38,8,3,68,16
+20210902-LA-DIV-01.geo.tif_20210831a_RGB.geo.tif,Train,N/A,Crewed Aircraft,NOAA,Hurricane Ida,8/31/2021,POST,0.150160807,0.077773351,0.590979434,5,82,185,72,4,348,94
+20230830-SteinhatcheeRiver.geo.tif_20230831a_RGB.geo.tif,Test,N/A,Crewed Aircraft,NOAA,Hurricane Idalia,8/31/2023,POST,0.150160807,0.137116414,1.037196715,473,49,23,3,39,608,121
+20230830-SteinhatcheeRiver.geo.tif_20230902a_RGB.geo.tif,Test,N/A,Crewed Aircraft,NOAA,Hurricane Idalia,9/2/2023,POST,0.150160807,0.137116414,1.037197169,469,55,18,4,42,613,68
+20230831-Jena-SteinhatcheeRiverSouth.geo.tif_20230831a_RGB.geo.tif,Test,N/A,Crewed Aircraft,NOAA,Hurricane Idalia,8/31/2023,POST,0.150160807,0.133434377,1.009404953,100,12,3,1,16,139,31
+20230831-Jena-SteinhatcheeRiverSouth.geo.tif_20230902a_RGB.geo.tif,Test,N/A,Crewed Aircraft,NOAA,Hurricane Idalia,9/2/2023,POST,0.150160807,0.153238102,1.159222744,128,10,3,1,14,157,40
+090302-Pecan-Grove-Levee.geo.tif_103001006F018C00.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,8/30/2017,POST,0.706503232,0.00331814,0.555759124,245,0,0,0,102,641,6
+090302-Pecan-Grove-Levee.geo.tif_103001006F884000.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,8/30/2017,POST,0.803628676,0.002567364,0.556365472,239,0,0,0,88,639,8
+090401-DMS-Assessment-Westpark.geo.tif_103001006F018C00.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,8/30/2017,POST,0.706503232,0.00018095,0.030289812,0,0,0,0,2,4,0
+090401-DMS-Assessment-Westpark.geo.tif_103001006F884000.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,8/30/2017,POST,0.803628676,0.000139984,0.030317887,0,0,0,0,2,4,0
+090402-DMS-Assessment-Sienna-Village.geo.tif_1030010066D17500.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,2/16/2017,PRE,0.553224753,0.000768102,0.078975063,9,0,0,0,5,16,1
+090402-DMS-Assessment-Sienna-Village.geo.tif_103001006F884000.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,8/30/2017,POST,0.803628676,0.000364568,0.079095851,12,0,0,0,4,16,1
+090403-Lancaster-Canyon-Gate.geo.tif_103001006F018C00.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,8/30/2017,POST,0.706503232,0.002044525,0.341972808,0,0,258,0,18,647,6
+090403-Lancaster-Canyon-Gate.geo.tif_103001006F884000.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Harvey,8/30/2017,POST,0.803628676,0.00155979,0.337801474,0,0,240,0,22,644,2
+1001-Ft-Myers-Beach-Boone.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.045666497,1.649657801,904,0,0,0,6,912,22
+1001-Ft-Myers-Beach-Boone.geo.tif_10200100B5D89900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,8/17/2021,PRE,0.305175781,0.045666497,1.649776153,906,0,0,0,5,912,0
+1001-Ft-Myers-Beach-Boone.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.045666477,1.649181107,512,0,0,0,6,549,113
+1001-Ft-Myers-Beach-Boone.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.045666368,1.647829533,629,210,24,55,12,932,28
+1001-Ft-Myers-Beach-Boone.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.018784063,0.676830922,643,204,18,56,12,933,68
+1001-Ft-Myers-Beach-DIRT.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.022544563,0.81438045,938,0,0,0,2,943,66
+1001-Ft-Myers-Beach-DIRT.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.01812789,0.654848898,392,282,47,213,9,943,55
+1001-Ft-Myers-Beach-DIRT.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.022544553,0.81435639,915,0,0,1,13,943,75
+1001-Ft-Myers-Beach-DIRT.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.02254454,0.814226373,371,299,51,212,10,943,17
+1001-Ft-Myers-Beach-DIRT.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.022544553,0.814290099,343,268,40,207,11,869,729
+1001-Harlem-Heights.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.009112618,0.329185295,929,0,0,0,47,988,10
+1001-Harlem-Heights.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.009112618,0.329186487,917,0,0,0,64,988,137
+1001-Harlem-Heights.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.009112011,0.328886573,949,0,0,0,26,978,62
+1001-Harlem-Heights.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.009112603,0.329041841,658,205,43,8,67,981,2
+1001-Harlem-Heights.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.009112618,0.32919523,675,198,35,8,69,985,295
+1001-Iona-Point.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.018822031,0.676720711,689,0,0,0,18,708,62
+1001-Iona-Point.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.018822028,0.676727033,681,0,0,0,23,707,138
+1001-Iona-Point.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.018821475,0.675064117,684,0,0,0,17,706,68
+1001-Iona-Point.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.018821382,0.675214618,664,16,1,2,23,706,13
+1001-Iona-Point.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.01882203,0.676761966,630,42,4,5,25,706,249
+1001-Kennedy-Green-Mobile-Homes.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.010037209,0.36259155,1010,0,0,0,27,1047,27
+1001-Kennedy-Green-Mobile-Homes.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.01003721,0.362585626,1011,0,0,0,24,1045,116
+1001-Kennedy-Green-Mobile-Homes.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.010036056,0.361884075,473,351,144,15,63,1049,189
+1001-Kennedy-Green-Mobile-Homes.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.010037022,0.362342286,529,311,128,13,64,1047,130
+1001-McGregor-College-Pkwy-South.1.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.009605387,0.346927538,289,49,2,1,26,367,9
+1001-McGregor-College-Pkwy-South.1.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.009605389,0.346922047,342,0,0,0,25,367,37
+1001-McGregor-College-Pkwy-South.1.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.009590133,0.343345758,345,1,0,0,21,367,67
+1001-McGregor-College-Pkwy-South.1.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.009604769,0.343806684,909,103,9,3,18,1043,58
+1001-McGregor-College-Pkwy-South.1.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.00960539,0.346996394,287,51,2,1,26,367,42
+1001-McGregor-College-Pkwy-South.2.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.006426117,0.232088896,213,40,0,1,26,280,7
+1001-McGregor-College-Pkwy-South.2.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.006426118,0.232081743,252,0,0,0,23,275,9
+1001-McGregor-College-Pkwy-South.2.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.006414813,0.228307881,259,1,0,0,21,281,25
+1001-McGregor-College-Pkwy-South.2.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.006423691,0.229367915,300,0,0,0,23,367,12
+1001-McGregor-College-Pkwy-South.2.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.006426119,0.232140447,216,38,0,1,25,280,12
+1001-McGregor-College-Pkwy-South.3.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.007492525,0.270616675,199,0,0,0,23,223,7
+1001-McGregor-College-Pkwy-South.3.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.00749252,0.270619926,206,0,0,0,19,272,16
+1001-McGregor-College-Pkwy-South.3.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.007475102,0.268777631,185,15,0,0,24,224,16
+1001-McGregor-College-Pkwy-South.3.geo.tif_10300100DA63D300-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.002454589,0.087941,177,19,0,0,28,224,6
+1001-McGregor-College-Pkwy-South.3.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.007490146,0.269081448,74,5,0,0,13,92,6
+1001-McGregor-College-Pkwy-South.3.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.007492525,0.270670972,197,0,0,0,25,223,24
+1001-Palmeto-Palms.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.008907805,0.319845131,1449,0,0,0,27,1481,5
+1001-Palmeto-Palms.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.008907805,0.319844011,1426,0,0,0,36,1481,153
+1001-Palmeto-Palms.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.000165102,0.005964153,190,0,0,0,23,222,2
+1001-Palmeto-Palms.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.008906759,0.319332332,986,352,77,14,51,1480,6
+1001-Palmeto-Palms.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.008907503,0.319623322,1153,215,39,14,62,1483,15
+1001-Palmeto-Palms.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.008907805,0.319858497,0,0,0,0,3,3,113
+1001-San-Carlos-Island.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.012387603,0.44747111,1475,0,0,0,5,1481,39
+1001-San-Carlos-Island.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.008446749,0.304790038,121,78,21,55,11,287,4
+1001-San-Carlos-Island.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.01238759,0.447381374,308,131,39,59,8,545,6
+1001-San-Carlos-Island.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.012387593,0.447187452,312,113,32,59,26,542,30
+1001-San-Carlos-Island.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.012387596,0.447495025,529,0,0,0,5,546,105
+1001-Summerlin-San-Carlos.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.008082907,0.291994371,833,0,0,0,30,873,1
+1001-Summerlin-San-Carlos.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.029338566,1.059542251,535,2,0,0,3,546,8
+1001-Summerlin-San-Carlos.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.029338193,1.056214112,1679,459,80,5,45,2275,51
+1001-Summerlin-San-Carlos.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.029338265,1.058215099,1733,420,66,3,51,2273,6
+1001-Summerlin-San-Carlos.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.029338499,1.059394714,2237,0,0,0,23,2268,53
+1002-Boca-Grande.1.geo.tif_10200100C0DA0700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,2/24/2022,PRE,0.305175781,0.03241809,1.17082322,708,0,1,0,8,718,6
+1002-Boca-Grande.1.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.032801951,1.183376541,501,172,27,6,10,718,6
+1002-Boca-Grande.1.geo.tif_1040010072528400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/30/2022,PRE,0.305175781,0.032801947,1.184123382,2251,0,0,0,13,2267,8
+1002-Boca-Grande.1.geo.tif_104001007C700900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/1/2022,POST,0.305175781,0.032801951,1.183122164,707,0,2,0,9,719,10
+1002-Boca-Grande.1.geo.tif_105001002A491900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,3/5/2022,PRE,0.305175781,0.032801651,1.183189378,538,144,18,6,10,718,5
+1002-Boca-Grande.1.geo.tif_105001002D409800-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,7/15/2022,PRE,0.305175781,0.032801931,1.184274932,711,0,0,1,5,718,7
+1002-Boca-Grande.2.geo.tif_10200100C0DA0700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,2/24/2022,PRE,0.305175781,0.000852266,0.030779297,9,0,0,0,3,12,4
+1002-Boca-Grande.2.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.008202466,0.296079904,65,16,1,0,1,100,3
+1002-Boca-Grande.2.geo.tif_1040010072528400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/30/2022,PRE,0.305175781,0.00806625,0.291142402,708,0,1,0,9,720,12
+1002-Boca-Grande.2.geo.tif_104001007C700900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/1/2022,POST,0.305175781,0.008202561,0.29612097,98,0,0,0,2,100,4
+1002-Boca-Grande.2.geo.tif_105001002A491900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,3/5/2022,PRE,0.305175781,0.008202561,0.296239976,77,17,1,0,2,100,2
+1002-Boca-Grande.2.geo.tif_105001002D409800-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,7/15/2022,PRE,0.305175781,0.008202566,0.296252075,98,0,0,0,2,100,5
+1002-Boca-Grande.2.geo.tif_105001002F19B300-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.004065908,0.146847081,99,0,0,0,1,100,4
+1002-Boca-Grande.3.geo.tif_10200100C0DA0700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,2/24/2022,PRE,0.305175781,0.005348113,0.193153832,107,0,0,0,3,111,5
+1002-Boca-Grande.3.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.009615915,0.346725009,120,31,1,2,4,158,21
+1002-Boca-Grande.3.geo.tif_1040010072528400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/30/2022,PRE,0.305175781,0.0096158,0.347083437,33,7,0,0,1,42,3
+1002-Boca-Grande.3.geo.tif_104001007C700900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/1/2022,POST,0.305175781,0.009615914,0.346899275,153,0,0,0,5,158,3
+1002-Boca-Grande.3.geo.tif_105001002A491900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,3/5/2022,PRE,0.305175781,0.00961591,0.347256079,122,28,1,2,3,156,2
+1002-Boca-Grande.3.geo.tif_105001002D409800-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,7/15/2022,PRE,0.305175781,0.009615908,0.347289993,150,0,0,0,5,157,3
+1002-Boca-Grande.4.geo.tif_10200100C0DA0700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,2/24/2022,PRE,0.305175781,0.017866082,0.64527008,252,0,0,0,2,254,6
+1002-Boca-Grande.4.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.017869386,0.645384139,199,42,9,1,2,254,5
+1002-Boca-Grande.4.geo.tif_1040010072528400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/30/2022,PRE,0.305175781,0.017869386,0.644663409,151,0,0,0,6,158,5
+1002-Boca-Grande.4.geo.tif_104001007C700900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/1/2022,POST,0.305175781,0.01786938,0.645309665,124,0,0,0,1,254,4
+1002-Boca-Grande.4.geo.tif_105001002A491900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,3/5/2022,PRE,0.305175781,0.017868702,0.64413136,207,42,2,1,2,255,3
+1002-Boca-Grande.4.geo.tif_105001002D409800-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,7/15/2022,PRE,0.305175781,0.017869373,0.645374099,247,0,0,0,1,254,5
+1002-Boca-Grande.5.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.019732298,0.711828878,177,69,10,0,3,259,6
+1002-Boca-Grande.5.geo.tif_1040010072528400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/30/2022,PRE,0.305175781,0.002835655,0.102389579,253,0,0,0,1,254,4
+1002-Boca-Grande.5.geo.tif_104001007C700900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/1/2022,POST,0.305175781,0.019732298,0.712210779,49,0,0,0,3,52,12
+1002-Boca-Grande.5.geo.tif_105001002A491900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,3/5/2022,PRE,0.305175781,0.019732105,0.711566707,189,56,8,0,5,259,5
+1002-Boca-Grande.5.geo.tif_105001002D409800-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,7/15/2022,PRE,0.305175781,0.004969987,0.179499315,30,0,0,0,3,33,6
+1002-Boca-Grande.5.geo.tif_105001002F19B300-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.019732301,0.712243573,257,0,0,0,2,259,7
+1002-Boca-Grande.6.geo.tif_10200100C0DA0700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,2/24/2022,PRE,0.305175781,0.012698379,0.45861997,115,0,1,0,3,119,4
+1002-Boca-Grande.6.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.012698284,0.458224553,97,17,0,0,4,118,2
+1002-Boca-Grande.6.geo.tif_1040010072528400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/30/2022,PRE,0.305175781,0.012697821,0.457587291,185,62,9,0,3,259,6
+1002-Boca-Grande.6.geo.tif_104001007C700900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/1/2022,POST,0.305175781,0.012698372,0.458622498,114,0,1,0,4,119,5
+1002-Boca-Grande.6.geo.tif_105001002A491900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,3/5/2022,PRE,0.305175781,0.012698194,0.458174493,100,15,0,0,4,119,4
+1002-Boca-Grande.6.geo.tif_105001002D409800-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,7/15/2022,PRE,0.305175781,0.012698373,0.45853661,114,0,1,0,4,119,4
+1002-Ft-Myers-Beach-LCSO.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.016904301,0.610580225,796,0,0,0,5,804,4
+1002-Ft-Myers-Beach-LCSO.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.000100167,0.003618623,113,0,0,0,4,118,0
+1002-Ft-Myers-Beach-LCSO.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.016904291,0.610212028,308,262,29,188,15,804,10
+1002-Ft-Myers-Beach-LCSO.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.016903803,0.6102453,322,252,25,189,11,799,4
+1002-Ft-Myers-Beach-LCSO.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.016904303,0.610677188,0,0,0,0,1,1,55
+1002-Ft-Myers-Beach-TFD.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.013350785,0.48215737,795,0,0,0,4,804,36
+1002-Ft-Myers-Beach-TFD.geo.tif_10200100B5D89900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,8/17/2021,PRE,0.305175781,0.00353752,0.127797802,764,0,0,0,4,772,1
+1002-Ft-Myers-Beach-TFD.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.01335079,0.482261883,331,246,40,147,7,771,13
+1002-Ft-Myers-Beach-TFD.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.013350768,0.481891263,351,227,40,144,7,769,3
+1002-Ft-Myers-Beach-TFD.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.013350537,0.48225343,195,0,0,0,11,206,29
+1002-Kelly-Road.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.005215474,0.188404539,166,0,0,0,9,175,2
+1002-Kelly-Road.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.005215474,0.188407067,170,0,0,0,5,175,2
+1002-Kelly-Road.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.005215097,0.185659182,740,0,0,0,5,771,3
+1002-Kelly-Road.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.005215457,0.187855106,147,17,4,1,4,173,4
+1002-Kelly-Road.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.005215474,0.18797591,149,17,2,1,6,175,6
+1002-Palm-Acers.1.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.005613412,0.20277901,157,0,0,0,9,167,2
+1002-Palm-Acers.1.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.005613412,0.202780744,166,0,0,0,7,173,16
+1002-Palm-Acers.1.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.001601733,0.057858756,24,12,2,0,5,43,2
+1002-Palm-Acers.1.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.005612961,0.200841265,98,43,10,0,12,166,7
+1002-Palm-Acers.1.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.005613254,0.202182406,120,26,7,0,14,168,9
+1002-Palm-Acers.1.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.005613412,0.202784501,155,0,0,0,8,166,14
+1002-Palm-Acers.2.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.010730658,0.387578448,192,0,0,0,0,193,5
+1002-Palm-Acers.2.geo.tif_10200100BC21AC00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,12/18/2021,PRE,0.305175781,0.010730658,0.387615115,164,27,1,0,1,193,3
+1002-Palm-Acers.2.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.010730623,0.387428486,163,28,1,0,1,193,6
+1002-Palm-Acers.2.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.010730074,0.386335394,154,0,0,0,5,165,9
+1002-Palm-Acers.2.geo.tif_10300100DB064000-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.010730065,0.386990186,193,0,0,0,0,193,6
+1002-Palm-Acers.2.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.010730653,0.387210945,165,26,1,0,1,193,7
+1002-Palm-Acers.2.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.010730658,0.387639065,165,26,1,0,1,193,12
+1002-Palm-Acers.3.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.006223874,0.224769134,52,3,0,0,0,55,1
+1002-Palm-Acers.3.geo.tif_10200100BC21AC00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,12/18/2021,PRE,0.305175781,0.006223874,0.224803561,52,2,1,0,0,55,2
+1002-Palm-Acers.3.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.006223874,0.224639158,193,0,0,0,0,193,1
+1002-Palm-Acers.3.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.006223437,0.22376606,55,0,0,0,0,55,2
+1002-Palm-Acers.3.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.00622387,0.224398604,55,0,0,0,0,55,3
+1002-Palm-Acers.3.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.006223874,0.224835026,52,2,1,0,0,55,5
+1002-Palm-Acers.4.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.009011372,0.325529289,651,0,0,0,31,696,1
+1002-Palm-Acers.4.geo.tif_10200100B0214600-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,4/29/2021,PRE,0.305175781,0.009011372,0.32553059,55,0,0,0,0,55,7
+1002-Palm-Acers.4.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.009009823,0.3242941,461,155,30,2,43,692,15
+1002-Palm-Acers.4.geo.tif_10300100DB06A700-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.009010415,0.32428077,471,148,25,3,38,686,5
+1002-Palm-Acers.4.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.009011372,0.32553655,640,0,0,0,39,695,38
+1002-Sanibel-Causeway-North.geo.tif_10200100B01E7400-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,5/7/2021,PRE,0.305175781,0.00128935,0.046569836,669,2,0,0,17,688,1
+1002-Sanibel-Causeway-North.geo.tif_10200100BC21AC00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,12/18/2021,PRE,0.305175781,0.00128935,0.046573629,8,0,0,0,3,11,1
+1002-Sanibel-Causeway-North.geo.tif_10300100DA368900-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,9/30/2022,POST,0.305175781,0.00128935,0.046576664,6,1,0,1,3,11,1
+1002-Sanibel-Causeway-North.geo.tif_10300100DA570A00-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.001289347,0.04657334,6,1,0,1,3,11,1
+1002-Sanibel-Causeway-North.geo.tif_10300100DB064000-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,10/3/2022,POST,0.305175781,0.00128935,0.046577025,6,1,0,1,2,10,1
+1002-Sanibel-Causeway-North.geo.tif_10400100703E5500-visual.tif.geo.tif,Train,N/A,Satellite,MAXAR,Hurricane Ian,1/21/2022,PRE,0.305175781,0.00128935,0.046576844,8,0,0,0,3,11,3
+10132018-MexicoBeach.geo.tif_10400100291A5A00.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,3/11/2017,PRE,0.384001757,0.012504013,0.616684837,8,0,0,0,2,10,24
+10132018-MexicoBeach.geo.tif_104001004384D900.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,10/12/2018,POST,0.589669364,0.005306655,0.617065399,196,28,29,218,30,503,13
+10132018-MexicoBeach.geo.tif_1050010011549F00.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,7/28/2018,PRE,0.465002127,0.00852957,0.616747417,125,21,29,317,10,503,6
+10132018-MexicoBeach.geo.tif_105001001292DF00.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,10/13/2018,POST,0.623802853,0.004742327,0.617169114,489,0,0,0,12,509,9
+10142018-MexicoBeach.geo.tif_10400100291A5A00.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,3/11/2017,PRE,0.384001757,0.015882216,0.781612357,143,104,57,188,14,507,27
+10142018-MexicoBeach.geo.tif_104001004384D900.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,10/12/2018,POST,0.589669364,0.006739278,0.781388227,115,130,63,185,14,507,8
+10142018-MexicoBeach.geo.tif_1050010011549F00.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,7/28/2018,PRE,0.465002127,0.010833422,0.781660496,498,1,0,0,10,509,1
+10142018-MexicoBeach.geo.tif_105001001292DF00.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Michael,10/13/2018,POST,0.623802853,0.006022587,0.781879738,13,62,32,184,67,358,5
+20230830-SteinhatcheeRiver.geo.tif_1040010061205400-visual.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Idalia,12/1/2020,PRE,0.305175781,0.028770787,1.030984819,276,179,63,98,16,633,10
+20230830-SteinhatcheeRiver.geo.tif_1040010077338D00-visual.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Idalia,5/12/2022,PRE,0.305175781,0.028771411,1.03577121,616,0,0,0,17,635,15
+20230830-SteinhatcheeRiver.geo.tif_105001000C7F2100-visual.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Idalia,10/20/2017,PRE,0.305175781,0.028770087,1.034512563,309,78,48,152,41,628,12
+20230831-Jena-SteinhatcheeRiverSouth.geo.tif_1040010061205400-visual.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Idalia,12/1/2020,PRE,0.305175781,0.032153117,1.150062854,617,0,0,0,15,635,14
+20230831-Jena-SteinhatcheeRiverSouth.geo.tif_1040010077338D00-visual.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Idalia,5/12/2022,PRE,0.305175781,0.032154374,1.157546704,254,235,42,79,21,635,5
+20230831-Jena-SteinhatcheeRiverSouth.geo.tif_105001000C7F2100-visual.tif.geo.tif,Test,N/A,Satellite,MAXAR,Hurricane Idalia,10/20/2017,PRE,0.305175781,0.032154225,1.157545326,278,206,59,74,18,636,9
+05-08-2020-MussettBayouFire-01.geo.tif,Test,Pix4d React,sUAS,SenseFly eBee X,Mussett Bayou Fire,5/8/2020,POST,0.0321534,0.728754,0.29205,11,1,0,2,2,16,11
+05-08-2020-MussettBayouFire-NorthOf98.geo.tif,Test,Pix4d React,sUAS,DJI Mavic 2,Mussett Bayou Fire,5/8/2020,POST,0.04401284,0.240955,0.180917,20,0,0,0,1,21,21
+05-08-2020-MussettBayouFire-SouthOf98-AnchorLakeDr.geo.tif,Test,Pix4d React,sUAS,DJI Phantom 4,Mussett Bayou Fire,5/8/2020,POST,0.02019042,0.467344,0.07385,15,3,1,16,4,39,2
+05-08-2020-MussettBayouFire-SouthOf98-DelbertLn.geo.tif,Test,Pix4d React,sUAS,DJI Phantom 4,Mussett Bayou Fire,5/8/2020,POST,0.02001503,0.376353,0.058443,18,2,0,17,0,37,11
+05-08-2020-MussettBayouFire-SouthOf98-LakeParkCove.geo.tif,Test,Pix4d React,sUAS,DJI Phantom 4,Mussett Bayou Fire,5/8/2020,POST,0.02042949,0.350723,0.056742,10,1,0,4,1,16,16
+0827-A-01.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Laura,8/27/2020,POST,0.04034476,1.30412,0.822828,399,32,16,0,6,453,107
+0827-B-02.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Laura,9/3/2017,POST,0.03851076,0.141533,0.081371,10,5,5,0,5,25,12
+090302-Pecan-Grove-Levee.geo.tif,Train,Pix4d React,sUAS,DJI Mavic Pro,Hurricane Harvey,9/4/2017,POST,0.01947012,3.758464,0.551468,585,2,1,0,80,668,287
+090401-DMS-Assessment-Westpark.geo.tif,Train,Pix4d React,sUAS,DJI Mavic Pro,Hurricane Harvey,9/4/2017,POST,0.01959983,0.202323,0.030084,4,0,0,0,0,4,7
+090402-DMS-Assessment-Sienna-Village.geo.tif,Train,Pix4d React,sUAS,DJI Mavic Pro,Hurricane Harvey,9/4/2017,POST,2.12E-02,0.452571,0.078704,16,0,0,0,0,16,2
+090403-Lancaster-Canyon-Gate.geo.tif,Train,Agisoft Metashape,sUAS,DJI M600,Hurricane Harvey,9/4/2017,POST,0.03651,0.662011,0.341563,552,96,0,0,0,648,269
+1001-Ft-Myers-Beach-Boone.geo.tif,Train,Pix4d React,sUAS,DJI M30T,Hurricane Ian,10/1/2022,POST,0.03498759,3.472437,1.64889,531,288,52,52,8,931,406
+1001-Ft-Myers-Beach-DIRT.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/1/2022,POST,0.02999266,2.331837,0.813662,340,277,87,226,14,944,152
+1001-Harlem-Heights.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/1/2022,POST,0.04672015,0.388489,0.328928,440,329,156,7,56,988,240
+1001-Iona-Point.geo.tif,Train,Pix4d React,sUAS,SenseFly eBee X,Hurricane Ian,10/1/2022,POST,0.0381,1.206549,0.676095,478,194,6,5,26,709,238
+1001-Kennedy-Green-Mobile-Homes.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/1/2022,POST,0.03458574,0.780769,0.362265,380,408,197,24,39,1048,177
+1001-McGregor-College-Pkwy-South.1.geo.tif,Train,Pix4d React,sUAS,DJI M300,Hurricane Ian,10/1/2022,POST,0.0383888,0.606403,0.346645,253,88,6,2,20,369,129
+1001-McGregor-College-Pkwy-South.2.geo.tif,Train,Pix4d React,sUAS,DJI M300,Hurricane Ian,10/1/2022,POST,0.01997849,1.497355,0.231827,193,73,1,1,13,281,125
+1001-McGregor-College-Pkwy-South.3.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/1/2022,POST,0.04620379,0.326396,0.270283,184,33,1,0,7,225,49
+1001-Palmeto-Palms.geo.tif,Train,Pix4d React,sUAS,"SenseFly eBee X, DJI Mavic 2",Hurricane Ian,10/1/2022,POST,0.0254,1.284458,0.319463,805,501,123,13,40,1482,415
+1001-San-Carlos-Island.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/1/2022,POST,0.04092435,0.688292,0.447148,228,222,73,55,7,585,92
+1001-Summerlin-San-Carlos.geo.tif,Train,Pix4d React,sUAS,"DJI Mavic 2, DJI M300",Hurricane Ian,10/1/2022,POST,0.04059608,1.657106,1.059053,1189,777,261,5,43,2275,465
+1002-Boca-Grande.1.geo.tif,Train,Pix4d React,sUAS,SenseFly eBee X,Hurricane Ian,10/2/2022,POST,0.02494279,4.907342,1.184005,413,252,45,2,10,722,259
+1002-Boca-Grande.2.geo.tif,Train,Pix4d React,sUAS,DJI M30T,Hurricane Ian,10/2/2022,POST,0.03797911,0.529044,0.295935,62,36,2,0,0,100,64
+1002-Boca-Grande.3.geo.tif,Train,Pix4d React,sUAS,DJI M30T,Hurricane Ian,10/2/2022,POST,0.03795145,0.621121,0.346936,103,48,4,1,2,158,75
+1002-Boca-Grande.4.geo.tif,Train,Pix4d React,sUAS,DJI M30T,Hurricane Ian,10/2/2022,POST,0.02474424,2.715481,0.644787,161,73,19,1,0,254,39
+1002-Boca-Grande.5.geo.tif,Train,Pix4d React,sUAS,DJI M30T,Hurricane Ian,10/2/2022,POST,0.03876947,1.221464,0.711986,165,69,23,0,2,259,173
+1002-Boca-Grande.6.geo.tif,Train,Pix4d React,sUAS,DJI M30T,Hurricane Ian,10/2/2022,POST,0.03911852,0.772041,0.458169,70,45,2,0,2,119,99
+1002-Ft-Myers-Beach-LCSO.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/2/2022,POST,0.03348839,1.402129,0.609954,285,262,51,191,16,805,250
+1002-Ft-Myers-Beach-TFD.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/2/2022,POST,0.03084663,1.30515,0.481725,362,203,51,148,8,772,242
+1002-Kelly-Road.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/2/2022,POST,0.0409004,0.290049,0.188209,134,33,5,1,2,175,82
+1002-Palm-Acers.1.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/2/2022,POST,0.0257488,0.787624,0.202554,86,59,14,1,7,167,78
+1002-Palm-Acers.2.geo.tif,Train,Pix4d React,sUAS,DJI M300,Hurricane Ian,10/2/2022,POST,0.03422865,0.85231,0.38733,121,65,6,0,2,194,73
+1002-Palm-Acers.3.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/2/2022,POST,0.04545927,0.280158,0.22457,22,30,2,0,1,55,28
+1002-Palm-Acers.4.geo.tif,Train,Pix4d React,sUAS,DJI Mavic 2,Hurricane Ian,10/2/2022,POST,0.03449714,0.704545,0.325225,405,193,53,4,43,698,146
+1002-Sanibel-Causeway-North.geo.tif,Train,Pix4d React,sUAS,Parrot Anafi,Hurricane Ian,10/2/2022,POST,0.03302688,0.109769,0.046443,4,3,0,1,3,11,9
+10132018-MexicoBeach.geo.tif,Test,Pix4d React,sUAS,DJI Mavic Pro,Hurricane Michael,10/13/2018,POST,0.01964606,4.118756,0.615833,54,119,120,206,11,510,106
+10142018-MexicoBeach.geo.tif,Test,Pix4d React,sUAS,DJI Mavic Pro,Hurricane Michael,10/14/2018,POST,0.01946466,5.331525,0.780707,107,249,186,83,10,635,204
+2018-05-18-X4S-visible-CentralPark.geo.tif,Train,Pix4d React,sUAS,DJI Phantom 4,Kilauea Eruption,5/18/2018,POST,0.07829941,0.488317,1.161738,228,14,2,22,5,271,94
+2018-05-18-X5-visible-Geothermal.geo.tif,Train,Pix4d React,sUAS,DJI M600,Kilauea Eruption,5/18/2018,POST,0.06672295,0.157314,0.271778,13,0,0,0,0,13,10
+2018-05-18-X5-visible-Kahukai.geo.tif,Train,Pix4d React,sUAS,DJI M600,Kilauea Eruption,5/18/2018,POST,0.06532729,0.475389,0.78729,58,11,2,28,2,101,46
+20210703-Champlain-Towers -South.geo.tif,Train,Agisoft Metashape,sUAS,DJI Mavic 2,Champlain Towers Collapse,7/3/2021,POST,0.0177465,0.246085,0.016037,3,0,1,0,0,4,1
+20210831-LA-DIV-01.geo.tif,Train,Pix4d React,sUAS,SenseFly eBee X,Hurricane Ida,8/31/2021,POST,0.02498188,4.218579,1.018774,148,212,155,21,9,545,221
+20210901-Cocodrie-1.geo.tif,Train,Pix4d React,sUAS,SenseFly eBee X,Hurricane Ida,9/1/2021,POST,0.03067822,0.492588,0.179542,28,21,54,11,0,114,60
+20210901-Cocodrie-2.geo.tif,Train,Pix4d React,sUAS,SenseFly eBee X,Hurricane Ida,9/1/2021,POST,0.03179036,0.124681,0.048798,4,0,14,0,1,19,17
+20210901-Cocodrie-3.geo.tif,Train,Pix4d React,sUAS,SenseFly eBee X,Hurricane Ida,9/1/2021,POST,0.03208422,0.367806,0.146628,10,7,43,5,4,69,49
+20210902-LA-DIV-01.geo.tif,Train,Pix4d React,sUAS,SenseFly eBee X,Hurricane Ida,9/2/2021,POST,0.03148086,1.540239,0.590704,58,100,116,69,5,348,89
+20211213-Candle-Factory-AO.geo.tif,Test,Pix4d React,sUAS,SenseFly eBee X,Mayfield Tornado,12/13/2021,POST,0.02927101,3.024511,1.002721,105,25,33,17,7,187,63
+20211214-Mayfield.geo.tif,Test,Pix4d React,sUAS,SenseFly eBee X,Mayfield Tornado,12/14/2021,POST,0.03110499,5.344009,2.000502,697,520,285,131,39,1672,423
+20211215-Russelville-Middle.geo.tif,Test,Pix4d React,sUAS,SenseFly eBee X,Mayfield Tornado,12/15/2021,POST,0.02197147,1.330187,0.248582,55,62,45,10,5,177,91
+20230830-SteinhatcheeRiver.geo.tif,Test,Pix4d React,sUAS,Wingtra WingtraOne Gen II,Hurricane Idalia,8/30/2023,POST,0.127,0.166005,1.036814,519,38,24,1,41,623,201
+20230831-Jena-SteinhatcheeRiverSouth.geo.tif,Test,Pix4d React,sUAS,Wingtra WingtraOne Gen II,Hurricane Idalia,8/31/2023,POST,0.127,0.185547,1.158868,128,11,3,1,16,159,61

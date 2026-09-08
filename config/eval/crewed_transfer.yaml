@@ -1,0 +1,23 @@
+# Cross-sensor transfer-evaluation data config (30 Aug): genuine crewed-aircraft imagery,
+# matched presentation. Used via ``src.postproc.ensemble --data-config`` to evaluate
+# sUAS-trained checkpoints (DROIDs-default split: Michael/Idalia/Mayfield/Mussett held
+# out) on the real crewed Michael + Idalia test mosaics — both events unseen by those
+# models in any form, labels from the crewed annotation source.
+#
+# chip_window_ground_m: 17.4 m = 512 px x 3.4 cm (the sUAS pool's median native GSD),
+# so chips present the same ground extent the models trained on; the crewed mosaic's
+# ~15-30 cm pixels are bilinearly enlarged to the 512 grid (the operational path for
+# feeding manned deliverables to a sUAS-native pipeline, and the mirror image of the
+# synthetic degradation chain's restoration step). Footprint masks rasterize on the
+# final chip grid from the crewed annotation polygons with their alignment adjustments.
+#
+# Interpretation guard: the label-agreement audit (outputs/label_agreement/summary.json)
+# measured cross-source label QWK at 0.83 (Michael) / 0.45 (Idalia) / 0.74 pooled on
+# co-annotated buildings, so scores here are bounded by annotation agreement, not only
+# by model quality.
+data:
+  dir: "data/"
+  chip_size: 512
+  holdout_event: ["Hurricane Michael", "Hurricane Idalia"]
+  sensor_profile: "manned_15cm"
+  chip_window_ground_m: 17.4

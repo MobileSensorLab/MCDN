@@ -1,0 +1,57 @@
+# Scale-preserving crewed-geometry preset (30 Aug; manifest rows 351-370). Companion to
+# downsample_crewed that isolates the chip-presentation term of the sUAS-vs-crewed gap:
+# instead of degrading resolution inside the native ~17 m ground window, the read window
+# widens to 7x the ground extent (chip_window_scale: 7.0, ~122 m median) and is area-
+# decimated to 512 px — reproducing the real crewed arm's chip geometry (wide context,
+# buildings at ~1/7 linear apparent size, footprint mask rasterized on the coarse grid)
+# while keeping sUAS pixels, sUAS labels, and the baseline chip inventory. Effective GSD
+# per final-chip pixel matches downsample_crewed (~23 cm median), so the pair differs
+# only in ground-window semantics: downsample_crewed = coarse pixels at native window
+# (matched presentation), this arm = coarse pixels at native crewed window (matched
+# deliverable geometry). The jitter fraction (25% of the read window) and validation
+# determinism are preserved by construction.
+data:
+  dir: "data/"
+  chip_size: 512
+  holdout_event: null
+  sensor_profile: "uas_5cm"
+  chip_window_scale: 7.0
+
+training:
+  epochs: 100
+  batch_size: 64
+  accum_steps: 2
+  lr: 1e-4
+  sampler_mode: "uniform"
+  class_weighting_enabled: true
+  class_weighting_power: 0.4
+  lr_plateau_patience: 4
+  label_smoothing: 0.02
+  max_grad_norm: 1.0
+
+model:
+  name: "convnextv2_nano.fcmae_ft_in22k_in1k"
+  pretrained: true
+  drop_path_rate: 0.10
+
+ablation:
+  mask_enabled: true
+  typology_enabled: true
+  mask_weighted_pooling_enabled: true
+  mask_dilation_px: 0
+
+runtime:
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 3
+  drop_last: true
+  val_batch_size_factor: 0.5
+  device: "auto"
+  seed: null
+  early_stopping_patience: 10
+  ema_enabled: true
+  ema_decay: 0.996
+  lr_drop_warmstart_from_best: true
+  reset_optimizer_on_lr_drop: false
+  checkpoint_root: "outputs/checkpoints"

@@ -21,7 +21,7 @@ model:
   pretrained: true
   drop_path_rate: 0.10
 
-# No-label-smoothing preset. All model toggles match baseline; only the adjacency-aware
+# No-label-smoothing preset. All model toggles match `all_features`; only the adjacency-aware
 # ordinal label smoothing is disabled (training.label_smoothing 0.02 -> 0.0), isolating
 # exactly the smoothing contribution to the squared-EMD training objective.
 ablation:

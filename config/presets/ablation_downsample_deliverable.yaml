@@ -1,0 +1,58 @@
+# Deliverable-matched resolution-degradation preset (30 Aug; manifest rows 331-350).
+# Companion to ablation_downsample_crewed: same factor-7.0 decimation to the crewed
+# pool's building-weighted GSD (median 25 cm), plus a product-referenced unsharp mask
+# (amount 0.2, sigma 1.0 low-res px) on the decimated grid before restoration —
+# mirroring the MTF-compensation/deconvolution step of operational ortho-production
+# chains (Pleiades ground restoration, QuickBird MTF resampling). The amount was
+# regressed against the three trustworthy overlapping Hurricane Ian crewed sorties
+# (scripts/validate_gsd_degradation.py machinery, 30 Aug): it minimizes the mean
+# absolute band-integrated log-power error (0.078 dex vs 0.155 sampling-only) and
+# lands the end-to-end transfer at 0.43-0.44 at the crewed Nyquist, inside the real
+# deliverables' measured 0.39-0.55 envelope. The pair brackets the delivered product:
+# downsample_crewed as the un-sharpened sensor floor, this arm as the shipped ortho.
+data:
+  dir: "data/"
+  chip_size: 512
+  holdout_event: null
+  sensor_profile: "uas_5cm"
+  synthetic_gsd_factor: 7.0
+  synthetic_gsd_post_sharpen: 0.2
+
+training:
+  epochs: 100
+  batch_size: 64
+  accum_steps: 2
+  lr: 1e-4
+  sampler_mode: "uniform"
+  class_weighting_enabled: true
+  class_weighting_power: 0.4
+  lr_plateau_patience: 4
+  label_smoothing: 0.02
+  max_grad_norm: 1.0
+
+model:
+  name: "convnextv2_nano.fcmae_ft_in22k_in1k"
+  pretrained: true
+  drop_path_rate: 0.10
+
+ablation:
+  mask_enabled: true
+  typology_enabled: true
+  mask_weighted_pooling_enabled: true
+  mask_dilation_px: 0
+
+runtime:
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 3
+  drop_last: true
+  val_batch_size_factor: 0.5
+  device: "auto"
+  seed: null
+  early_stopping_patience: 10
+  ema_enabled: true
+  ema_decay: 0.996
+  lr_drop_warmstart_from_best: true
+  reset_optimizer_on_lr_drop: false
+  checkpoint_root: "outputs/checkpoints"

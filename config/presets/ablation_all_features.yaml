@@ -15,21 +15,24 @@ training:
   lr_plateau_patience: 4
   label_smoothing: 0.02
   max_grad_norm: 1.0
-  loss: "ce"
 
 model:
   name: "convnextv2_nano.fcmae_ft_in22k_in1k"
   pretrained: true
   drop_path_rate: 0.10
 
-# Cross-entropy loss preset. All model toggles match `all_features`; only the training criterion
-# differs (categorical cross-entropy vs the full configuration's squared-EMD), isolating the ordinal-loss
-# contribution. The same per-class weight tensor applies to both losses; label smoothing under
-# CE is torch-standard uniform smoothing rather than adjacency-aware ordinal smoothing.
+# Full configuration: every MCDN component enabled (4th-channel footprint mask, mask-weighted
+# pooling, typology FiLM). This is the published reference configuration and the common
+# comparator for every ablation arm; it runs the full protocol (dataset-default split plus
+# LOEO Ida / Michael / Mayfield). Formerly named `baseline`; renamed 4 Sep 2026.
 ablation:
   mask_enabled: true
   typology_enabled: true
   mask_weighted_pooling_enabled: true
+  # Morphological dilation of the rasterized footprint mask in final-chip pixel units.
+  # Compensates for label-source under-segmentation (roof overhangs, eaves, attached
+  # structures). At 5 cm GSD, 10 px = 50 cm ground buffer. Set to 0 to disable and
+  # preserve legacy behavior byte-for-byte. An earlier pilot showed null effect at 5px; disabled.
   mask_dilation_px: 0
 
 runtime:

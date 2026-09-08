@@ -1,8 +1,18 @@
+# MTF-matched resolution-degradation preset. Identical to ablation_downsample_15cm
+# except the degradation adds a Gaussian optics pre-blur before decimation, targeting
+# Gaussian MTF ~= 0.3 at the new Nyquist (sigma = 0.494 * 3 ~= 1.48 source pixels).
+# Empirical validation against genuinely overlapping NOAA crewed ~15 cm mosaics
+# (scripts/validate_gsd_degradation.py, 29 Aug) measured the sampling-only arm's
+# end-to-end transfer at ~0.37 at Nyquist — matching the real sensors' 0.33-0.42 —
+# while this arm lands at ~0.12 effective: a deliberately pessimistic lower bound.
+# The pair brackets sensor quality from below, with sampling-only as the realistic match.
 data:
   dir: "data/"
   chip_size: 512
   holdout_event: null
   sensor_profile: "uas_5cm"
+  synthetic_gsd_factor: 3.0
+  synthetic_gsd_mtf_at_nyquist: 0.3
 
 training:
   epochs: 100
@@ -15,17 +25,12 @@ training:
   lr_plateau_patience: 4
   label_smoothing: 0.02
   max_grad_norm: 1.0
-  loss: "ce"
 
 model:
   name: "convnextv2_nano.fcmae_ft_in22k_in1k"
   pretrained: true
   drop_path_rate: 0.10
 
-# Cross-entropy loss preset. All model toggles match `all_features`; only the training criterion
-# differs (categorical cross-entropy vs the full configuration's squared-EMD), isolating the ordinal-loss
-# contribution. The same per-class weight tensor applies to both losses; label smoothing under
-# CE is torch-standard uniform smoothing rather than adjacency-aware ordinal smoothing.
 ablation:
   mask_enabled: true
   typology_enabled: true

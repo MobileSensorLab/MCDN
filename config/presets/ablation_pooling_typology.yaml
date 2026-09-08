@@ -15,19 +15,21 @@ training:
   lr_plateau_patience: 4
   label_smoothing: 0.02
   max_grad_norm: 1.0
-  loss: "ce"
 
 model:
   name: "convnextv2_nano.fcmae_ft_in22k_in1k"
   pretrained: true
   drop_path_rate: 0.10
 
-# Cross-entropy loss preset. All model toggles match `all_features`; only the training criterion
-# differs (categorical cross-entropy vs the full configuration's squared-EMD), isolating the ordinal-loss
-# contribution. The same per-class weight tensor applies to both losses; label smoothing under
-# CE is torch-standard uniform smoothing rather than adjacency-aware ordinal smoothing.
+# Pooling + typology preset (30 Aug, author-directed). Combines the two components the
+# 30 Aug ensemble matrices identified as carrying the architecture's value — mask-weighted
+# pooling (headline-column winner among mask roles) and typology FiLM (whose benefit
+# concentrates under event-type novelty, interacting super-additively with the mask
+# machinery on the Mayfield holdout) — while dropping the 4th-channel mask input, whose
+# gains were non-additive once pooling is present. The one cell the existing factorial
+# cannot adjudicate: whether a leaner channel-free configuration matches `all_features`.
 ablation:
-  mask_enabled: true
+  mask_enabled: false
   typology_enabled: true
   mask_weighted_pooling_enabled: true
   mask_dilation_px: 0

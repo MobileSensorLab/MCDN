@@ -14,7 +14,7 @@ Two modes:
 
 Deployment-mode usage:
     uv run python -m scripts.profile_mcdn_inference --deployment \
-        --checkpoint-dir outputs/ablation/baseline/Spatial_Block_East/seed_00 \
+        --checkpoint-dir outputs/ablation/all_features/Spatial_Block_East/seed_00 \
         --deployment-batch-sizes 1 16 64 --output-json outputs/ablation/latency_profile.json
 """
 
@@ -40,7 +40,7 @@ from src.data.dataset import to_normalized_float
 from src.model.mcdn import MaskCenteredDamageNet
 from src.postproc.ensemble import ensemble_mean_tta_probs, tta_mean_softmax_probs
 
-DEFAULT_CHECKPOINT_DIR = Path("outputs/ablation/baseline/Spatial_Block_East/seed_00")
+DEFAULT_CHECKPOINT_DIR = Path("outputs/ablation/all_features/Spatial_Block_East/seed_00")
 
 # Operational yardstick: the deployed CRASAR baseline assessed 415 buildings in ~18 min
 # at Hurricanes Debby/Helene; used as a citable time-to-assessment anchor in T-8.

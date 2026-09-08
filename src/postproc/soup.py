@@ -30,7 +30,7 @@ Usage::
 
     from src.postproc.soup import build_uniform_soup
 
-    paths = [Path(f"outputs/ablation/baseline/Spatial_Block_East/seed_{s:02d}/best_model.pt")
+    paths = [Path(f"outputs/ablation/all_features/Spatial_Block_East/seed_{s:02d}/best_model.pt")
              for s in (0, 11, 22, 33, 44, 55, 66, 77, 88, 99)]
     soup_state = build_uniform_soup(checkpoint_paths=paths, average_key_prefixes=("backbone.",))
     model.load_state_dict(soup_state, strict=True)

@@ -24,14 +24,14 @@ next to the variant root under ``prediction_rule_probe.json``.
 This script does not train anything, does not mutate any existing files, and
 only touches data loaders / model forward passes. Run from the repo root.
 
-Status: diagnostic-only. The findings produced here motivated the canonical
+Status: diagnostic-only. The findings produced here motivated the adopted
 choice of the hybrid rule at ensemble time (see ``src/postproc/ensemble.py``
 and ``doc/4-modeling.qmd`` §Inference pipeline). Retained as a reproducibility
 artifact and for per-seed probing under new training configurations.
 
 Usage:
     uv run python -m scripts.probe_prediction_rule \
-        --variant-root outputs/ablation/baseline \
+        --variant-root outputs/ablation/all_features \
         --seeds 11 22 33 44 55 \
         --data-dir data \
         --device auto
@@ -150,6 +150,10 @@ def build_val_loader_from_config(cfg: dict, data_dir_override: str | None = None
         seed=runtime_cfg.get("seed"),
         sampler_mode=training_cfg.get("sampler_mode", "uniform"),
         synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0),
+        synthetic_gsd_mtf_at_nyquist=data_cfg.get("synthetic_gsd_mtf_at_nyquist"),
+        synthetic_gsd_post_sharpen=data_cfg.get("synthetic_gsd_post_sharpen"),
+        chip_window_scale=data_cfg.get("chip_window_scale", 1.0),
+        chip_window_ground_m=data_cfg.get("chip_window_ground_m"),
     )
     return val_loader, holdout
 
@@ -264,7 +268,7 @@ def main() -> None:
     """CLI entry point for probing EV vs argmax prediction rules on trained checkpoints."""
 
     parser = argparse.ArgumentParser(description="Probe EV vs argmax prediction rules on trained checkpoints.")
-    parser.add_argument("--variant-root", type=Path, default=Path("outputs/ablation/baseline"))
+    parser.add_argument("--variant-root", type=Path, default=Path("outputs/ablation/all_features"))
     parser.add_argument("--seeds", type=int, nargs="+", default=list(DEFAULT_SEEDS))
     parser.add_argument("--data-dir", type=str, default=None,
                         help="Override the data root recorded in each seed's config_resolved.yaml.")

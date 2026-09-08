@@ -17,7 +17,7 @@ Ensemble strategies reported:
 Prediction rules applied to each ensemble probability tensor:
     - EV:     ``floor(sum_i i * p(i) + 0.5)`` -- ordinal-aware, optimizes QWK.
     - argmax: ``argmax_i p(i)`` -- categorical, optimizes macro F1 / accuracy;
-              promoted to canonical after the per-arm sweep landed because it
+              promoted to the primary rule after the per-arm sweep landed because it
               dominates hybrid on F1/accuracy across all 11 arm/split directories
               while staying within ~0.005 QWK of EV.
     - hybrid: argmax on extreme classes (0, K-1), else EV rounding -- retained
@@ -36,14 +36,14 @@ Outputs:
     - JSON artifact at ``outputs/ablation/ensemble_inference.json`` (overridable)
 
 Layout:
-    Operates on the canonical ablation layout
+    Operates on the standard ablation layout
     ``<variant>/<split>/seed_<n>/{best_model.pt, config_resolved.yaml}``. The
     ``--split`` argument selects the split directory name (default:
     ``Spatial_Block_East``).
 
 Usage:
     uv run python -m src.postproc.ensemble \
-        --variant-roots outputs/ablation/baseline outputs/ablation/no-mask \
+        --variant-roots outputs/ablation/all_features outputs/ablation/no-mask \
                          outputs/ablation/context outputs/ablation/resolution \
         --split Spatial_Block_East
 """
@@ -236,6 +236,10 @@ def build_val_loader_from_config(cfg: dict, data_dir_override: str | None = None
         sampler_mode=training_cfg.get("sampler_mode", "uniform"),
         mask_dilation_px=ablation.get("mask_dilation_px", 0),
         synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0),
+        synthetic_gsd_mtf_at_nyquist=data_cfg.get("synthetic_gsd_mtf_at_nyquist"),
+        synthetic_gsd_post_sharpen=data_cfg.get("synthetic_gsd_post_sharpen"),
+        chip_window_scale=data_cfg.get("chip_window_scale", 1.0),
+        chip_window_ground_m=data_cfg.get("chip_window_ground_m"),
     )
     return val_loader, holdout
 
@@ -264,9 +268,13 @@ def build_deterministic_train_loader_from_config(cfg: dict, data_dir_override: s
     train_dataset = CRASARUnitemporalDataset(
         train_df,
         chip_size=data_cfg["chip_size"],
-        transform=get_val_transforms(synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0)),
+        transform=get_val_transforms(synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0),
+                                     synthetic_gsd_mtf_at_nyquist=data_cfg.get("synthetic_gsd_mtf_at_nyquist"),
+                                     synthetic_gsd_post_sharpen=data_cfg.get("synthetic_gsd_post_sharpen")),
         is_train=False,
         mask_dilation_px=ablation.get("mask_dilation_px", 0),
+        window_scale=data_cfg.get("chip_window_scale", 1.0),
+        window_ground_m=data_cfg.get("chip_window_ground_m"),
     )
 
     if runtime_cfg["persistent_workers"] and runtime_cfg["num_workers"] == 0:
@@ -441,13 +449,24 @@ def format_metric_line(label: str, m: dict) -> str:
 # Orchestration -----------------------------------------------------------
 
 def run_variant(variant_root: Path, seeds: list[int], split_name: str, data_dir: str | None,
-                device: str) -> dict:
+                device: str, data_override: dict | None = None) -> dict:
     """Build val loader from first seed's config; run TTA over every seed.
 
-    The canonical ablation layout places each seed at
+    The standard ablation layout places each seed at
     ``<variant_root>/<split_name>/seed_<n>/`` with ``best_model.pt`` and
     ``config_resolved.yaml`` written directly into the seed directory (no ``fold_*``
     subdir).
+
+    Args:
+        variant_root: ``outputs/ablation/<variant>`` directory.
+        seeds: Seeds to attempt (missing seed directories are skipped).
+        split_name: Fold directory name used to locate checkpoints.
+        data_dir: Optional data-root override.
+        device: Resolved torch device string.
+        data_override: Optional replacement for the seeds' resolved ``data`` config
+            (transfer evaluation on a corpus the models were not trained on). The val
+            loader is built from this section instead; the replay-vs-stored check is
+            reported as not applicable since stored metrics describe a different pool.
 
     Returns a dict with:
         - per_seed: list of {seed, probs [T,K], replay under each rule}
@@ -469,6 +488,14 @@ def run_variant(variant_root: Path, seeds: list[int], split_name: str, data_dir:
 
     first_seed = sorted(fold_dirs.keys())[0]
     first_cfg = load_resolved_config(fold_dirs[first_seed])
+    if data_override is not None:
+        # Replace the data section wholesale and force explicit holdout selection so the
+        # override's holdout_event governs the fold, not the checkpoints' split metadata.
+        first_cfg = {**first_cfg, "data": dict(data_override)}
+        first_cfg["metadata"] = {**first_cfg.get("metadata", {}), "holdout_selection": "explicit"}
+        print(f"  data override active: sensor_profile={data_override.get('sensor_profile')}  "
+              f"holdout_event={data_override.get('holdout_event')}  "
+              f"chip_window_ground_m={data_override.get('chip_window_ground_m')}")
 
     t0 = time.time()
     val_loader, holdout_event = build_val_loader_from_config(cfg=first_cfg, data_dir_override=data_dir)
@@ -506,13 +533,22 @@ def run_variant(variant_root: Path, seeds: list[int], split_name: str, data_dir:
                 )
 
         replay = metrics_under_all_rules(probs=probs, targets=targets)
-        replay_delta = replay["EV"]["qwk"] - stored_qwk
-        replay_ok = abs(replay_delta) <= REPLAY_TOLERANCE
-        tag = "OK" if replay_ok else "!!"
-        f1_str = f"  stored_F1={stored_f1:.4f}" if stored_f1 is not None else ""
-        print(f"  seed {seed}: replay EV QWK={replay['EV']['qwk']:.4f} "
-              f"(stored={stored_qwk:.4f} delta={replay_delta:+.4f} [{tag}])  "
-              f"F1={replay['EV']['macro_f1']:.4f}{f1_str}  ({inf_seconds:.1f}s)")
+        if data_override is not None:
+            # Stored metrics describe the training-time val pool, not the override pool;
+            # the delta is meaningless here so the check is reported as not applicable.
+            replay_delta = None
+            replay_ok = None
+            print(f"  seed {seed}: transfer EV QWK={replay['EV']['qwk']:.4f} "
+                  f"(stored={stored_qwk:.4f} on training-time pool [n/a])  "
+                  f"F1={replay['EV']['macro_f1']:.4f}  ({inf_seconds:.1f}s)")
+        else:
+            replay_delta = replay["EV"]["qwk"] - stored_qwk
+            replay_ok = abs(replay_delta) <= REPLAY_TOLERANCE
+            tag = "OK" if replay_ok else "!!"
+            f1_str = f"  stored_F1={stored_f1:.4f}" if stored_f1 is not None else ""
+            print(f"  seed {seed}: replay EV QWK={replay['EV']['qwk']:.4f} "
+                  f"(stored={stored_qwk:.4f} delta={replay_delta:+.4f} [{tag}])  "
+                  f"F1={replay['EV']['macro_f1']:.4f}{f1_str}  ({inf_seconds:.1f}s)")
 
         all_probs.append(probs)
         per_seed_records.append({
@@ -580,7 +616,7 @@ def print_summary_table(variant_results: list[dict], cross_results: dict) -> Non
     """Print one clean summary table across variants and cross-variant ensembles."""
 
     print("\n" + "=" * 100)
-    print("SUMMARY (argmax = canonical ensemble rule; EV + hybrid retained as comparative references)")
+    print("SUMMARY (argmax = primary ensemble rule; EV + hybrid retained as comparative references)")
     print("=" * 100)
     header = (f"{'variant':<32s}  {'N':>3s}  {'EV-F1':>7s}  {'arg-F1':>7s}  {'hyb-F1':>7s}"
               f"  {'EV-QWK':>7s}  {'arg-QWK':>7s}  {'hyb-QWK':>7s}  {'EV-acc':>7s}")
@@ -609,7 +645,7 @@ def print_summary_table(variant_results: list[dict], cross_results: dict) -> Non
           f"{es_m['EV']['qwk']:>7.4f}  {es_m['argmax']['qwk']:>7.4f}  {es_m['hybrid']['qwk']:>7.4f}  "
           f"{es_m['EV']['accuracy']:>7.4f}")
 
-    print("\nCanonical reporting line = argmax rule (post-sweep selection: dominates hybrid on F1/"
+    print("\nHeadline reporting line = argmax rule (post-sweep selection: dominates hybrid on F1/"
           "accuracy across all 11 arm/split arms; EV / hybrid retained above for ablation context).")
 
     # per-class F1 breakdown on the winning cross-variant ensemble (best F1 across rules)
@@ -704,7 +740,7 @@ def main() -> None:
                         help="Seeds to attempt per variant (missing ones are silently skipped).")
     parser.add_argument("--split", type=str, default="Spatial_Block_East",
                         help="Split/fold directory name under each variant root "
-                             "(``<variant>/<split>/seed_<n>/``). Defaults to the canonical "
+                             "(``<variant>/<split>/seed_<n>/``). Defaults to the "
                              "east/west spatial-block holdout.")
     parser.add_argument("--data-dir", type=str, default=None,
                         help="Override the data root recorded in each seed's config_resolved.yaml.")
@@ -713,7 +749,18 @@ def main() -> None:
                         default=Path("outputs/ablation/ensemble_inference.json"))
     parser.add_argument("--prob-cache", type=Path, default=None,
                         help="Optional path to dump per-seed + ensemble probability tensors (.pt).")
+    parser.add_argument("--data-config", type=Path, default=None,
+                        help="Optional YAML whose data: section replaces every seed's resolved data "
+                             "config (transfer evaluation on a corpus the models were not trained on). "
+                             "Disables the replay-vs-stored check.")
     args = parser.parse_args()
+
+    data_override: dict | None = None
+    if args.data_config is not None:
+        override_doc = yaml.safe_load(args.data_config.read_text(encoding="utf-8"))
+        if not isinstance(override_doc, dict) or "data" not in override_doc:
+            raise ValueError(f"--data-config file must contain a top-level 'data:' section: {args.data_config}")
+        data_override = override_doc["data"]
 
     first_variant = args.variant_roots[0]
     first_seed_dir = next((first_variant / args.split / f"seed_{s:02d}" for s in args.seeds
@@ -738,6 +785,7 @@ def main() -> None:
             split_name=args.split,
             data_dir=args.data_dir,
             device=resolved_device,
+            data_override=data_override,
         )
         variant_results.append(result)
 

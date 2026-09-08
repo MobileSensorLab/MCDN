@@ -16,8 +16,8 @@ Reports:
 
 Usage:
     uv run python -m src.postproc.calibrate \
-        --prob-cache outputs/ablation/baseline/Spatial_Block_East/ensemble_probs.pt \
-        --output-json outputs/ablation/baseline/Spatial_Block_East/calibration.json
+        --prob-cache outputs/ablation/all_features/Spatial_Block_East/ensemble_probs.pt \
+        --output-json outputs/ablation/all_features/Spatial_Block_East/calibration.json
 """
 
 import argparse

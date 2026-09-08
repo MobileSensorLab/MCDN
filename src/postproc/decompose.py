@@ -19,9 +19,9 @@ Outputs:
 
 Usage:
     uv run python -m src.postproc.decompose \
-        --variant-roots outputs/ablation/baseline \
+        --variant-roots outputs/ablation/all_features \
         --split Spatial_Block_East \
-        --view-cache outputs/ablation/baseline/Spatial_Block_East/view_probs.pt
+        --view-cache outputs/ablation/all_features/Spatial_Block_East/view_probs.pt
 """
 
 import argparse

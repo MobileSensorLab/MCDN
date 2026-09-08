@@ -36,7 +36,7 @@ Outputs:
 
 Usage:
     uv run python -m scripts.eval_mask_robustness \
-        --variant-roots outputs/ablation/baseline \
+        --variant-roots outputs/ablation/all_features \
         --split Spatial_Block_East \
         --conditions aligned raw_cache offset:15 offset:60 offset:75 offset:150 offset:240 mask_zero:auto \
         --data-dir data \
@@ -390,7 +390,9 @@ def build_perturbed_val_loader(cfg: dict, val_df: pd.DataFrame, perturbation: Pe
         val_df,
         perturbation=perturbation,
         chip_size=data_cfg["chip_size"],
-        transform=get_val_transforms(synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0)),
+        transform=get_val_transforms(synthetic_gsd_factor=data_cfg.get("synthetic_gsd_factor", 1.0),
+                                     synthetic_gsd_mtf_at_nyquist=data_cfg.get("synthetic_gsd_mtf_at_nyquist"),
+                                     synthetic_gsd_post_sharpen=data_cfg.get("synthetic_gsd_post_sharpen")),
         mask_dilation_px=ablation.get("mask_dilation_px", 0),
         cache_validation_tensors=False,
     )

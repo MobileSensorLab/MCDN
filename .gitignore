@@ -7,18 +7,37 @@ __pycache__
 .venv/
 *.py[oc]
 *.egg-info
+_*
 build/
 dist/
 wheels/
-outputs/
+*.bundle
 
-# Include the data folder and top-level files, but ignore the ~400GB files within the subfolders
+# Experiment outputs: track the result artifacts (metrics, configs, prediction caches) for the
+# directories the paper draws on; ignore everything else under outputs/. Trained checkpoints
+# (best_model.pt, ~134 MB each) are published on Hugging Face (mobilesensorlab/mcdn) and
+# fetched with scripts/fetch_checkpoints.py rather than tracked here.
+outputs/*
+!outputs/ablation/
+!outputs/ablation/_ensembles/
+!outputs/crewed_displacement/
+!outputs/crewed_transfer/
+!outputs/decomposition/
+!outputs/error_mining/
+!outputs/gsd_validation/
+!outputs/gsd_validation_7x/
+!outputs/label_agreement/
+!outputs/mask_robustness/
+!outputs/soup/
+!outputs/spatial_autocorr/
+!outputs/spatial_context/
+outputs/**/best_model.pt
+outputs/**/split_summary.json
+outputs/**/classification_metrics.json
+outputs/ablation/.cache/
+outputs/ablation/MANIFEST.json
+
+# Include the data folder and top-level files (statistics.csv) but ignore the ~200 GB dataset within.
+# data/readme/ holds README assets and stays tracked.
 data/*/*
-
-# Documentation artifacts (quarto wiki will be rendered from _freeze through a CI/CD loop)
-doc/.quarto/
-doc/_book/
-doc/_wiki/
-doc/site_libs/
-doc/*_files/
-**/*.quarto_ipynb
+!data/readme/**

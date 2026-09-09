@@ -46,7 +46,7 @@ Per-seed columns are mean ± SD over ten seeds; ensemble columns average those t
 | LOEO Mayfield Tornado | 0.849 ± 0.007 | 0.751 ± 0.014 | **0.862** | **0.768** |
 | LOEO Hurricane Ida | 0.752 ± 0.010 | 0.686 ± 0.008 | **0.762** | **0.693** |
 
-<img src="data/readme/confusion_triptych.svg" alt="10-seed ensemble confusion matrices on the four holdouts, row-normalized" width="858">
+<img src="data/readme/confusion_triptych.svg" alt="10-seed ensemble confusion matrices on the four holdouts, row-normalized" width="792">
 
 Three of the four holdouts fall within 0.01 of one another.
 Hurricane Ida is the exception, and its deficit traces to a single class boundary: most of Ida's severe errors are structures with intact roofs surrounded by storm

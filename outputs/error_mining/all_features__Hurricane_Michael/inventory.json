@@ -1,0 +1,2829 @@
+{
+  "variant_root": "outputs\\ablation_dgx\\all_features",
+  "split": "Hurricane_Michael",
+  "probs_cache": "outputs\\ablation_dgx\\_ensembles\\all_features__Hurricane_Michael_probs.pt",
+  "summary": {
+    "n_instances": 1110,
+    "n_errors": 244,
+    "n_severe": 28,
+    "n_adjacent": 216,
+    "under_call": 195,
+    "over_call": 49,
+    "error_confidence": {
+      "median": 0.6872881650924683,
+      "frac_gt_0.9": 0.15163934230804443
+    },
+    "correct_confidence": {
+      "median": 0.9262038469314575,
+      "frac_gt_0.9": 0.5923787355422974
+    },
+    "errors_unanimous_across_seeds": 140,
+    "severe_unanimous_across_seeds": 14,
+    "transitions_true_x_pred": [
+      [
+        0,
+        17,
+        0,
+        1
+      ],
+      [
+        68,
+        0,
+        15,
+        4
+      ],
+      [
+        17,
+        87,
+        0,
+        12
+      ],
+      [
+        1,
+        5,
+        17,
+        0
+      ]
+    ],
+    "by_event": {
+      "Hurricane Michael": {
+        "n": 1110,
+        "errors": 244,
+        "severe": 28,
+        "under_call": 195,
+        "over_call": 49
+      }
+    },
+    "mechanical_flags_in_top_severe": {
+      "nodata_gt_5pct": 0,
+      "mask_at_border": 14,
+      "mask_empty": 0
+    },
+    "stratification": [
+      {
+        "mask_frac_bin": [
+          0.0,
+          0.05
+        ],
+        "n": 0,
+        "error_rate": null,
+        "severe_rate": null
+      },
+      {
+        "mask_frac_bin": [
+          0.05,
+          0.15
+        ],
+        "n": 1,
+        "error_rate": 0.0,
+        "severe_rate": 0.0
+      },
+      {
+        "mask_frac_bin": [
+          0.15,
+          0.3
+        ],
+        "n": 0,
+        "error_rate": null,
+        "severe_rate": null
+      },
+      {
+        "mask_frac_bin": [
+          0.3,
+          0.6
+        ],
+        "n": 69,
+        "error_rate": 0.2608695652173913,
+        "severe_rate": 0.07246376811594203
+      },
+      {
+        "mask_frac_bin": [
+          0.6,
+          0.9
+        ],
+        "n": 378,
+        "error_rate": 0.18518518518518517,
+        "severe_rate": 0.021164021164021163
+      },
+      {
+        "mask_frac_bin": [
+          0.9,
+          1.0
+        ],
+        "n": 662,
+        "error_rate": 0.23564954682779457,
+        "severe_rate": 0.022658610271903322
+      },
+      {
+        "group": "mask_at_border",
+        "n": 1096,
+        "error_rate": 0.21897810218978103,
+        "severe_rate": 0.02281021897810219
+      },
+      {
+        "group": "mask_interior",
+        "n": 14,
+        "error_rate": 0.2857142857142857,
+        "severe_rate": 0.21428571428571427
+      },
+      {
+        "group": "nodata_gt_5pct",
+        "n": 9,
+        "error_rate": 0.0,
+        "severe_rate": 0.0
+      }
+    ]
+  },
+  "severe_errors": [
+    {
+      "index": 581,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 0,
+      "pred": 3,
+      "severity": 3,
+      "confidence": 0.5822881460189819,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0609,
+        0.1735,
+        0.1833,
+        0.5823
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9378623962402344,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 378,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 0,
+      "severity": 3,
+      "confidence": 0.3793138861656189,
+      "seed_agreement": 6,
+      "n_seeds": 10,
+      "probs": [
+        0.3793,
+        0.348,
+        0.253,
+        0.0197
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.45378875732421875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 146,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.9591039419174194,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9591,
+        0.039,
+        0.0016,
+        0.0004
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 180,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.9436609148979187,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9437,
+        0.0507,
+        0.0048,
+        0.0008
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 684,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.9401084184646606,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9401,
+        0.0534,
+        0.0053,
+        0.0012
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 505,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.9090418815612793,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.909,
+        0.082,
+        0.0078,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9644927978515625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 293,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.8587806820869446,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8588,
+        0.1327,
+        0.0075,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7055130004882812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 935,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.8410129547119141,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.841,
+        0.1262,
+        0.0303,
+        0.0025
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 798,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.7877572774887085,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7878,
+        0.2,
+        0.0103,
+        0.0019
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8278579711914062,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 242,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.7860191464424133,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.786,
+        0.1976,
+        0.0147,
+        0.0017
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7587509155273438,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 73,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 1,
+      "severity": 2,
+      "confidence": 0.7626716494560242,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0832,
+        0.7627,
+        0.1461,
+        0.008
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 149,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.7605999112129211,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7606,
+        0.2128,
+        0.0243,
+        0.0023
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 923,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.6418971419334412,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.6419,
+        0.316,
+        0.0364,
+        0.0058
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 448,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 1,
+      "severity": 2,
+      "confidence": 0.5780250430107117,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.0101,
+        0.578,
+        0.3761,
+        0.0358
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4645042419433594,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 418,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.568999171257019,
+      "seed_agreement": 8,
+      "n_seeds": 10,
+      "probs": [
+        0.1903,
+        0.1797,
+        0.061,
+        0.569
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.692596435546875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 323,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.5689975023269653,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0392,
+        0.1451,
+        0.2467,
+        0.569
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.490325927734375,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 632,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 1,
+      "severity": 2,
+      "confidence": 0.5558539032936096,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.2195,
+        0.5559,
+        0.2084,
+        0.0163
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.669403076171875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 523,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.5418790578842163,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.0088,
+        0.1035,
+        0.3458,
+        0.5419
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5692520141601562,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 336,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.5284532904624939,
+      "seed_agreement": 8,
+      "n_seeds": 10,
+      "probs": [
+        0.5285,
+        0.3753,
+        0.085,
+        0.0112
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8815078735351562,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 609,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.5215887427330017,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.5216,
+        0.3394,
+        0.1333,
+        0.0057
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 113,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.49725136160850525,
+      "seed_agreement": 6,
+      "n_seeds": 10,
+      "probs": [
+        0.4973,
+        0.483,
+        0.0182,
+        0.0015
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9358367919921875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 687,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.4737119674682617,
+      "seed_agreement": 6,
+      "n_seeds": 10,
+      "probs": [
+        0.4737,
+        0.4429,
+        0.0763,
+        0.0071
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.986083984375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 436,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.47061866521835327,
+      "seed_agreement": 6,
+      "n_seeds": 10,
+      "probs": [
+        0.4706,
+        0.3631,
+        0.09,
+        0.0763
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8657341003417969,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 82,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 1,
+      "severity": 2,
+      "confidence": 0.469789981842041,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.111,
+        0.4698,
+        0.3149,
+        0.1043
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9615936279296875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 27,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.4637318551540375,
+      "seed_agreement": 4,
+      "n_seeds": 10,
+      "probs": [
+        0.4637,
+        0.4603,
+        0.0594,
+        0.0166
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8233795166015625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 824,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.44581207633018494,
+      "seed_agreement": 5,
+      "n_seeds": 10,
+      "probs": [
+        0.4458,
+        0.4434,
+        0.1032,
+        0.0075
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9913101196289062,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 217,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 1,
+      "severity": 2,
+      "confidence": 0.3777790665626526,
+      "seed_agreement": 6,
+      "n_seeds": 10,
+      "probs": [
+        0.1797,
+        0.3778,
+        0.1521,
+        0.2904
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9548683166503906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 896,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.37531790137290955,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.073,
+        0.2904,
+        0.2613,
+        0.3753
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5706863403320312,
+      "mask_at_border": false,
+      "mask_empty": false
+    }
+  ],
+  "adjacent_errors": [
+    {
+      "index": 173,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9844277501106262,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0003,
+        0.0011,
+        0.0142,
+        0.9844
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9535903930664062,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1000,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.972286581993103,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.008,
+        0.9723,
+        0.0192,
+        0.0005
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9487342834472656,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 634,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9722188115119934,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0019,
+        0.9722,
+        0.0255,
+        0.0004
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 445,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.971409022808075,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9714,
+        0.0265,
+        0.0017,
+        0.0004
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.92108154296875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 559,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.9712317585945129,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0011,
+        0.0152,
+        0.9712,
+        0.0125
+      ],
+      "nodata_frac": 0.03633880615234375,
+      "mask_frac": 0.9717254638671875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1038,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9642102122306824,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0054,
+        0.9642,
+        0.0296,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8872413635253906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1029,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9623697400093079,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0086,
+        0.9624,
+        0.0284,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.990478515625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 804,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9619144201278687,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0064,
+        0.9619,
+        0.031,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8485794067382812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 891,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9607135057449341,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.022,
+        0.9607,
+        0.0167,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9563751220703125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 312,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9555761218070984,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0008,
+        0.0041,
+        0.0395,
+        0.9556
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8577461242675781,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 749,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9544196128845215,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0028,
+        0.9544,
+        0.042,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8815269470214844,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 990,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9527848958969116,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.004,
+        0.9528,
+        0.0422,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8160362243652344,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 310,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.950262725353241,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9503,
+        0.0461,
+        0.003,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.932830810546875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 110,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.9447714686393738,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0013,
+        0.0061,
+        0.9448,
+        0.0478
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.999237060546875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1018,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9422746896743774,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0031,
+        0.9423,
+        0.0538,
+        0.0008
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 365,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9420803189277649,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0076,
+        0.9421,
+        0.0494,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9711952209472656,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 890,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9411031603813171,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9411,
+        0.0554,
+        0.0029,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9027900695800781,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 215,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9385765194892883,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0124,
+        0.9386,
+        0.0475,
+        0.0015
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9966659545898438,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 705,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9365836381912231,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0128,
+        0.9366,
+        0.0458,
+        0.0049
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9393157958984375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 618,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9305413365364075,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0432,
+        0.9305,
+        0.0253,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9652290344238281,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 309,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.929083526134491,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0006,
+        0.005,
+        0.0654,
+        0.9291
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1050,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9256305694580078,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0402,
+        0.9256,
+        0.0322,
+        0.002
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.891693115234375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 384,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9224470257759094,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9224,
+        0.0705,
+        0.0061,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9734306335449219,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 545,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.92230623960495,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0018,
+        0.0718,
+        0.9223,
+        0.0041
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8443565368652344,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 449,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9189978837966919,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.919,
+        0.0741,
+        0.0059,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7807121276855469,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 264,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.9134931564331055,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0014,
+        0.0074,
+        0.9135,
+        0.0777
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 368,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9126256108283997,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9126,
+        0.0792,
+        0.0072,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 997,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9111234545707703,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9111,
+        0.0842,
+        0.0037,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.83319091796875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1109,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9104909896850586,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9105,
+        0.0843,
+        0.0044,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.91229248046875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1048,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9039568901062012,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.904,
+        0.0891,
+        0.0059,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9777183532714844,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 791,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9036267399787903,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9036,
+        0.0929,
+        0.003,
+        0.0005
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8431777954101562,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 901,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9019099473953247,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9019,
+        0.0901,
+        0.0068,
+        0.0012
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9750709533691406,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1023,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9009838104248047,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.075,
+        0.901,
+        0.0227,
+        0.0013
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9858627319335938,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 239,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8989589810371399,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0037,
+        0.899,
+        0.095,
+        0.0023
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8885421752929688,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 761,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8980337381362915,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0435,
+        0.898,
+        0.0567,
+        0.0018
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8817405700683594,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 139,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8950284123420715,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0037,
+        0.0234,
+        0.0779,
+        0.895
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9868736267089844,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 818,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8925195932388306,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0503,
+        0.8925,
+        0.0552,
+        0.002
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7108497619628906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1098,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8906818628311157,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8907,
+        0.1056,
+        0.0033,
+        0.0005
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5310249328613281,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 857,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8905329704284668,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0283,
+        0.8905,
+        0.0782,
+        0.0029
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9473533630371094,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 128,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8807830810546875,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8808,
+        0.115,
+        0.0034,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9745216369628906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 276,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8708168268203735,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0135,
+        0.0465,
+        0.8708,
+        0.0692
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 137,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8687102198600769,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.006,
+        0.8687,
+        0.1216,
+        0.0037
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9780998229980469,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 120,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8640760183334351,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8641,
+        0.1163,
+        0.0181,
+        0.0016
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1055,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.860506534576416,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0069,
+        0.8605,
+        0.104,
+        0.0285
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5771942138671875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 417,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8507851362228394,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0471,
+        0.8508,
+        0.0973,
+        0.0049
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.994598388671875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 372,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8458245396614075,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8458,
+        0.1447,
+        0.0078,
+        0.0017
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.949432373046875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 789,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8446413278579712,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0324,
+        0.8446,
+        0.1194,
+        0.0035
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9370956420898438,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 472,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8429750204086304,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.009,
+        0.843,
+        0.1448,
+        0.0032
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9990234375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 828,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8421615362167358,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0465,
+        0.8422,
+        0.1072,
+        0.0041
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9508743286132812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 185,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8412481546401978,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8412,
+        0.15,
+        0.0075,
+        0.0012
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9509086608886719,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 950,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8376750946044922,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0023,
+        0.128,
+        0.8377,
+        0.0321
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 12,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8349312543869019,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1176,
+        0.8349,
+        0.0458,
+        0.0017
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 879,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8297195434570312,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0085,
+        0.8297,
+        0.1565,
+        0.0053
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9578475952148438,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 380,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8294650912284851,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.059,
+        0.8295,
+        0.1074,
+        0.0041
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.915740966796875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 558,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8281240463256836,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0394,
+        0.8281,
+        0.129,
+        0.0035
+      ],
+      "nodata_frac": 0.02117919921875,
+      "mask_frac": 0.9756126403808594,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 434,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8277378082275391,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8277,
+        0.1498,
+        0.0194,
+        0.003
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 766,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.827405571937561,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.001,
+        0.0069,
+        0.1646,
+        0.8274
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 549,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8270787000656128,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0075,
+        0.8271,
+        0.1626,
+        0.0028
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9107666015625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 373,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8264625668525696,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0933,
+        0.8265,
+        0.0768,
+        0.0034
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9754524230957031,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 640,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8224086761474609,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0063,
+        0.8224,
+        0.1668,
+        0.0044
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9778900146484375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 937,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8213785886764526,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0048,
+        0.1386,
+        0.8214,
+        0.0352
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 92,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8196239471435547,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8196,
+        0.16,
+        0.0183,
+        0.002
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 869,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.810388445854187,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1469,
+        0.8104,
+        0.0402,
+        0.0025
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8292198181152344,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 95,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8103346824645996,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.026,
+        0.8103,
+        0.1501,
+        0.0136
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8132057189941406,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 607,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8070173263549805,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.807,
+        0.1816,
+        0.0099,
+        0.0015
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.67254638671875,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 882,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8060657382011414,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8061,
+        0.1777,
+        0.0133,
+        0.003
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9256553649902344,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 358,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8050251007080078,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.805,
+        0.1801,
+        0.0135,
+        0.0014
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8388175964355469,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1089,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8048931956291199,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0254,
+        0.8049,
+        0.1665,
+        0.0031
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6851539611816406,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 776,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8016139268875122,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0956,
+        0.8016,
+        0.0887,
+        0.0141
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9294357299804688,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 657,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7987431287765503,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0239,
+        0.7987,
+        0.1735,
+        0.0039
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 36,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.7986796498298645,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0044,
+        0.1681,
+        0.7987,
+        0.0288
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.996185302734375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 237,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.7963458299636841,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0095,
+        0.1645,
+        0.7963,
+        0.0296
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9237289428710938,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 554,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7935456037521362,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.009,
+        0.7935,
+        0.1923,
+        0.0052
+      ],
+      "nodata_frac": 0.00299072265625,
+      "mask_frac": 0.9974250793457031,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 860,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7918816804885864,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.005,
+        0.7919,
+        0.2001,
+        0.003
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.95526123046875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 889,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7834048271179199,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.7834,
+        0.2073,
+        0.0082,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9361610412597656,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 731,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7827077507972717,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1534,
+        0.7827,
+        0.0613,
+        0.0026
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9349441528320312,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 656,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7799868583679199,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.056,
+        0.78,
+        0.1595,
+        0.0045
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 600,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7761101722717285,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0088,
+        0.7761,
+        0.2089,
+        0.0061
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 135,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.7760552763938904,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.034,
+        0.1144,
+        0.7761,
+        0.0755
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8927154541015625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 596,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7739414572715759,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7739,
+        0.2155,
+        0.0094,
+        0.0012
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 742,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.7726893424987793,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0032,
+        0.2165,
+        0.7727,
+        0.0077
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9884910583496094,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 157,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7709413766860962,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7709,
+        0.2199,
+        0.008,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 704,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.7683452367782593,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0091,
+        0.2121,
+        0.7683,
+        0.0104
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7580604553222656,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 255,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.766684889793396,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7667,
+        0.2082,
+        0.0229,
+        0.0022
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9873046875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 696,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7634257674217224,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7634,
+        0.2237,
+        0.0117,
+        0.0012
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9195899963378906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 786,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7589682936668396,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.2034,
+        0.759,
+        0.0361,
+        0.0015
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.677825927734375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 904,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7583027482032776,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7583,
+        0.2202,
+        0.0175,
+        0.004
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.958740234375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 823,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7548249959945679,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0269,
+        0.7548,
+        0.2024,
+        0.0159
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6358833312988281,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1079,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7532568573951721,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1687,
+        0.7533,
+        0.0705,
+        0.0075
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5205955505371094,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 885,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7473334074020386,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7473,
+        0.2369,
+        0.0132,
+        0.0025
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9807472229003906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 991,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7464905977249146,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7465,
+        0.2344,
+        0.0162,
+        0.0029
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9182090759277344,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 392,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7456172704696655,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.2407,
+        0.7456,
+        0.0128,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 218,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7378926873207092,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7379,
+        0.2397,
+        0.0203,
+        0.0021
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9858665466308594,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 661,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7378594279289246,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7379,
+        0.218,
+        0.0396,
+        0.0045
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 845,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7375394701957703,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7375,
+        0.252,
+        0.0092,
+        0.0013
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5406761169433594,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1006,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.732173502445221,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7322,
+        0.2499,
+        0.0158,
+        0.0021
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8208770751953125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 498,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7285909652709961,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0054,
+        0.7286,
+        0.261,
+        0.0049
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.90899658203125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1107,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7275575399398804,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0255,
+        0.7276,
+        0.2414,
+        0.0056
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8091506958007812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 788,
+      "mosaic": "10142018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7252594828605652,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0125,
+        0.7253,
+        0.2414,
+        0.0208
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9994430541992188,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 10,
+      "mosaic": "10132018-MexicoBeach.geo.tif",
+      "event": "Hurricane Michael",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.7243927717208862,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0053,
+        0.0545,
+        0.7244,
+        0.2158
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    }
+  ]
+}

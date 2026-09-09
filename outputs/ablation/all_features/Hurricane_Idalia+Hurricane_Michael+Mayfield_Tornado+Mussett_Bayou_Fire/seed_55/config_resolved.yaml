@@ -1,0 +1,59 @@
+data:
+  dir: /network/rit/dgx/dgx_mobilesensorlab/crasar-u-droids
+  chip_size: 512
+  holdout_event: &id001
+  - Hurricane Michael
+  - Hurricane Idalia
+  - Mussett Bayou Fire
+  - Mayfield Tornado
+  sensor_profile: uas_5cm
+  synthetic_gsd_factor: 1.0
+  synthetic_gsd_mtf_at_nyquist: null
+  resolved_data_root: /network/rit/dgx/dgx_mobilesensorlab/crasar-u-droids
+training:
+  epochs: 100
+  batch_size: 64
+  accum_steps: 2
+  lr: 0.0001
+  max_grad_norm: 1.0
+  sampler_mode: uniform
+  class_weighting_enabled: true
+  class_weighting_strategy: inverse_freq
+  class_weighting_power: 0.4
+  class_weighting_eps: 1.0e-06
+  class_weighting_max_ratio: null
+  lr_plateau_patience: 4
+  label_smoothing: 0.02
+  loss: emd
+model:
+  name: convnextv2_nano.fcmae_ft_in22k_in1k
+  pretrained: true
+  drop_path_rate: 0.1
+ablation:
+  mask_enabled: true
+  typology_enabled: true
+  mask_weighted_pooling_enabled: true
+  mask_dilation_px: 0
+runtime:
+  num_workers: 8
+  pin_memory: true
+  persistent_workers: true
+  prefetch_factor: 3
+  drop_last: true
+  val_batch_size_factor: 0.5
+  device: cuda
+  seed: 55
+  early_stopping_patience: 10
+  lr_drop_warmstart_from_best: true
+  reset_optimizer_on_lr_drop: false
+  ema_enabled: true
+  ema_decay: 0.996
+  checkpoint_root: outputs/ablation/deployed_split/Hurricane_Idalia+Hurricane_Michael+Mayfield_Tornado+Mussett_Bayou_Fire/seed_55
+  cuda_launch_blocking: false
+  verbose: false
+  print_every_n_batches: null
+  log_to_file: true
+metadata:
+  created_utc: '2026-08-30T05:26:42.294584+00:00'
+  holdout_event: *id001
+  holdout_selection: explicit_multi

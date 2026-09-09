@@ -1,0 +1,156 @@
+{
+  "holdout_event": "Hurricane Idalia+Hurricane Michael+Mayfield Tornado+Mussett Bayou Fire",
+  "holdout_selection": "explicit_multi",
+  "seed": 55,
+  "train_class_counts_ordinal": [
+    9313,
+    5041,
+    1642,
+    893
+  ],
+  "class_weights_ordinal": [
+    0.5852376222610474,
+    0.7481030821800232,
+    1.1717064380645752,
+    1.494952917098999
+  ],
+  "best_model_path": "outputs/ablation/no_smoothing/Hurricane_Idalia+Hurricane_Michael+Mayfield_Tornado+Mussett_Bayou_Fire/seed_55/best_model.pt",
+  "final_classification": {
+    "accuracy": 0.7774640657084189,
+    "macro_recall": 0.7555973388925304,
+    "macro_precision": 0.7759302782404871,
+    "macro_f1": 0.7629373686368948,
+    "num_samples": 3896,
+    "confusion_matrix": [
+      [
+        1511,
+        178,
+        10,
+        0
+      ],
+      [
+        248,
+        695,
+        75,
+        4
+      ],
+      [
+        49,
+        168,
+        423,
+        67
+      ],
+      [
+        4,
+        19,
+        45,
+        400
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 1699,
+        "predicted": 1812,
+        "correct": 1511,
+        "recall": 0.8893466745144203,
+        "precision": 0.8338852097130243,
+        "f1": 0.8607234406152093
+      },
+      "Minor": {
+        "support": 1022,
+        "predicted": 1060,
+        "correct": 695,
+        "recall": 0.6800391389432485,
+        "precision": 0.6556603773584906,
+        "f1": 0.6676272814601345
+      },
+      "Major": {
+        "support": 707,
+        "predicted": 553,
+        "correct": 423,
+        "recall": 0.5983026874115983,
+        "precision": 0.7649186256781193,
+        "f1": 0.6714285714285715
+      },
+      "Destroyed": {
+        "support": 468,
+        "predicted": 471,
+        "correct": 400,
+        "recall": 0.8547008547008547,
+        "precision": 0.8492569002123143,
+        "f1": 0.8519701810436635
+      }
+    }
+  },
+  "best_classification": {
+    "accuracy": 0.7836242299794661,
+    "macro_recall": 0.7656774363122618,
+    "macro_precision": 0.782481219260493,
+    "macro_f1": 0.7715238101508302,
+    "num_samples": 3896,
+    "confusion_matrix": [
+      [
+        1505,
+        185,
+        9,
+        0
+      ],
+      [
+        237,
+        705,
+        76,
+        4
+      ],
+      [
+        50,
+        155,
+        435,
+        67
+      ],
+      [
+        2,
+        17,
+        41,
+        408
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 1699,
+        "predicted": 1794,
+        "correct": 1505,
+        "recall": 0.8858151854031784,
+        "precision": 0.8389074693422519,
+        "f1": 0.8617234468937877
+      },
+      "Minor": {
+        "support": 1022,
+        "predicted": 1062,
+        "correct": 705,
+        "recall": 0.6898238747553816,
+        "precision": 0.6638418079096046,
+        "f1": 0.6765834932821497
+      },
+      "Major": {
+        "support": 707,
+        "predicted": 561,
+        "correct": 435,
+        "recall": 0.6152758132956153,
+        "precision": 0.7754010695187166,
+        "f1": 0.6861198738170347
+      },
+      "Destroyed": {
+        "support": 468,
+        "predicted": 479,
+        "correct": 408,
+        "recall": 0.8717948717948718,
+        "precision": 0.8517745302713987,
+        "f1": 0.8616684266103485
+      }
+    }
+  },
+  "best_val_qwk": 0.8713279655575064,
+  "final_val_qwk": 0.8655769921057536,
+  "final_val_loss": 0.07101473254776659,
+  "epochs_completed": 42
+}

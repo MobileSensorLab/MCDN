@@ -215,9 +215,8 @@ only downloaded where a clone does not already track one.
 
 The nine sUAS arms × four holdouts × ten seeds compose to 360 runs; the crewed-aircraft `resolution` arm adds ten more on the Michael holdout, for 370
 runs in total. The matrix was trained as a SLURM job array: `scripts/cluster/make_job_manifest.py` emits one `preset  holdout  seed` line per run and
-`scripts/cluster/train_array.sbatch` consumes it, with `train.py --skip-if-complete` making resubmission idempotent. Every run's per-seed `metrics.json`,
-`train_log.txt`, and `config_resolved.yaml` are tracked in this repository under `outputs/ablation/<arm>/<holdout>/seed_<NN>/`; the weights are fetched as
-described above.
+`scripts/cluster/train_array.sbatch` consumes it, with `train.py --skip-if-complete` making resubmission idempotent. Every run's per-seed `metrics.json`
+and `config_resolved.yaml` are tracked in this repository under `outputs/ablation/<arm>/<holdout>/seed_<NN>/`; the weights are fetched as described above.
 
 ## Citation
 

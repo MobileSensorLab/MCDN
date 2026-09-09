@@ -1,0 +1,156 @@
+{
+  "holdout_event": "Hurricane Michael",
+  "holdout_selection": "explicit",
+  "seed": 44,
+  "train_class_counts_ordinal": [
+    10855,
+    5700,
+    2042,
+    1078
+  ],
+  "class_weights_ordinal": [
+    0.5913973450660706,
+    0.765211284160614,
+    1.1537429094314575,
+    1.4896485805511475
+  ],
+  "best_model_path": "outputs/ablation/ce_loss/Hurricane_Michael/seed_44/best_model.pt",
+  "final_classification": {
+    "accuracy": 0.7576576576576577,
+    "macro_recall": 0.771793232962299,
+    "macro_precision": 0.7652498150764132,
+    "macro_f1": 0.7580444193225613,
+    "num_samples": 1110,
+    "confusion_matrix": [
+      [
+        136,
+        20,
+        1,
+        0
+      ],
+      [
+        60,
+        286,
+        17,
+        0
+      ],
+      [
+        17,
+        108,
+        172,
+        10
+      ],
+      [
+        1,
+        5,
+        30,
+        247
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 157,
+        "predicted": 214,
+        "correct": 136,
+        "recall": 0.8662420382165605,
+        "precision": 0.6355140186915887,
+        "f1": 0.7331536388140163
+      },
+      "Minor": {
+        "support": 363,
+        "predicted": 419,
+        "correct": 286,
+        "recall": 0.7878787878787878,
+        "precision": 0.6825775656324582,
+        "f1": 0.7314578005115089
+      },
+      "Major": {
+        "support": 307,
+        "predicted": 220,
+        "correct": 172,
+        "recall": 0.5602605863192183,
+        "precision": 0.7818181818181819,
+        "f1": 0.6527514231499051
+      },
+      "Destroyed": {
+        "support": 283,
+        "predicted": 257,
+        "correct": 247,
+        "recall": 0.872791519434629,
+        "precision": 0.9610894941634242,
+        "f1": 0.9148148148148147
+      }
+    }
+  },
+  "best_classification": {
+    "accuracy": 0.7810810810810811,
+    "macro_recall": 0.7926139762461605,
+    "macro_precision": 0.785442941935921,
+    "macro_f1": 0.7816465780428592,
+    "num_samples": 1110,
+    "confusion_matrix": [
+      [
+        136,
+        20,
+        1,
+        0
+      ],
+      [
+        55,
+        291,
+        17,
+        0
+      ],
+      [
+        11,
+        95,
+        189,
+        12
+      ],
+      [
+        1,
+        4,
+        27,
+        251
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 157,
+        "predicted": 203,
+        "correct": 136,
+        "recall": 0.8662420382165605,
+        "precision": 0.6699507389162561,
+        "f1": 0.7555555555555555
+      },
+      "Minor": {
+        "support": 363,
+        "predicted": 410,
+        "correct": 291,
+        "recall": 0.8016528925619835,
+        "precision": 0.7097560975609756,
+        "f1": 0.7529107373868047
+      },
+      "Major": {
+        "support": 307,
+        "predicted": 234,
+        "correct": 189,
+        "recall": 0.6156351791530945,
+        "precision": 0.8076923076923077,
+        "f1": 0.6987060998151571
+      },
+      "Destroyed": {
+        "support": 283,
+        "predicted": 263,
+        "correct": 251,
+        "recall": 0.8869257950530035,
+        "precision": 0.9543726235741445,
+        "f1": 0.9194139194139194
+      }
+    }
+  },
+  "best_val_qwk": 0.8736487932125391,
+  "final_val_qwk": 0.8550574773373991,
+  "final_val_loss": 0.6991601577826909,
+  "epochs_completed": 29
+}

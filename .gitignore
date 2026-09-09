@@ -13,29 +13,37 @@ dist/
 wheels/
 *.bundle
 
-# Experiment outputs: track the result artifacts (metrics, configs, prediction caches) for the
-# directories the paper draws on; ignore everything else under outputs/. Trained checkpoints
-# (best_model.pt, ~134 MB each) are published on Hugging Face (mobilesensorlab/mcdn) and
-# fetched with scripts/fetch_checkpoints.py rather than tracked here.
+# Manuscript sources, review correspondence, and figure renders live outside the code repository.
+doc/
+
+# Experiment outputs: track only the artifacts the manuscript draws on (per-seed metrics and resolved
+# configs, ensemble JSON and probability caches, the decomposition, error-mining, footprint-robustness,
+# and soup results) and ignore everything else under outputs/. Trained checkpoints (best_model.pt,
+# ~134 MB each) are published on Hugging Face (mobilesensorlab/mcdn) and fetched with
+# scripts/fetch_checkpoints.py rather than tracked here; training telemetry (train_log.txt,
+# history.json), rendered PNG montages, and analyses not reported in the paper are not tracked.
 outputs/*
 !outputs/ablation/
 !outputs/ablation/_ensembles/
-!outputs/crewed_displacement/
-!outputs/crewed_transfer/
 !outputs/decomposition/
 !outputs/error_mining/
-!outputs/gsd_validation/
-!outputs/gsd_validation_7x/
-!outputs/label_agreement/
 !outputs/mask_robustness/
 !outputs/soup/
-!outputs/spatial_autocorr/
-!outputs/spatial_context/
 outputs/**/best_model.pt
 outputs/**/split_summary.json
 outputs/**/classification_metrics.json
+outputs/**/train_log.txt
+outputs/**/history.json
+outputs/**/*.png
 outputs/ablation/.cache/
 outputs/ablation/MANIFEST.json
+# Retired arms that do not appear in the manuscript.
+outputs/ablation/_ensembles/downsample_*
+outputs/ablation/_ensembles/mask_local__*
+outputs/ablation/_ensembles/typology_local__*
+# Derived caches whose reported numbers live in the sibling JSON.
+outputs/decomposition/*.pt
+outputs/soup/*.pt
 
 # Include the data folder and top-level files (statistics.csv) but ignore the ~200 GB dataset within.
 # data/readme/ holds README assets and stays tracked.

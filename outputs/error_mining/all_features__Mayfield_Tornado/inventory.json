@@ -1,0 +1,2808 @@
+{
+  "variant_root": "outputs\\ablation_dgx\\all_features",
+  "split": "Mayfield_Tornado",
+  "probs_cache": "outputs\\ablation_dgx\\_ensembles\\all_features__Mayfield_Tornado_probs.pt",
+  "summary": {
+    "n_instances": 1948,
+    "n_errors": 421,
+    "n_severe": 27,
+    "n_adjacent": 394,
+    "under_call": 206,
+    "over_call": 215,
+    "error_confidence": {
+      "median": 0.6490590572357178,
+      "frac_gt_0.9": 0.07363420724868774
+    },
+    "correct_confidence": {
+      "median": 0.85991370677948,
+      "frac_gt_0.9": 0.3752455711364746
+    },
+    "errors_unanimous_across_seeds": 162,
+    "severe_unanimous_across_seeds": 4,
+    "transitions_true_x_pred": [
+      [
+        0,
+        105,
+        7,
+        1
+      ],
+      [
+        122,
+        0,
+        38,
+        8
+      ],
+      [
+        9,
+        62,
+        0,
+        56
+      ],
+      [
+        0,
+        2,
+        11,
+        0
+      ]
+    ],
+    "by_event": {
+      "Mayfield Tornado": {
+        "n": 1948,
+        "errors": 421,
+        "severe": 27,
+        "under_call": 206,
+        "over_call": 215
+      }
+    },
+    "mechanical_flags_in_top_severe": {
+      "nodata_gt_5pct": 2,
+      "mask_at_border": 7,
+      "mask_empty": 0
+    },
+    "stratification": [
+      {
+        "mask_frac_bin": [
+          0.0,
+          0.05
+        ],
+        "n": 0,
+        "error_rate": null,
+        "severe_rate": null
+      },
+      {
+        "mask_frac_bin": [
+          0.05,
+          0.15
+        ],
+        "n": 19,
+        "error_rate": 0.15789473684210525,
+        "severe_rate": 0.0
+      },
+      {
+        "mask_frac_bin": [
+          0.15,
+          0.3
+        ],
+        "n": 141,
+        "error_rate": 0.19148936170212766,
+        "severe_rate": 0.028368794326241134
+      },
+      {
+        "mask_frac_bin": [
+          0.3,
+          0.6
+        ],
+        "n": 757,
+        "error_rate": 0.19418758256274768,
+        "severe_rate": 0.013210039630118891
+      },
+      {
+        "mask_frac_bin": [
+          0.6,
+          0.9
+        ],
+        "n": 738,
+        "error_rate": 0.19647696476964768,
+        "severe_rate": 0.009485094850948509
+      },
+      {
+        "mask_frac_bin": [
+          0.9,
+          1.0
+        ],
+        "n": 293,
+        "error_rate": 0.3378839590443686,
+        "severe_rate": 0.020477815699658702
+      },
+      {
+        "group": "mask_at_border",
+        "n": 1212,
+        "error_rate": 0.22524752475247525,
+        "severe_rate": 0.010726072607260726
+      },
+      {
+        "group": "mask_interior",
+        "n": 736,
+        "error_rate": 0.20108695652173914,
+        "severe_rate": 0.019021739130434784
+      },
+      {
+        "group": "nodata_gt_5pct",
+        "n": 38,
+        "error_rate": 0.21052631578947367,
+        "severe_rate": 0.07894736842105263
+      }
+    ]
+  },
+  "severe_errors": [
+    {
+      "index": 215,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 3,
+      "severity": 3,
+      "confidence": 0.3995193839073181,
+      "seed_agreement": 5,
+      "n_seeds": 10,
+      "probs": [
+        0.1932,
+        0.2619,
+        0.1454,
+        0.3995
+      ],
+      "nodata_frac": 0.14026260375976562,
+      "mask_frac": 0.4475822448730469,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1592,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.9521734118461609,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0005,
+        0.0039,
+        0.0434,
+        0.9522
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.49654388427734375,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1066,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.7987526059150696,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7988,
+        0.1935,
+        0.0068,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.33240509033203125,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 565,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 2,
+      "severity": 2,
+      "confidence": 0.7567450404167175,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0525,
+        0.1561,
+        0.7567,
+        0.0346
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1341,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.7478822469711304,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7479,
+        0.1764,
+        0.0715,
+        0.0043
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1326,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.723065972328186,
+      "seed_agreement": 8,
+      "n_seeds": 10,
+      "probs": [
+        0.0043,
+        0.0238,
+        0.2489,
+        0.7231
+      ],
+      "nodata_frac": 0.25365447998046875,
+      "mask_frac": 0.26834869384765625,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1339,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.703157365322113,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0026,
+        0.0622,
+        0.2321,
+        0.7032
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.20077896118164062,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1058,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 2,
+      "severity": 2,
+      "confidence": 0.6909235715866089,
+      "seed_agreement": 8,
+      "n_seeds": 10,
+      "probs": [
+        0.026,
+        0.2704,
+        0.6909,
+        0.0127
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7356986999511719,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 205,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.6775950789451599,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.6776,
+        0.3083,
+        0.0123,
+        0.0018
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6637649536132812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1162,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.6418859362602234,
+      "seed_agreement": 8,
+      "n_seeds": 10,
+      "probs": [
+        0.6419,
+        0.3087,
+        0.0436,
+        0.0058
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.23426055908203125,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1709,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.6311187744140625,
+      "seed_agreement": 8,
+      "n_seeds": 10,
+      "probs": [
+        0.0295,
+        0.2513,
+        0.0881,
+        0.6311
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 555,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.6021602749824524,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.6022,
+        0.3623,
+        0.0327,
+        0.0029
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7543830871582031,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1686,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.5787606239318848,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.5788,
+        0.3534,
+        0.0638,
+        0.0041
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6659164428710938,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 334,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.5417688488960266,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.0146,
+        0.1327,
+        0.311,
+        0.5418
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7286186218261719,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 723,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.5187970399856567,
+      "seed_agreement": 6,
+      "n_seeds": 10,
+      "probs": [
+        0.0093,
+        0.1395,
+        0.3324,
+        0.5188
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5477943420410156,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 970,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 2,
+      "severity": 2,
+      "confidence": 0.514872670173645,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.0772,
+        0.3826,
+        0.5149,
+        0.0253
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 772,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 3,
+      "pred": 1,
+      "severity": 2,
+      "confidence": 0.5140467882156372,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.2328,
+        0.514,
+        0.1521,
+        0.1011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.38475799560546875,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 401,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 2,
+      "severity": 2,
+      "confidence": 0.5090610980987549,
+      "seed_agreement": 5,
+      "n_seeds": 10,
+      "probs": [
+        0.0324,
+        0.3656,
+        0.5091,
+        0.0929
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 495,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.5079840421676636,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.508,
+        0.4448,
+        0.0445,
+        0.0027
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5866279602050781,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1608,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.4989475607872009,
+      "seed_agreement": 5,
+      "n_seeds": 10,
+      "probs": [
+        0.4989,
+        0.3907,
+        0.0957,
+        0.0147
+      ],
+      "nodata_frac": 0.3753547668457031,
+      "mask_frac": 0.43959808349609375,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1741,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.4895403981208801,
+      "seed_agreement": 5,
+      "n_seeds": 10,
+      "probs": [
+        0.0653,
+        0.2246,
+        0.2205,
+        0.4895
+      ],
+      "nodata_frac": 3.814697265625e-06,
+      "mask_frac": 0.3819847106933594,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1779,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 3,
+      "severity": 2,
+      "confidence": 0.4804520010948181,
+      "seed_agreement": 5,
+      "n_seeds": 10,
+      "probs": [
+        0.1208,
+        0.2346,
+        0.1641,
+        0.4805
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.21558380126953125,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 887,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 0,
+      "severity": 2,
+      "confidence": 0.46985119581222534,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.4699,
+        0.4415,
+        0.0783,
+        0.0103
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6699295043945312,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1590,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 2,
+      "severity": 2,
+      "confidence": 0.44247502088546753,
+      "seed_agreement": 5,
+      "n_seeds": 10,
+      "probs": [
+        0.317,
+        0.2338,
+        0.4425,
+        0.0067
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.47833251953125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1911,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 3,
+      "pred": 1,
+      "severity": 2,
+      "confidence": 0.4354187548160553,
+      "seed_agreement": 4,
+      "n_seeds": 10,
+      "probs": [
+        0.0282,
+        0.4354,
+        0.4177,
+        0.1187
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8628883361816406,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 966,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 2,
+      "severity": 2,
+      "confidence": 0.42675352096557617,
+      "seed_agreement": 7,
+      "n_seeds": 10,
+      "probs": [
+        0.0588,
+        0.2373,
+        0.4268,
+        0.2771
+      ],
+      "nodata_frac": 3.814697265625e-06,
+      "mask_frac": 0.3085899353027344,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 526,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 2,
+      "severity": 2,
+      "confidence": 0.4155657887458801,
+      "seed_agreement": 6,
+      "n_seeds": 10,
+      "probs": [
+        0.2614,
+        0.3143,
+        0.4156,
+        0.0087
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    }
+  ],
+  "adjacent_errors": [
+    {
+      "index": 1437,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9760313034057617,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0001,
+        0.0007,
+        0.0232,
+        0.976
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.3518943786621094,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1540,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9754198789596558,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0001,
+        0.0006,
+        0.0238,
+        0.9754
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6068916320800781,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 603,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9646385312080383,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0193,
+        0.9646,
+        0.0154,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6472053527832031,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1276,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.963465690612793,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0002,
+        0.0009,
+        0.0355,
+        0.9635
+      ],
+      "nodata_frac": 3.814697265625e-06,
+      "mask_frac": 0.386016845703125,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1115,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9588225483894348,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0235,
+        0.9588,
+        0.0169,
+        0.0008
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6513404846191406,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1814,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9505441784858704,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9505,
+        0.0464,
+        0.0026,
+        0.0005
+      ],
+      "nodata_frac": 0.6403617858886719,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1792,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9467414617538452,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9467,
+        0.0512,
+        0.0018,
+        0.0003
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9998855590820312,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1083,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.94610196352005,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0025,
+        0.0147,
+        0.9461,
+        0.0367
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.44939422607421875,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1206,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9456392526626587,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.031,
+        0.9456,
+        0.0215,
+        0.0018
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.524993896484375,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1293,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9453641176223755,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0002,
+        0.001,
+        0.0535,
+        0.9454
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1248,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.9434197545051575,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0024,
+        0.0334,
+        0.9434,
+        0.0208
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.3762245178222656,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1871,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9407774209976196,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9408,
+        0.0564,
+        0.0025,
+        0.0004
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9300308227539062,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1945,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9398439526557922,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9398,
+        0.0582,
+        0.0017,
+        0.0003
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1410,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9389387369155884,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0002,
+        0.0011,
+        0.0597,
+        0.9389
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6845550537109375,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1670,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9370441436767578,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0003,
+        0.0063,
+        0.0563,
+        0.937
+      ],
+      "nodata_frac": 3.814697265625e-06,
+      "mask_frac": 0.9684600830078125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1289,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9358597993850708,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9359,
+        0.0604,
+        0.0031,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6162796020507812,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1453,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9350040555000305,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0002,
+        0.0012,
+        0.0636,
+        0.935
+      ],
+      "nodata_frac": 3.814697265625e-06,
+      "mask_frac": 0.46541595458984375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 85,
+      "mosaic": "20211213-Candle-Factory-AO.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9340662956237793,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0001,
+        0.0011,
+        0.0647,
+        0.9341
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1010,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9286348223686218,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0511,
+        0.9286,
+        0.0185,
+        0.0018
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6611480712890625,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1582,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9277763366699219,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0001,
+        0.0008,
+        0.0713,
+        0.9278
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8616981506347656,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1834,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9266036748886108,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9266,
+        0.0701,
+        0.0029,
+        0.0005
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9280052185058594,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 611,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9257193803787231,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0004,
+        0.0028,
+        0.0711,
+        0.9257
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9641342163085938,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1831,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9243255853652954,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.016,
+        0.9243,
+        0.0575,
+        0.0023
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.988189697265625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 415,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9182043075561523,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0003,
+        0.0014,
+        0.0802,
+        0.9182
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9472274780273438,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1823,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.9163508415222168,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.9164,
+        0.0802,
+        0.0031,
+        0.0004
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9568557739257812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 556,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9162904024124146,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0364,
+        0.9163,
+        0.0448,
+        0.0025
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6481475830078125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 403,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9156016111373901,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0001,
+        0.0008,
+        0.0835,
+        0.9156
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1065,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9103119969367981,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0331,
+        0.9103,
+        0.0541,
+        0.0025
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4815330505371094,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 192,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.9064091444015503,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.074,
+        0.9064,
+        0.0187,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6118316650390625,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1350,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.9053738713264465,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.002,
+        0.0184,
+        0.0742,
+        0.9054
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4675559997558594,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1269,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8931625485420227,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0086,
+        0.0922,
+        0.8932,
+        0.006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6621170043945312,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 853,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8882001042366028,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0875,
+        0.8882,
+        0.023,
+        0.0013
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.796875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1841,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8852044343948364,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8852,
+        0.1073,
+        0.0067,
+        0.0008
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8922538757324219,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 396,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.884856104850769,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0002,
+        0.002,
+        0.1129,
+        0.8849
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1813,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8797348737716675,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8797,
+        0.113,
+        0.0063,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1756,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8781293630599976,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8781,
+        0.1159,
+        0.005,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4931755065917969,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1596,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8776031732559204,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0007,
+        0.023,
+        0.0987,
+        0.8776
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1822,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8762782216072083,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8763,
+        0.1133,
+        0.0092,
+        0.0013
+      ],
+      "nodata_frac": 0.4357643127441406,
+      "mask_frac": 0.9841461181640625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1180,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8751170039176941,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0002,
+        0.0023,
+        0.1223,
+        0.8751
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5614356994628906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 858,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8747248649597168,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0105,
+        0.1012,
+        0.8747,
+        0.0136
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.717315673828125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 582,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8743335604667664,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0008,
+        0.0055,
+        0.8743,
+        0.1193
+      ],
+      "nodata_frac": 1.1444091796875e-05,
+      "mask_frac": 0.7487983703613281,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1506,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8734810948371887,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.088,
+        0.8735,
+        0.0369,
+        0.0016
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6492843627929688,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1210,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8721771240234375,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0989,
+        0.8722,
+        0.0273,
+        0.0016
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.613739013671875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1124,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.871638298034668,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1015,
+        0.8716,
+        0.0248,
+        0.002
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4425315856933594,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1029,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.871084988117218,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1051,
+        0.8711,
+        0.0225,
+        0.0014
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8440475463867188,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 822,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8701856732368469,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0009,
+        0.0034,
+        0.1255,
+        0.8702
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1909,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8696152567863464,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8696,
+        0.1258,
+        0.0041,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9145126342773438,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1824,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8689637184143066,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.869,
+        0.1259,
+        0.0045,
+        0.0006
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9968757629394531,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1931,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.865411639213562,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8654,
+        0.1212,
+        0.0121,
+        0.0013
+      ],
+      "nodata_frac": 0.15789794921875,
+      "mask_frac": 0.8755760192871094,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1867,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8628042936325073,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8628,
+        0.1283,
+        0.0078,
+        0.0012
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8676223754882812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1164,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8611850738525391,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8612,
+        0.124,
+        0.0124,
+        0.0024
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5425872802734375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1436,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8600348234176636,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0138,
+        0.86,
+        0.1189,
+        0.0073
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6008071899414062,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1679,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8593074083328247,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0002,
+        0.0014,
+        0.139,
+        0.8593
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5973243713378906,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 445,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8587617874145508,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0134,
+        0.0986,
+        0.8588,
+        0.0293
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6750411987304688,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1634,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8581713438034058,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1018,
+        0.8582,
+        0.0382,
+        0.0018
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5864753723144531,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1537,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8527259826660156,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0041,
+        0.1187,
+        0.8527,
+        0.0245
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.23495864868164062,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1181,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8518492579460144,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1283,
+        0.8518,
+        0.0189,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5937576293945312,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1803,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8500269651412964,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.85,
+        0.142,
+        0.0073,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9378128051757812,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1142,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8490449786186218,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.849,
+        0.1445,
+        0.0054,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5198707580566406,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 863,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8456250429153442,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8456,
+        0.1464,
+        0.0069,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5859375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 151,
+      "mosaic": "20211213-Candle-Factory-AO.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8445324897766113,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0007,
+        0.0101,
+        0.8445,
+        0.1446
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9905281066894531,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 427,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8440886735916138,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8441,
+        0.1472,
+        0.0076,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6582412719726562,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1805,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8391383290290833,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8391,
+        0.156,
+        0.0043,
+        0.0005
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9383697509765625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1578,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8377835154533386,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0003,
+        0.0025,
+        0.1594,
+        0.8378
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9465179443359375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 312,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8353571891784668,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1347,
+        0.8354,
+        0.0282,
+        0.0018
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4585914611816406,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1502,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8349424600601196,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8349,
+        0.1529,
+        0.0109,
+        0.0013
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6506118774414062,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1234,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8316659927368164,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0067,
+        0.8317,
+        0.1565,
+        0.0051
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6353111267089844,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1461,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8310385942459106,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.035,
+        0.831,
+        0.1311,
+        0.0028
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.705596923828125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 880,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8304136991500854,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1212,
+        0.8304,
+        0.0414,
+        0.007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6659278869628906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 745,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8302682638168335,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1352,
+        0.8303,
+        0.0327,
+        0.0019
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7821388244628906,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1161,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8285441398620605,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1297,
+        0.8285,
+        0.0386,
+        0.0032
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5132598876953125,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1666,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.827987015247345,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.828,
+        0.1664,
+        0.0049,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4434814453125,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1776,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8276195526123047,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1493,
+        0.8276,
+        0.0221,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7746658325195312,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1104,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8272444605827332,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0009,
+        0.0087,
+        0.8272,
+        0.1632
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4325370788574219,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1215,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8255482912063599,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1515,
+        0.8255,
+        0.0216,
+        0.0013
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.586181640625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1853,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8181931376457214,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8182,
+        0.1714,
+        0.0095,
+        0.0009
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9455413818359375,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1882,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8156525492668152,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8157,
+        0.178,
+        0.0056,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.884002685546875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1775,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8155024647712708,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8155,
+        0.172,
+        0.0106,
+        0.0018
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.7518310546875,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1852,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8142515420913696,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8143,
+        0.1782,
+        0.0065,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9723854064941406,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 573,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8137775659561157,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0213,
+        0.8138,
+        0.1598,
+        0.0052
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.2977447509765625,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1345,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8136215209960938,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1739,
+        0.8136,
+        0.0118,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.3859405517578125,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1937,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8128471374511719,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8128,
+        0.1808,
+        0.0056,
+        0.0007
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.9748153686523438,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1520,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8122684359550476,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0004,
+        0.002,
+        0.1853,
+        0.8123
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8036727905273438,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 479,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8107859492301941,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0196,
+        0.1486,
+        0.8108,
+        0.0211
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6437149047851562,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 404,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8104910850524902,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0003,
+        0.0034,
+        0.1858,
+        0.8105
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1093,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8088065981864929,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8088,
+        0.1817,
+        0.0085,
+        0.001
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4211578369140625,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1,
+      "mosaic": "20211213-Candle-Factory-AO.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8086431622505188,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0014,
+        0.0131,
+        0.1769,
+        0.8086
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8932037353515625,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1625,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8064241409301758,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.8064,
+        0.183,
+        0.0094,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5750617980957031,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1078,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.8060410618782043,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.806,
+        0.188,
+        0.0052,
+        0.0008
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.6446990966796875,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 969,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8060289621353149,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0003,
+        0.0014,
+        0.1923,
+        0.806
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1702,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 3,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.8024734258651733,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0065,
+        0.0715,
+        0.8025,
+        0.1195
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5691642761230469,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1050,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.8024728894233704,
+      "seed_agreement": 9,
+      "n_seeds": 10,
+      "probs": [
+        0.0013,
+        0.0116,
+        0.1846,
+        0.8025
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8495903015136719,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1028,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 0,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.8015562295913696,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.1731,
+        0.8016,
+        0.0237,
+        0.0016
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4926605224609375,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1085,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 2,
+      "severity": 1,
+      "confidence": 0.7977946996688843,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0069,
+        0.1786,
+        0.7978,
+        0.0167
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5598678588867188,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1075,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7968695163726807,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0252,
+        0.7969,
+        0.1749,
+        0.0031
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.4970436096191406,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 552,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 1,
+      "severity": 1,
+      "confidence": 0.7959306836128235,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0059,
+        0.7959,
+        0.1886,
+        0.0096
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5889701843261719,
+      "mask_at_border": false,
+      "mask_empty": false
+    },
+    {
+      "index": 1932,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 2,
+      "pred": 3,
+      "severity": 1,
+      "confidence": 0.7957364320755005,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.0059,
+        0.0358,
+        0.1625,
+        0.7957
+      ],
+      "nodata_frac": 0.5455436706542969,
+      "mask_frac": 0.9088401794433594,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1788,
+      "mosaic": "20211215-Russelville-Middle.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7952365875244141,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7952,
+        0.193,
+        0.0107,
+        0.0011
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 1.0,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 952,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.789506196975708,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7895,
+        0.1708,
+        0.0375,
+        0.0022
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.8885002136230469,
+      "mask_at_border": true,
+      "mask_empty": false
+    },
+    {
+      "index": 1560,
+      "mosaic": "20211214-Mayfield.geo.tif",
+      "event": "Mayfield Tornado",
+      "target": 1,
+      "pred": 0,
+      "severity": 1,
+      "confidence": 0.7867940664291382,
+      "seed_agreement": 10,
+      "n_seeds": 10,
+      "probs": [
+        0.7868,
+        0.1839,
+        0.0177,
+        0.0116
+      ],
+      "nodata_frac": 0.0,
+      "mask_frac": 0.5112953186035156,
+      "mask_at_border": false,
+      "mask_empty": false
+    }
+  ]
+}

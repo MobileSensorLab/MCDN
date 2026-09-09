@@ -1,0 +1,156 @@
+{
+  "holdout_event": "Mayfield Tornado",
+  "holdout_selection": "explicit",
+  "seed": 55,
+  "train_class_counts_ordinal": [
+    10183,
+    5460,
+    1977,
+    1217
+  ],
+  "class_weights_ordinal": [
+    0.6108209490776062,
+    0.7837673425674438,
+    1.1766886711120605,
+    1.428722858428955
+  ],
+  "best_model_path": "outputs/ablation/pooling_only/Mayfield_Tornado/seed_55/best_model.pt",
+  "final_classification": {
+    "accuracy": 0.7551334702258727,
+    "macro_recall": 0.7796553150044168,
+    "macro_precision": 0.7523028847737224,
+    "macro_f1": 0.7595161736942284,
+    "num_samples": 1948,
+    "confusion_matrix": [
+      [
+        622,
+        200,
+        7,
+        0
+      ],
+      [
+        84,
+        462,
+        53,
+        4
+      ],
+      [
+        7,
+        62,
+        255,
+        48
+      ],
+      [
+        0,
+        1,
+        11,
+        132
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 829,
+        "predicted": 713,
+        "correct": 622,
+        "recall": 0.7503015681544029,
+        "precision": 0.8723702664796634,
+        "f1": 0.8067444876783397
+      },
+      "Minor": {
+        "support": 603,
+        "predicted": 725,
+        "correct": 462,
+        "recall": 0.7661691542288557,
+        "precision": 0.6372413793103449,
+        "f1": 0.6957831325301206
+      },
+      "Major": {
+        "support": 372,
+        "predicted": 326,
+        "correct": 255,
+        "recall": 0.6854838709677419,
+        "precision": 0.7822085889570553,
+        "f1": 0.7306590257879656
+      },
+      "Destroyed": {
+        "support": 144,
+        "predicted": 184,
+        "correct": 132,
+        "recall": 0.9166666666666666,
+        "precision": 0.717391304347826,
+        "f1": 0.8048780487804877
+      }
+    }
+  },
+  "best_classification": {
+    "accuracy": 0.757700205338809,
+    "macro_recall": 0.7811631557764313,
+    "macro_precision": 0.7536314032240847,
+    "macro_f1": 0.7611377341308729,
+    "num_samples": 1948,
+    "confusion_matrix": [
+      [
+        627,
+        195,
+        7,
+        0
+      ],
+      [
+        84,
+        462,
+        53,
+        4
+      ],
+      [
+        7,
+        62,
+        255,
+        48
+      ],
+      [
+        0,
+        1,
+        11,
+        132
+      ]
+    ],
+    "per_class": {
+      "No Damage": {
+        "support": 829,
+        "predicted": 718,
+        "correct": 627,
+        "recall": 0.7563329312424608,
+        "precision": 0.8732590529247911,
+        "f1": 0.8106011635423401
+      },
+      "Minor": {
+        "support": 603,
+        "predicted": 720,
+        "correct": 462,
+        "recall": 0.7661691542288557,
+        "precision": 0.6416666666666667,
+        "f1": 0.6984126984126985
+      },
+      "Major": {
+        "support": 372,
+        "predicted": 326,
+        "correct": 255,
+        "recall": 0.6854838709677419,
+        "precision": 0.7822085889570553,
+        "f1": 0.7306590257879656
+      },
+      "Destroyed": {
+        "support": 144,
+        "predicted": 184,
+        "correct": 132,
+        "recall": 0.9166666666666666,
+        "precision": 0.717391304347826,
+        "f1": 0.8048780487804877
+      }
+    }
+  },
+  "best_val_qwk": 0.8511048524734559,
+  "final_val_qwk": 0.8495224996144874,
+  "final_val_loss": 0.061636393279081485,
+  "epochs_completed": 50
+}

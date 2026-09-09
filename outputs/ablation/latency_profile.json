@@ -1,0 +1,183 @@
+{
+  "mode": "deployment",
+  "torch_version": "2.11.0+cu128",
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5090",
+  "checkpoint_dir": "C:\\Users\\Adam\\Code\\mcdn\\outputs\\ablation\\baseline\\Spatial_Block_East\\seed_00",
+  "variant_root": "C:\\Users\\Adam\\Code\\mcdn\\outputs\\ablation\\baseline",
+  "split": "Spatial_Block_East",
+  "backbone": "convnextv2_nano.fcmae_ft_in22k_in1k",
+  "chip_size": 512,
+  "ensemble_seed_dirs": [
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_00",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_11",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_22",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_33",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_44",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_55",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_66",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_77",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_88",
+    "outputs\\ablation\\baseline\\Spatial_Block_East\\seed_99"
+  ],
+  "warmup": 5,
+  "iterations": 20,
+  "event_chip_counts": {
+    "Hurricane_Michael": 1110,
+    "Mayfield_Tornado": 1948,
+    "Spatial_Block_East": 1733
+  },
+  "yardstick_chips": 415,
+  "batch_sweeps": [
+    {
+      "batch_size": 1,
+      "configs": {
+        "single_no_tta": {
+          "latency_batch_ms_mean": 8.795803213119507,
+          "latency_batch_ms_std": 1.3359855379370844,
+          "latency_batch_ms_p50": 8.38435173034668,
+          "latency_batch_ms_p95": 10.784540700912476,
+          "per_chip_ms": 8.795803213119507,
+          "chips_per_s": 113.69058353970853,
+          "peak_cuda_memory_allocated_bytes": 1580222976,
+          "operational": {
+            "Hurricane_Michael_s": 9.763341566562653,
+            "Mayfield_Tornado_s": 17.1342246591568,
+            "Spatial_Block_East_s": 15.243126968336107,
+            "yardstick_415_chips_s": 3.6502583334445955
+          }
+        },
+        "single_tta8": {
+          "latency_batch_ms_mean": 45.956817626953125,
+          "latency_batch_ms_std": 1.1534296897799543,
+          "latency_batch_ms_p50": 45.83019256591797,
+          "latency_batch_ms_p95": 47.3899959564209,
+          "per_chip_ms": 45.956817626953125,
+          "chips_per_s": 21.759557159012505,
+          "peak_cuda_memory_allocated_bytes": 1675382784,
+          "operational": {
+            "Hurricane_Michael_s": 51.01206756591797,
+            "Mayfield_Tornado_s": 89.5238807373047,
+            "Spatial_Block_East_s": 79.64316494750976,
+            "yardstick_415_chips_s": 19.072079315185547
+          }
+        },
+        "ensemble10_tta8": {
+          "latency_batch_ms_mean": 456.73254547119143,
+          "latency_batch_ms_std": 4.720268026133765,
+          "latency_batch_ms_p50": 455.5636291503906,
+          "latency_batch_ms_p95": 465.0736526489258,
+          "per_chip_ms": 456.73254547119143,
+          "chips_per_s": 2.1894651693111618,
+          "peak_cuda_memory_allocated_bytes": 1675387392,
+          "operational": {
+            "Hurricane_Michael_s": 506.97312547302244,
+            "Mayfield_Tornado_s": 889.7149985778809,
+            "Spatial_Block_East_s": 791.5175013015747,
+            "yardstick_415_chips_s": 189.54400637054442
+          }
+        }
+      }
+    },
+    {
+      "batch_size": 16,
+      "configs": {
+        "single_no_tta": {
+          "latency_batch_ms_mean": 19.30184164047241,
+          "latency_batch_ms_std": 0.0648405368941883,
+          "latency_batch_ms_p50": 19.2784481048584,
+          "latency_batch_ms_p95": 19.39154977798462,
+          "per_chip_ms": 1.2063651025295257,
+          "chips_per_s": 828.9364454452337,
+          "peak_cuda_memory_allocated_bytes": 2680035840,
+          "operational": {
+            "Hurricane_Michael_s": 1.3390652638077736,
+            "Mayfield_Tornado_s": 2.349999219727516,
+            "Spatial_Block_East_s": 2.090630722683668,
+            "yardstick_415_chips_s": 0.5006415175497532
+          }
+        },
+        "single_tta8": {
+          "latency_batch_ms_mean": 148.3236083984375,
+          "latency_batch_ms_std": 0.5641268861085152,
+          "latency_batch_ms_p50": 148.07488250732422,
+          "latency_batch_ms_p95": 149.51492309570312,
+          "per_chip_ms": 9.270225524902344,
+          "chips_per_s": 107.87224079001405,
+          "peak_cuda_memory_allocated_bytes": 3216434176,
+          "operational": {
+            "Hurricane_Michael_s": 10.289950332641602,
+            "Mayfield_Tornado_s": 18.058399322509764,
+            "Spatial_Block_East_s": 16.065300834655762,
+            "yardstick_415_chips_s": 3.8471435928344726
+          }
+        },
+        "ensemble10_tta8": {
+          "latency_batch_ms_mean": 1627.5336669921876,
+          "latency_batch_ms_std": 78.99819761101107,
+          "latency_batch_ms_p50": 1668.5960083007812,
+          "latency_batch_ms_p95": 1682.843798828125,
+          "per_chip_ms": 101.72085418701172,
+          "chips_per_s": 9.830825822220488,
+          "peak_cuda_memory_allocated_bytes": 3216438784,
+          "operational": {
+            "Hurricane_Michael_s": 112.910148147583,
+            "Mayfield_Tornado_s": 198.15222395629883,
+            "Spatial_Block_East_s": 176.28224030609132,
+            "yardstick_415_chips_s": 42.21415448760986
+          }
+        }
+      }
+    },
+    {
+      "batch_size": 64,
+      "configs": {
+        "single_no_tta": {
+          "latency_batch_ms_mean": 86.44307022094726,
+          "latency_batch_ms_std": 1.7253158074345945,
+          "latency_batch_ms_p50": 86.68766403198242,
+          "latency_batch_ms_p95": 88.59419174194336,
+          "per_chip_ms": 1.350672972202301,
+          "chips_per_s": 740.3716669990655,
+          "peak_cuda_memory_allocated_bytes": 6203374592,
+          "operational": {
+            "Hurricane_Michael_s": 1.499246999144554,
+            "Mayfield_Tornado_s": 2.631110949850082,
+            "Spatial_Block_East_s": 2.3407162608265875,
+            "yardstick_415_chips_s": 0.5605292834639549
+          }
+        },
+        "single_tta8": {
+          "latency_batch_ms_mean": 688.9897613525391,
+          "latency_batch_ms_std": 8.219028442797914,
+          "latency_batch_ms_p50": 688.8435974121094,
+          "latency_batch_ms_p95": 698.4049072265625,
+          "per_chip_ms": 10.765465021133423,
+          "chips_per_s": 92.88962418594313,
+          "peak_cuda_memory_allocated_bytes": 8149062656,
+          "operational": {
+            "Hurricane_Michael_s": 11.9496661734581,
+            "Mayfield_Tornado_s": 20.97112586116791,
+            "Spatial_Block_East_s": 18.65655088162422,
+            "yardstick_415_chips_s": 4.4676679837703706
+          }
+        },
+        "ensemble10_tta8": {
+          "latency_batch_ms_mean": 6750.856225585938,
+          "latency_batch_ms_std": 158.5442259602435,
+          "latency_batch_ms_p50": 6823.816650390625,
+          "latency_batch_ms_p95": 6924.58642578125,
+          "per_chip_ms": 105.48212852478028,
+          "chips_per_s": 9.480278924832998,
+          "peak_cuda_memory_allocated_bytes": 8149071872,
+          "operational": {
+            "Hurricane_Michael_s": 117.08516266250611,
+            "Mayfield_Tornado_s": 205.479186366272,
+            "Spatial_Block_East_s": 182.80052873344422,
+            "yardstick_415_chips_s": 43.77508333778381
+          }
+        }
+      }
+    }
+  ]
+}

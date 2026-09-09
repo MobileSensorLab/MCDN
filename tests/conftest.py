@@ -9,6 +9,31 @@ from rasterio.transform import from_origin
 from shapely.geometry import Polygon
 
 
+def write_seed_dir(seed_dir: Path, *, checkpoint_bytes: bytes, sidecars: tuple[str, ...] = ("metrics.json", "config_resolved.yaml")) -> None:
+    """Populate one ``seed_XX`` directory with a fake checkpoint and the named sidecars."""
+
+    seed_dir.mkdir(parents=True, exist_ok=True)
+    (seed_dir / "best_model.pt").write_bytes(checkpoint_bytes)
+    for name in sidecars:
+        (seed_dir / name).write_text(f"{seed_dir.name}:{name}\n", encoding="utf-8")
+
+
+@pytest.fixture
+def ablation_tree(tmp_path: Path) -> Path:
+    """Fake ``outputs/ablation`` root: two arms, an excluded fold, an underscore dir, and a seed without a checkpoint."""
+
+    root = tmp_path / "ablation"
+    rng = np.random.default_rng(0)
+    for arm, folds in {"all_features": ("Hurricane_Ida", "Spatial_Block_East"), "rgb_only": ("Hurricane_Ida",)}.items():
+        for fold in folds:
+            for seed in ("seed_00", "seed_11"):
+                write_seed_dir(root / arm / fold / seed, checkpoint_bytes=rng.bytes(4096))
+    (root / "rgb_only" / "Hurricane_Ida" / "seed_22").mkdir()  # no checkpoint: must be ignored
+    (root / "_ensembles").mkdir()
+    (root / "_ensembles" / "probs.pt").write_bytes(b"x")
+    return root
+
+
 @pytest.fixture
 def mock_dataset_root(tmp_path: Path) -> Path:
     """Creates a temporary directory structure mimicking the CRASAR dataset."""

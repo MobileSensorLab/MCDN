@@ -23,9 +23,9 @@ occlusion, ordinal-boundary ambiguity, nodata edges, footprint registration).
 Usage::
 
     python -m scripts.mine_errors \
-        --variant-root outputs/ablation_dgx/all_features \
+        --variant-root outputs/ablation/all_features \
         --split "Hurricane_Idalia+Hurricane_Michael+Mayfield_Tornado+Mussett_Bayou_Fire" \
-        --probs-cache "outputs/ablation_dgx/_ensembles/all_features__<split>_probs.pt" \
+        --probs-cache "outputs/ablation/_ensembles/all_features__<split>_probs.pt" \
         --data-dir data --output-dir outputs/error_mining/all_features__default_split
 """
 

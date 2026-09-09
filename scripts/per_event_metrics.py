@@ -14,11 +14,11 @@ reported with support so readers can weigh them accordingly.
 Usage::
 
     python -m scripts.per_event_metrics \
-        --variant-root outputs/ablation_dgx/all_features \
+        --variant-root outputs/ablation/all_features \
         --split "Hurricane_Idalia+Hurricane_Michael+Mayfield_Tornado+Mussett_Bayou_Fire" \
-        --probs-cache "outputs/ablation_dgx/_ensembles/all_features__<split>_probs.pt" \
+        --probs-cache "outputs/ablation/_ensembles/all_features__<split>_probs.pt" \
         --data-dir data \
-        --output-json outputs/ablation_dgx/_ensembles/all_features__<split>_per_event.json
+        --output-json outputs/ablation/_ensembles/all_features__<split>_per_event.json
 """
 
 import argparse

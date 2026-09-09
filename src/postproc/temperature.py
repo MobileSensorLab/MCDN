@@ -14,8 +14,8 @@ Mathematical equivalence note:
 
 Usage:
     uv run python -m src.postproc.temperature \
-        --prob-cache outputs/ablation/all_features/Spatial_Block_East/ensemble_probs.pt \
-        --output-json outputs/ablation/all_features/Spatial_Block_East/temperature_calibration.json
+        --prob-cache outputs/ablation/_ensembles/all_features__Hurricane_Ida_probs.pt \
+        --output-json outputs/ablation/_ensembles/all_features__Hurricane_Ida_temperature_calibration.json
 """
 
 import argparse

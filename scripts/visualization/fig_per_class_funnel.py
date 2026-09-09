@@ -17,7 +17,7 @@ Visual conventions:
       greyscale print and for color-vision-deficient readers.
     - Compact figure footprint with a 2 x 2 in-axes legend.
 
-Source: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json`` ->
+Source: ``outputs/ablation/_ensembles/all_features__<split>.json`` ->
 ``cross_variant.equal_seed_metrics.argmax.per_class_f1``.
 """
 from __future__ import annotations
@@ -125,7 +125,7 @@ def main() -> None:
             "marker shapes (circle / square / triangle / diamond) provide redundant non-color encoding for "
             "greyscale print and color-vision-deficient readers. Values in column order "
             f"({', '.join(split_labels)}) - {trajectory_text}. "
-            "Source: `outputs/ablation_dgx/_ensembles/all_features__<split>.json` -> "
+            "Source: `outputs/ablation/_ensembles/all_features__<split>.json` -> "
             "`cross_variant.equal_seed_metrics.argmax.per_class_f1`."
         ),
     )

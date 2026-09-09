@@ -15,7 +15,7 @@ FiLM); the two training arms swap the loss (CE for EMD) and remove label
 smoothing while retaining all three components. The ``C + T`` cell (channel
 and typology without pooling) was not trained and is absent from the grid.
 
-Source artifacts: ``outputs/ablation_dgx/_ensembles/<arm>__<split>.json``.
+Source artifacts: ``outputs/ablation/_ensembles/<arm>__<split>.json``.
 The ``mask`` and ``typology`` arms were trained on the DGX for the default
 split and LOEO Ida only; their LOEO Michael and Mayfield ensembles are the
 v1 local runs re-summarized under ``mask_local`` / ``typology_local`` with
@@ -182,7 +182,7 @@ def main() -> None:
             "pooling, T = typology FiLM); the two rows below the dotted separator retain all three components and "
             "change the training recipe (cross-entropy in place of the EMD loss; label smoothing removed). "
             f"Values in column order (default / Michael / Mayfield / Ida) - {rows}. "
-            "Source: `outputs/ablation_dgx/_ensembles/<arm>__<split>.json`; the `mask` and `typology` arms' LOEO "
+            "Source: `outputs/ablation/_ensembles/<arm>__<split>.json`; the `mask` and `typology` arms' LOEO "
             "Michael and Mayfield ensembles are the v1 local runs (`mask_local`, `typology_local`)."
         ),
     )

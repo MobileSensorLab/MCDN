@@ -17,7 +17,7 @@ Visual conventions:
       position, dark grey, drawn above the dots in the layer stack.
     - Per-bar value annotation (3-decimal F1) above each ensemble bar.
 
-Source: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json`` ->
+Source: ``outputs/ablation/_ensembles/all_features__<split>.json`` ->
 ``variants[0].per_seed[*].replay_metrics.argmax.macro_f1`` (dots) and
 ``cross_variant.equal_seed_metrics.argmax.macro_f1`` (bar).
 """
@@ -138,7 +138,7 @@ def main() -> None:
             "``numpy.random.default_rng(seed=0)``) and carries no semantic content. The dark horizontal bar marks "
             "the 10-seed ensemble argmax Macro-F1 - the softmax-mean of the ten per-seed probability tensors decoded "
             "under argmax. Per-column dispersion and ensemble lift: " + "; ".join(dispersion_notes) + ". "
-            "Source: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json`` (per-seed replayed metrics for "
+            "Source: ``outputs/ablation/_ensembles/all_features__<split>.json`` (per-seed replayed metrics for "
             "the dots, ``cross_variant.equal_seed_metrics.argmax`` for the bar)."
         ),
     )

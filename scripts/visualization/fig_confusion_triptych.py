@@ -22,7 +22,7 @@ Visual conventions:
       so readers can read the headline metric next to the matrix that produced
       it.
 
-Source artifacts: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json``
+Source artifacts: ``outputs/ablation/_ensembles/all_features__<split>.json``
 -> ``cross_variant.equal_seed_metrics.argmax`` (the reported decoding rule;
 the EV and hybrid blocks are preserved in the same JSON but not rendered here).
 """
@@ -183,7 +183,7 @@ def main() -> None:
             "correct predictions; cell tinting follows the per-row percent "
             "under a single shared `Blues` sequential colormap (0-100 %) so the four "
             "panels are directly comparable independent of column-level class "
-            "support. Source: `outputs/ablation_dgx/_ensembles/all_features__<split>.json` "
+            "support. Source: `outputs/ablation/_ensembles/all_features__<split>.json` "
             "-> `cross_variant.equal_seed_metrics.argmax.confusion_matrix`. "
             "Per-panel headline F1 and QWK are the corresponding ensemble "
             "scalars from the same JSON. The dominant residual error modes "

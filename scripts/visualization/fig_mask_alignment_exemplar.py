@@ -26,8 +26,8 @@ gallery (F8) so this figure reads as a continuation of the chapter-4 visual
 vocabulary rather than as a new convention.
 
 Source artifacts: the cached val pools at
-`outputs/ablation_dgx/_ensembles/all_features__{Hurricane_Michael, Mayfield_Tornado}_probs.pt`
-plus the seed-00 `config_resolved.yaml` snapshots under `outputs/ablation_dgx/all_features/`, accessed via the
+`outputs/ablation/_ensembles/all_features__{Hurricane_Michael, Mayfield_Tornado}_probs.pt`
+plus the seed-00 `config_resolved.yaml` snapshots under `outputs/ablation/all_features/`, accessed via the
 parameterized ``load_reference_val_chip(holdout=...)`` helper in
 ``_common.py``.
 """
@@ -148,8 +148,8 @@ def main() -> None:
             "kinematic patterns - the structure stays vs. the structure "
             "displaces - is exactly the latent variable that explains the "
             "mask ablation's split-dependent signature. Source artifacts: "
-            "outputs/ablation_dgx/_ensembles/all_features__{Hurricane_Michael, Mayfield_Tornado}_probs.pt "
-            "and the seed_00/config_resolved.yaml fold-config snapshots under outputs/ablation_dgx/all_features/."
+            "outputs/ablation/_ensembles/all_features__{Hurricane_Michael, Mayfield_Tornado}_probs.pt "
+            "and the seed_00/config_resolved.yaml fold-config snapshots under outputs/ablation/all_features/."
         ),
     )
 

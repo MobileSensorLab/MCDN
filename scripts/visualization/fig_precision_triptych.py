@@ -23,7 +23,7 @@ two figures read as a paired recall-precision view:
     - Diagonal cells outlined in solid black to emphasize correct predictions.
     - Per-panel title carries the column label plus ensemble Macro-F1 and QWK.
 
-Source artifacts: ``outputs/ablation_dgx/_ensembles/all_features__<split>.json``
+Source artifacts: ``outputs/ablation/_ensembles/all_features__<split>.json``
 -> ``cross_variant.equal_seed_metrics.argmax.confusion_matrix``. Same JSON the
 recall view reads.
 """
@@ -189,7 +189,7 @@ def main() -> None:
             "true class). The diagonal of each column is the corresponding per-class precision. Diagonal cells are "
             "outlined in solid black; cell tinting follows a shared `Blues` sequential colormap on the same 0-100 "
             "percent scale as the recall view, so the two figures read as paired views over the same data. Source: "
-            "`outputs/ablation_dgx/_ensembles/all_features__<split>.json` -> "
+            "`outputs/ablation/_ensembles/all_features__<split>.json` -> "
             "`cross_variant.equal_seed_metrics.argmax.confusion_matrix`. Per-panel headline F1 and QWK are the "
             "corresponding ensemble scalars from the same JSON. Destroyed-column precision by column: "
             + "; ".join(destroyed_notes) + ". The Mayfield shortfall is the Major-versus-Destroyed visual boundary "

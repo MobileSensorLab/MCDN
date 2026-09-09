@@ -12,8 +12,8 @@ non-Python ``rsvg-convert`` binary that is not available on Windows under
 the project's uv-only env management).
 
 Result lineage (revision 2, work-plan D-12/D-19): every metric-driven figure
-reads the DGX 10-seed runs under ``outputs/ablation_dgx/<variant>/<split>/``
-and the ensemble artifacts under ``outputs/ablation_dgx/_ensembles/
+reads the DGX 10-seed runs under ``outputs/ablation/<variant>/<split>/``
+and the ensemble artifacts under ``outputs/ablation/_ensembles/
 <variant>__<split>{.json,_probs.pt}``. The full configuration is the
 ``all_features`` variant; the four reported evaluation columns are listed in
 ``REPORTED_COLUMNS`` with their D-20 display labels (the DROIDs default split
@@ -74,7 +74,7 @@ _DOC_MIRROR_DIR: Final[Path] = _REPO_ROOT / "doc" / "images"
 _DEFAULT_HOLDOUT: Final[str] = "Mayfield_Tornado"
 
 # Revision-2 result lineage: DGX 10-seed runs and their ensemble artifacts.
-_LINEAGE_DIR: Final[Path] = _REPO_ROOT / "outputs" / "ablation_dgx"
+_LINEAGE_DIR: Final[Path] = _REPO_ROOT / "outputs" / "ablation"
 _ENSEMBLE_DIR: Final[Path] = _LINEAGE_DIR / "_ensembles"
 _DATA_DIR: Final[Path] = _REPO_ROOT / "data"
 
@@ -119,7 +119,7 @@ def load_ensemble_summary(split: str, variant: str = FULL_VARIANT) -> dict[str, 
     Args:
         split: Split directory name (one of the ``REPORTED_COLUMNS`` keys or
             ``"Spatial_Block_East"``).
-        variant: Ablation variant directory name under ``outputs/ablation_dgx/``.
+        variant: Ablation variant directory name under ``outputs/ablation/``.
 
     Returns:
         The parsed JSON payload (``variants[0]`` holds per-seed replay metrics
@@ -385,7 +385,7 @@ def _build_reference_val_dataset(holdout: str) -> tuple[Any, np.ndarray, np.ndar
     multi-event default split).
 
     Args:
-        holdout: Split directory name under ``outputs/ablation_dgx/all_features/``
+        holdout: Split directory name under ``outputs/ablation/all_features/``
             (e.g. ``"Mayfield_Tornado"``, ``"Hurricane_Ida"``, ``DEFAULT_SPLIT_DIR``).
 
     Returns:
@@ -442,7 +442,7 @@ def load_reference_val_pool(holdout: str = _DEFAULT_HOLDOUT) -> dict[str, Any]:
     manifest index.
 
     Args:
-        holdout: Split directory name under ``outputs/ablation_dgx/all_features/``.
+        holdout: Split directory name under ``outputs/ablation/all_features/``.
             Defaults to the module-level ``_DEFAULT_HOLDOUT``
             (``"Mayfield_Tornado"``).
 
@@ -503,7 +503,7 @@ def load_reference_val_chip(
         require_correct: When True (default), restrict to candidates where
             the ensemble's argmax matches the true class. False allows
             inspection of misclassifications.
-        holdout: Split directory name under ``outputs/ablation_dgx/all_features/``.
+        holdout: Split directory name under ``outputs/ablation/all_features/``.
             Defaults to ``Mayfield_Tornado``.
 
     Returns:

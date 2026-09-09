@@ -32,7 +32,7 @@ _FIGURE_MODULES: Final[tuple[str, ...]] = (
     "scripts.visualization.fig_d4_group",               # F7 (data-dependent: D4 of base chip)
     "scripts.visualization.fig_augmentation_gallery",   # F8 (data-dependent: augmented chips)
     # Results figures - all read from the DGX ensemble JSON artifacts under
-    # outputs/ablation_dgx/_ensembles/ rather than the val dataset, so they
+    # outputs/ablation/_ensembles/ rather than the val dataset, so they
     # run independently and do not benefit from the cached dataset.
     "scripts.visualization.fig_confusion_triptych",     # R1 (JSON-driven)
     "scripts.visualization.fig_precision_triptych",     # R1b precision view (JSON-driven)

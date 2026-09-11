@@ -11,9 +11,6 @@
 [![Checkpoints](https://img.shields.io/badge/%F0%9F%A4%97%20Checkpoints-MobileSensorLab%2FMCDN-FFD21E)](https://huggingface.co/mobilesensorlab/mcdn)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-CRASAR%2FCRASAR--U--DROIDs-FFD21E)](https://huggingface.co/datasets/CRASAR/CRASAR-U-DROIDs)
 
-[![Codebase](https://img.shields.io/badge/GitHub-MobileSensorLab%2FMCDN-181717?logo=github)](https://github.com/MobileSensorLab/MCDN)
-[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-CRASAR%2FCRASAR--U--DROIDs-FFD21E)](https://huggingface.co/datasets/CRASAR/CRASAR-U-DROIDs)
-
 [![License: AGPL v3](https://img.shields.io/badge/License-GNU%20AGPL%20v3-663366.svg?logo=gnu&logoColor=white)](./LICENSE.md)
 
 Mask Centered Damage Net (MCDN) is a **~33.5M**-parameter unitemporal structural damage classifier designed for use on sUAS orthomosaics, built on a 

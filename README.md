@@ -27,9 +27,6 @@ This footprint serves two functions. First, it localizes: it centers each of MCD
 Second, it directs attention: the rasterized mask is ingested as a fourth input channel and separately weights the model's spatial pooling, so that features under
 the roof dominate the pooled representation and surrounding debris contributes less. 
 
-A FiLM gate conditions the head on disaster typology, since the same visual evidence carries different meaning after a tornado than 
-after a flood, and a squared Earth Mover's Distance loss preserves the ordinal structure of the grades, penalizing a two-grade error more than a one-grade error.
-
 MCDN is trained and evaluated on
 **[CRASAR-U-DROIDs](https://huggingface.co/datasets/CRASAR/CRASAR-U-DROIDs)**, a sUAS damage-annotation dataset assembled from incident-response flights.
 

@@ -8,7 +8,7 @@
 <!-- Live badge; re-enable once the repo is public:
 [![PyTest coverage](https://raw.githubusercontent.com/MobileSensorLab/mcdn/badges/coverage.svg)](https://docs.pytest.org/en/stable/) -->
 
-[![Checkpoints](https://img.shields.io/badge/%F0%9F%A4%97%20Checkpoints-MobileSensorLab%2FMCDN-FFD21E)](https://huggingface.co/mobilesensorlab/mcdn)
+[![Checkpoints](https://img.shields.io/badge/%F0%9F%A4%97%20Checkpoints-MobileSensorLab%2FMCDN-FFD21E)](https://doi.org/10.57967/hf/10856)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-CRASAR%2FCRASAR--U--DROIDs-FFD21E)](https://huggingface.co/datasets/CRASAR/CRASAR-U-DROIDs)
 
 [![License: AGPL v3](https://img.shields.io/badge/License-GNU%20AGPL%20v3-663366.svg?logo=gnu&logoColor=white)](./LICENSE.md)
